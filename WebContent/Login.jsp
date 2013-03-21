@@ -24,7 +24,7 @@
 
 </head>
 <body>
-	<form name="loginForm" method="get" action="Login" onsubmit="return checkLoginForm();" >
+	<form name="loginForm" method="post" action="Login" onsubmit="return checkLoginForm();" >
 	<table>
 		<tr><td>User</td><td><input type="text" name="user"></td></tr>
 		<tr><td>Password</td><td><input type="password" name="pass"></td></tr>

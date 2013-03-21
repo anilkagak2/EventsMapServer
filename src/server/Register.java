@@ -76,11 +76,16 @@ public class Register extends HttpServlet {
 
 	    if(conn!= null){
 	             Statement s = conn.createStatement();
-	             String query = "INSERT INTO Login (loginId, passwdHash, email, post) VALUES ('"+user+ "','" + hash + 
+	             //String query = "INSERT INTO Login (loginId, passwdHash, email, post) VALUES ('"+user+ "','" + hash +
+	             String query = "INSERT INTO Login (userName, passwdHash, email, post) VALUES ('"+user+ "','" + hash + 
 	            		 	"','" + email + "','" + post+"')";
 	             System.out.println(query);
 	             s.executeUpdate(query);
 	             s.close();
+	             
+	             // TODO VP Section to VP's DashBoard
+	             // request.getRequestDispatcher("/Events.jsp").forward(request, response);
+	             request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	    }
 	    else{
 	            System.out.println("Cannot connect to the database\n");
@@ -91,12 +96,19 @@ public class Register extends HttpServlet {
     }
 }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-    	processRequest(request, response);
+    	// TODO VP Section
+ /*   	HttpSession session = request.getSession(false);
+    	if (session != null && (session.getAttribute("user").toString () != "vp") ) { */
+    		processRequest(request, response);
+    	/*}
+    	else { 
+    		request.getRequestDispatcher("/Login.jsp").forward(request, response);
+    	}*/
     }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 	    processRequest(request, response);
 	}

@@ -37,7 +37,7 @@
 
 </head>
 <body>
-	<form name="createForm" method="get" action="Register" onsubmit="return checkCreateLoginForm();">
+	<form name="createForm" method="post" action="Register" onsubmit="return checkCreateLoginForm();">
 	<table>
 		<tr><td>User</td>
 			<td><input type="text" name="user"></td></tr>
@@ -47,7 +47,7 @@
 			<td><input type="password" name="pass"></td></tr>
 		<tr><td>Re-Password</td>
 			<td><input type="password" name="repass"></td></tr>
-		<tr><td>User</td>
+		<tr><td>Post</td>
 			<td><input type="text" name="post"></td></tr>
 		<tr><td></td>
 			<td><input type="submit" value="Create"></td></tr>

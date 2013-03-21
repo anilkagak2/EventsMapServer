@@ -55,8 +55,12 @@ input.LinkButton {
 		</c:otherwise>
 	</c:choose>
 
-	<form name="Logout" action="Logout" method="get">
+	<form name="Logout" action="Logout" method="post">
 		<input type="submit" value="Log Out">
+	</form>
+
+	<form name="Add Event" action="FetchLocationCategory" method="post">
+		<input type="submit" value="Fetch">
 	</form>
 
 </body>

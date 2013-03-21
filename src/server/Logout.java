@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class Logout
@@ -35,7 +36,12 @@ public class Logout extends HttpServlet {
 		out.println("<h1>You Entered</h1>");
 		out.println("</body></html>");
 
-		request.getSession().invalidate();
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.removeAttribute("user");
+			session.removeAttribute("loginId");
+			session.invalidate();
+		}
 		//response.sendRedirect("Login.jsp");
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
@@ -46,7 +52,6 @@ public class Logout extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Logging out.");
 		request.getSession().invalidate();
-		//response.sendRedirect("Login.jsp");
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
 

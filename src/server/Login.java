@@ -100,6 +100,13 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
  
         try {
+        	/* Use previous session, if it exists. */
+        	HttpSession session = request.getSession(false);
+        	if ( (session != null) && (session.getAttribute("user") != null)) {
+        		redirectToDashBoard (request, response);
+        	}
+        	
+        	/* No Previous Session */
             user = request.getParameter("user");
             String pass = request.getParameter("pass");
             String final_hash = "";
@@ -124,7 +131,9 @@ public class Login extends HttpServlet {
             // Execute Queries by checking passHash
             if (connection != null) {
                 Statement s = connection.createStatement();
-                s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+ user +"'");
+                /* Changed the Table structure--> loginId = INT & userName = user */
+                //s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+ user +"'");
+                s.executeQuery("SELECT * FROM Login where userName = '"+ user +"'");
                 ResultSet rs = s.getResultSet();
                 boolean found = false;
                 while (rs.next()) {
@@ -132,11 +141,12 @@ public class Login extends HttpServlet {
                     System.out.println("final_hash " + final_hash);
                     System.out.println("pass_hash " + pass_hash);
                     if (final_hash.equals(pass_hash)) {
-                    	HttpSession session = request.getSession(true);
+                    	int loginId = rs.getInt("loginId");
+                    	session = request.getSession(true);
 
                     	// TODO use session object instead of passed user data
                     	session.setAttribute("user", user);
-                    	session.setAttribute("passHash", final_hash);
+                    	session.setAttribute("loginId", loginId);
                     	System.out.println("");
                     	found = true;
                     	
@@ -145,7 +155,9 @@ public class Login extends HttpServlet {
                     			" Please proceed further\n");
                     	
                     	Statement s1 = connection.createStatement();
-                    	String query = "Select E.eventId, E.title, E.startTime, M.mainLand, L.subLand, E.endTime, C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+user+"' AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+                    	String query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
+                    					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+user+"'" +
+                    					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
                     	System.out.println(query);
                     	s1.executeQuery(query);
                     	ResultSet rs1 = s.getResultSet();
@@ -155,6 +167,7 @@ public class Login extends HttpServlet {
                     		event.eventId = rs1.getInt("eventId");
                     		event.title = rs1.getString("title");
                     		event.startTime = rs1.getTime("startTime");
+                    		event.modifiedTime = rs1.getTime("modifiedTime");		// Newly Introduced
                     		event.endTime = rs1.getTime("endTime");
                     		event.category = rs1.getString("category");
                     		event.status = status_enum[rs1.getInt("status")];
@@ -199,3 +212,4 @@ public class Login extends HttpServlet {
         processRequest(request, response);
     }
 }
+
