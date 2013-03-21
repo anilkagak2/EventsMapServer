@@ -13,7 +13,7 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	private String user;
-	List<EventDetail> news = new ArrayList<EventDetail>();
+	List<EventDetail> events = new ArrayList<EventDetail>();
 	
 	/*
 	 * Initialise these 3 arrays from use data from database. 
@@ -74,14 +74,36 @@ public class Login extends HttpServlet {
 	}
 	
 	// Redirect to user's Home
-	protected void redirectToDashBoard (HttpServletRequest request, HttpServletResponse response)
+	/*protected void redirectToDashBoard (HttpServletRequest request, HttpServletResponse response)
 		throws IOException {
 		try {
 	    	request.setAttribute("user", user);
-	    	request.setAttribute("events", news);
+	    	request.setAttribute("events", events);
 	    	request.getRequestDispatcher("/Events.jsp").forward(request, response);
 		} catch (Exception e){
 			
+		}
+	} */
+	
+	protected void redirectToDashBoard (HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		try {
+			if(user.equals("admin")) {
+				request.setAttribute("user", user);
+				request.setAttribute("events",events);
+				request.getRequestDispatcher("/Admin.jsp").forward(request, response);
+				return;
+			}
+			else {
+				request.setAttribute("user", user);
+				request.setAttribute("events", events);
+				request.getRequestDispatcher("/Events.jsp").forward(request, response);
+				return;
+			}
+		} catch (Exception e){
+			System.out.println("Some error occurred.. go n have fun.. :P");
+			request.getRequestDispatcher("/Events.jsp").forward(request, response);
+			return;
 		}
 	}
 	
@@ -172,7 +194,7 @@ public class Login extends HttpServlet {
                     		event.category = rs1.getString("category");
                     		event.status = status_enum[rs1.getInt("status")];
                     		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
-                 		    news.add(event);
+                 		    events.add(event);
                     	}
 
                     	rs1.close ();

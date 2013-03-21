@@ -45,8 +45,7 @@
     <servlet-name>FetchLocationCategory</servlet-name>
     <url-pattern>   /FetchLocationCategory  </url-pattern>
   </servlet-mapping>
-  
-   <servlet>
+  <servlet>
     <display-name>   AddEvent   </display-name>
     <servlet-name>AddEvent</servlet-name>
     <servlet-class>  server.AddEvent   </servlet-class>
@@ -55,4 +54,15 @@
     <servlet-name>AddEvent</servlet-name>
     <url-pattern>   /AddEvent  </url-pattern>
   </servlet-mapping>
+  
+    <servlet>
+    <display-name>   Details   </display-name>
+    <servlet-name>Details</servlet-name>
+    <servlet-class>  server.Details   </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Details</servlet-name>
+    <url-pattern>   /Details  </url-pattern>
+  </servlet-mapping>
+  
 </web-app>

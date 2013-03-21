@@ -25,7 +25,6 @@ input.LinkButton {
   padding : 4px;
   border-color : #000000;
 }
-
 </style>
 
 </head>
@@ -35,32 +34,37 @@ input.LinkButton {
 	<h1>Welcome ${user}
 	</h1>
 	</c:if>
-		
+	
+	<table border = "1" > 
 	<c:choose>
-		<c:when test="${not empty events}">
-			<c:forEach items="${events}" var="events">
+		<c:when test="{not empty events}">
+			<c:forEach items="${events}" var="event">
 	                <tr>
-	                    <td>Event Id 	<fmt:formatNumber 	value="${events.id}" />		</td>
-	                    <td>Title 		<c:out 				value="${events.title}" />	</td>
-	                    <td>Start Time	<fmt:formatDate 	value="${events.startTime}"/></td>
-	                    <td>End Time	<fmt:formatDate 	value="${events.endTime}" />	</td>
-	                    <td>Address 	<c:out 				value="${events.address}" />	</td>
-	                    <td>Content 	<c:out 				value="${events.content}" />	</td>
+						<td> <input type="checkbox" name="Check_ctr" value="yes" onClick="checkAll(document.list00.link, this)"></td>												
+	                    <td>User Id 		<c:out 				value="${event.user}" />	</td>
+	                    <td>Username 		<c:out 				value="${event.userName}" />	</td>
+	                    <td>Email Id		<c:out 				value="${event.emailId}" />	</td>
+	                    <td>Post			<c:out 				value="${event.post}" />	</td>
 	                </tr>
 			</c:forEach>
 		</c:when>
 		
 		<c:otherwise>
-			No events added by you.
+			No events added by you.	
 		</c:otherwise>
 	</c:choose>
-
+	</table>
+	
+	<form name="Details" action="Details" method="get">
+		<input type="button" value="Add user" onclick="JavaScript:window.location='Register.jsp';">
+	</form>
+	
+	<form name="Details" action="Details" method="get">
+		<input type="button" value="Delete User" onclick>
+	</form>
+	
 	<form name="Logout" action="Logout" method="post">
 		<input type="submit" value="Log Out">
-	</form>
-
-	<form name="Add Event" action="FetchLocationCategory" method="post">
-		<input type="submit" value="Fetch">
 	</form>
 
 </body>
