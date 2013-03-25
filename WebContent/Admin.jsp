@@ -59,10 +59,11 @@ input.LinkButton {
 		<input type="button" value="Add user" onclick="JavaScript:window.location='Register.jsp';">
 	</form>
 	
-	<form name="Details" action="Details" method="get">
+<!-- 	<form name="Details" action="Details" method="get">
 		<input type="button" value="Delete User" onclick>
 	</form>
-	
+	 -->
+	 
 	<form name="Logout" action="Logout" method="post">
 		<input type="submit" value="Log Out">
 	</form>
