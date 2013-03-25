@@ -54,8 +54,7 @@
     <servlet-name>AddEvent</servlet-name>
     <url-pattern>   /AddEvent  </url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <display-name>   Details   </display-name>
     <servlet-name>Details</servlet-name>
     <servlet-class>  server.Details   </servlet-class>
@@ -65,4 +64,19 @@
     <url-pattern>   /Details  </url-pattern>
   </servlet-mapping>
   
+  <!--  Filters  -->
+	<filter>
+		<filter-name>LoginFilter</filter-name>
+		<filter-class>server.LoginFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>LoginFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+
+	<!--  <context-param>
+		<param-name>Events.jsp.pageCheckSeconds</param-name>
+		<param-value>0</param-value>
+	</context-param> -->
+
 </web-app>
