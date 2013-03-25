@@ -89,6 +89,7 @@ public class AddEvent extends HttpServlet {
 	        			System.out.println("Cannot insert into the database :(");
 	        			closeConnection();
 	        			request.getRequestDispatcher("/Events.jsp").forward(request, response);
+	        			return;
 	        		}
 		        	rs1.close();
 	        	}
@@ -100,19 +101,20 @@ public class AddEvent extends HttpServlet {
 	        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
 	        	System.out.println(query);
 	        	s.executeUpdate(query);
-	        	request.getRequestDispatcher("/Events.jsp").forward(request, response);
 	        	s.close();
 	        	s1.close();
 	        	rs.close();
 
 	        	closeConnection();
 	        	request.getRequestDispatcher("/Events.jsp").forward(request, response);
+	        	return;
 	        }
 	        
 		}catch(Exception e){
 			closeConnection();
 			System.out.println(e.toString());
 			request.getRequestDispatcher("/Events.jsp").forward(request, response);
+			return;
 		}
 	}
 
