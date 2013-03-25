@@ -3,9 +3,9 @@ import java.sql.*;
 
 public class EventDetail {
 	public long eventId; 	
-	public Time startTime; 	
-	public Time endTime;
-	public Time modifiedTime; 
+	public Timestamp startTime; 	
+	public Timestamp endTime;
+	public Timestamp modifiedTime; 
 	public String title;
 	public String content;	
 	public  String location;
@@ -24,15 +24,15 @@ public class EventDetail {
 		return eventId;
 	}
 	
-	public Time getStartTime (){
+	public Timestamp getStartTime (){
 		return startTime;
 	}
 	
-	public Time getEndTime (){
+	public Timestamp getEndTime (){
 		return endTime;
 	}
 	
-	public Time getModifiedTime (){
+	public Timestamp getModifiedTime (){
 		return modifiedTime;
 	}
 	
