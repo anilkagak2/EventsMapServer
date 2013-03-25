@@ -31,21 +31,23 @@ input.LinkButton {
 </head>
 <body>
 	<!--  ${user} from the Login.java doPost -->
-	<c:if test="${not empty user}">
-	<h1>Welcome ${user}
+	<c:if test="${not empty sessionScope.user}">
+	<h1>Welcome ${sessionScope.user}
 	</h1>
 	</c:if>
 		
 	<c:choose>
-		<c:when test="${not empty events}">
-			<c:forEach items="${events}" var="events">
+		<c:when test="${not empty sessionScope.events}">
+			<c:forEach items="${sessionScope.events}" var="events">
 	                <tr>
-	                    <td>Event Id 	<fmt:formatNumber 	value="${events.id}" />		</td>
-	                    <td>Title 		<c:out 				value="${events.title}" />	</td>
-	                    <td>Start Time	<fmt:formatDate 	value="${events.startTime}"/></td>
-	                    <td>End Time	<fmt:formatDate 	value="${events.endTime}" />	</td>
-	                    <td>Address 	<c:out 				value="${events.address}" />	</td>
-	                    <td>Content 	<c:out 				value="${events.content}" />	</td>
+	                    <td>Event Id 	<fmt:formatNumber 	value="${events.eventId}" />		</td><br/>
+	                    <td>Title 		<c:out 				value="${events.title}" />			</td><br/>
+	                    <td>Start Time	<fmt:formatDate 	value="${events.startTime}"/>		</td><br/>
+	                    <td>End Time	<fmt:formatDate 	value="${events.endTime}" />		</td><br/>
+	                    <td>Address 	<c:out 				value="${events.location}" />		</td><br/>
+	                    <td>Content 	<c:out 				value="${events.content}" />		</td><br/>
+	                    
+	                    <br/><br/>
 	                </tr>
 			</c:forEach>
 		</c:when>
