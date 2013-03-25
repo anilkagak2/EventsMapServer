@@ -24,35 +24,39 @@ public class Logout extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * NEVER CALLED --> CAN BE DELETED
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		response.setContentType("text/html");
-		java.io.PrintWriter out = response.getWriter( );
-
-		System.out.println("Logging out.");
-		out.println("<html>");
-		out.println("<body>");
-		out.println("<h1>You Entered</h1>");
-		out.println("</body></html>");
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.removeAttribute("user");
 			session.removeAttribute("loginId");
+			session.removeAttribute("events");
 			session.invalidate();
 		}
-		//response.sendRedirect("Login.jsp");
+		
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Called when LOGGIN OUT
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Logging out.");
-		request.getSession().invalidate();
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			System.out.println("Removing the attributes");
+			session.removeAttribute("user");
+			session.removeAttribute("loginId");
+			
+			System.out.println("events "+ session.getAttribute("events"));
+			session.removeAttribute("events");
+			session.invalidate();
+			System.out.println("events "+ session);
+		}
+		
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	}
-
 }

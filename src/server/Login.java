@@ -13,7 +13,7 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	private String user;
-	List<EventDetail> events = new ArrayList<EventDetail>();
+
 	
 	/*
 	 * Initialise these 3 arrays from use data from database. 
@@ -74,31 +74,14 @@ public class Login extends HttpServlet {
 	}
 	
 	// Redirect to user's Home
-	/*protected void redirectToDashBoard (HttpServletRequest request, HttpServletResponse response)
-		throws IOException {
-		try {
-	    	request.setAttribute("user", user);
-	    	request.setAttribute("events", events);
-	    	request.getRequestDispatcher("/Events.jsp").forward(request, response);
-		} catch (Exception e){
-			
-		}
-	} */
-	
 	protected void redirectToDashBoard (HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
 			if(user.equals("admin")) {
-				request.setAttribute("user", user);
-				request.setAttribute("events",events);
 				request.getRequestDispatcher("/Admin.jsp").forward(request, response);
-				return;
 			}
 			else {
-				request.setAttribute("user", user);
-				request.setAttribute("events", events);
 				request.getRequestDispatcher("/Events.jsp").forward(request, response);
-				return;
 			}
 		} catch (Exception e){
 			System.out.println("Some error occurred.. go n have fun.. :P");
@@ -125,7 +108,9 @@ public class Login extends HttpServlet {
         	/* Use previous session, if it exists. */
         	HttpSession session = request.getSession(false);
         	if ( (session != null) && (session.getAttribute("user") != null)) {
+        		user = request.getParameter("user");
         		redirectToDashBoard (request, response);
+        		return;
         	}
         	
         	/* No Previous Session */
@@ -169,36 +154,49 @@ public class Login extends HttpServlet {
                     	// TODO use session object instead of passed user data
                     	session.setAttribute("user", user);
                     	session.setAttribute("loginId", loginId);
-                    	System.out.println("");
+                    	session.removeAttribute("events");
+                    	System.out.println("login  Id is "+loginId);
                     	found = true;
                     	
-                    	// NOT USEFULL --> will go into server log & not to the user
+                    	// NOT USEFUL --> will go into server log & not to the user
                     	System.out.println ("You are authenticated now.\n"+ user +
                     			" Please proceed further\n");
                     	
                     	Statement s1 = connection.createStatement();
                     	String query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
-                    					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+user+"'" +
+                    					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+loginId+"'" +
                     					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
                     	System.out.println(query);
                     	s1.executeQuery(query);
-                    	ResultSet rs1 = s.getResultSet();
+                    	ResultSet rs1 = s1.getResultSet();
+                    	boolean eventsEmpty = true;
+                    	List<EventDetail> events = new ArrayList<EventDetail>();
                     	while(rs1.next())
                     	{
+                    		if (eventsEmpty) eventsEmpty = false;
+                    		System.out.println ("GOt a record matching");
                     		EventDetail event = new EventDetail();
-                    		event.eventId = rs1.getInt("eventId");
+                    		event.eventId = rs1.getLong("eventId");
                     		event.title = rs1.getString("title");
-                    		event.startTime = rs1.getTime("startTime");
-                    		event.modifiedTime = rs1.getTime("modifiedTime");		// Newly Introduced
-                    		event.endTime = rs1.getTime("endTime");
+                    		event.startTime = rs1.getTimestamp("startTime");
+                    		event.modifiedTime = rs1.getTimestamp("modifiedTime");		// Newly Introduced
+                    		event.endTime = rs1.getTimestamp("endTime");
                     		event.category = rs1.getString("category");
-                    		event.status = status_enum[rs1.getInt("status")];
+                    		//event.status = status_enum[rs1.getInt("status")];
+                    		event.status = rs1.getString("status");
                     		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
                  		    events.add(event);
                     	}
-
+                     	
                     	rs1.close ();
                     	s1.close ();
+                    	session.setAttribute("events", events);
+                    	
+                    	List<EventDetail> ls = (List<EventDetail>)(session.getAttribute("events"));
+                    	for (int i=0; i<ls.size(); i++) {
+                    		System.out.println ("item "+i +"  "+ ls.get(i));
+                    	}
+                    	
                     	break;
                     }
                 }
@@ -206,15 +204,22 @@ public class Login extends HttpServlet {
                 rs.close();
                 s.close();
                 
+                // no cache
+          /*      response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                response.setHeader("Pragma", "no-cache"); 	// HTTP 1.0.
+                response.setDateHeader("Expires", 0); 		// Proxies.
+             */   
                 closeConnection ();
                 System.out.println("Response.");
                 if (!found) {
                 	System.out.println("Home.");
                 	redirectToLoginHome(request, response);
+                	return;
                 }
                 else {
                 	System.out.println("Dash.");
                 	redirectToDashBoard(request, response);
+                	return;
                 }
             }
             
