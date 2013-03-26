@@ -40,14 +40,14 @@ input.LinkButton {
 		<c:when test="${not empty sessionScope.events}">
 			<c:forEach items="${sessionScope.events}" var="events">
 	                <tr>
-	                    <td>Event Id 	<fmt:formatNumber 	value="${events.eventId}" />		</td><br/>
-	                    <td>Title 		<c:out 				value="${events.title}" />			</td><br/>
-	                    <td>Start Time	<fmt:formatDate 	value="${events.startTime}"/>		</td><br/>
-	                    <td>End Time	<fmt:formatDate 	value="${events.endTime}" />		</td><br/>
-	                    <td>Address 	<c:out 				value="${events.location}" />		</td><br/>
-	                    <td>Content 	<c:out 				value="${events.content}" />		</td><br/>
+	                    <td>Event Id 	<fmt:formatNumber 	value="${events.eventId}" />		</td><br>
+	                    <td>Title 		<c:out 				value="${events.title}" />			</td><br>
+	                    <td>Start Time	<fmt:formatDate 	value="${events.startTime}"/>		</td><br>
+	                    <td>End Time	<fmt:formatDate 	value="${events.endTime}" />		</td><br>
+	                    <td>Address 	<c:out 				value="${events.location}" />		</td><br>
+	                    <td>Content 	<c:out 				value="${events.content}" />		</td><br>
 	                    
-	                    <br/><br/>
+	                    <br><br>
 	                </tr>
 			</c:forEach>
 		</c:when>
@@ -57,12 +57,12 @@ input.LinkButton {
 		</c:otherwise>
 	</c:choose>
 
+	<form name="Add Event" action="FetchLocationCategory" method="post">
+		<input type="submit" value="Add Event">
+	</form>
+	
 	<form name="Logout" action="Logout" method="post">
 		<input type="submit" value="Log Out">
-	</form>
-
-	<form name="Add Event" action="FetchLocationCategory" method="post">
-		<input type="submit" value="Fetch">
 	</form>
 
 </body>

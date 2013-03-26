@@ -49,15 +49,26 @@ public class AddEvent extends HttpServlet {
     		loginId = Integer.parseInt(session.getAttribute("loginId").toString());
     	}
 		
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
-		String subland = request.getParameter("subland");
-		int category = Integer.parseInt(request.getParameter("category"));
-		int mainland = Integer.parseInt(request.getParameter("mainland"));
-		int status = Integer.parseInt(request.getParameter("status"));
-		int locationId = 0;
-		Timestamp startTime = Timestamp.valueOf(request.getParameter("starttime"));
-		Timestamp endTime = Timestamp.valueOf(request.getParameter("endtime"));
+    	String title, content, subland;
+    	int category, mainland, status, locationId;
+    	Timestamp startTime, endTime;
+    	
+    	try {
+			title = request.getParameter("title");
+			content = request.getParameter("content");
+			subland = request.getParameter("subland");
+			category = Integer.parseInt(request.getParameter("category"));
+			mainland = Integer.parseInt(request.getParameter("mainland"));
+			status = Integer.parseInt(request.getParameter("status"));
+			locationId = 0;
+			startTime = Timestamp.valueOf(request.getParameter("starttime"));
+			endTime = Timestamp.valueOf(request.getParameter("endtime"));
+    	} catch (Exception e){
+    		System.out.println(e.toString());
+    		request.getSession().setAttribute("error", e.toString());
+    		request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+    		return;
+    	}
 		
 		System.out.println(user);
 		System.out.println(title);
@@ -106,14 +117,14 @@ public class AddEvent extends HttpServlet {
 	        	rs.close();
 
 	        	closeConnection();
-	        	request.getRequestDispatcher("/Events.jsp").forward(request, response);
+	        	request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
 	        	return;
 	        }
 	        
 		}catch(Exception e){
 			closeConnection();
 			System.out.println(e.toString());
-			request.getRequestDispatcher("/Events.jsp").forward(request, response);
+			request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
 			return;
 		}
 	}

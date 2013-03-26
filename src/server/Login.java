@@ -11,12 +11,14 @@ import java.util.List;
 public class Login extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	public static final String admin="vp"; 			// Define admin's post here
+	public static final int adminId=1; 			// Define admin's post here
 	private Connection connection;
 	private String user;
-
+	private long loginId;
 	
 	/*
-	 * Initialise these 3 arrays from use data from database. 
+	 * Initialize these 3 arrays from use data from database. 
 	 */
 	public String[] status_enum = new String[4];
 
@@ -77,8 +79,9 @@ public class Login extends HttpServlet {
 	protected void redirectToDashBoard (HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
-			if(user.equals("admin")) {
-				request.getRequestDispatcher("/Admin.jsp").forward(request, response);
+			// TODO: Should loginId be of type long or int 
+			if(loginId == adminId) {
+				request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
 			}
 			else {
 				request.getRequestDispatcher("/Events.jsp").forward(request, response);
@@ -109,12 +112,14 @@ public class Login extends HttpServlet {
         	HttpSession session = request.getSession(false);
         	if ( (session != null) && (session.getAttribute("user") != null)) {
         		user = request.getParameter("user");
+        		loginId = Long.parseLong(request.getParameter("loginId"));
         		redirectToDashBoard (request, response);
         		return;
         	}
         	
         	/* No Previous Session */
             user = request.getParameter("user");
+            loginId = -1;		// ERROR
             String pass = request.getParameter("pass");
             String final_hash = "";
 
@@ -148,7 +153,7 @@ public class Login extends HttpServlet {
                     System.out.println("final_hash " + final_hash);
                     System.out.println("pass_hash " + pass_hash);
                     if (final_hash.equals(pass_hash)) {
-                    	int loginId = rs.getInt("loginId");
+                    	loginId = rs.getInt("loginId");
                     	session = request.getSession(true);
 
                     	// TODO use session object instead of passed user data
@@ -192,10 +197,10 @@ public class Login extends HttpServlet {
                     	s1.close ();
                     	session.setAttribute("events", events);
                     	
-                    	List<EventDetail> ls = (List<EventDetail>)(session.getAttribute("events"));
+                    	/*List<EventDetail> ls = (List<EventDetail>)(session.getAttribute("events"));
                     	for (int i=0; i<ls.size(); i++) {
                     		System.out.println ("item "+i +"  "+ ls.get(i));
-                    	}
+                    	}*/
                     	
                     	break;
                     }

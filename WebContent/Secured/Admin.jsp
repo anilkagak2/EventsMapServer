@@ -40,11 +40,14 @@ input.LinkButton {
 		<c:when test="{not empty events}">
 			<c:forEach items="${events}" var="event">
 	                <tr>
-						<td> <input type="checkbox" name="Check_ctr" value="yes" onClick="checkAll(document.list00.link, this)"></td>												
-	                    <td>User Id 		<c:out 				value="${event.user}" />	</td>
-	                    <td>Username 		<c:out 				value="${event.userName}" />	</td>
-	                    <td>Email Id		<c:out 				value="${event.emailId}" />	</td>
-	                    <td>Post			<c:out 				value="${event.post}" />	</td>
+	                    <td>Event Id 	<fmt:formatNumber 	value="${events.eventId}" />		</td><br>
+	                    <td>Title 		<c:out 				value="${events.title}" />			</td><br>
+	                    <td>Start Time	<fmt:formatDate 	value="${events.startTime}"/>		</td><br>
+	                    <td>End Time	<fmt:formatDate 	value="${events.endTime}" />		</td><br>
+	                    <td>Address 	<c:out 				value="${events.location}" />		</td><br>
+	                    <td>Content 	<c:out 				value="${events.content}" />		</td><br>
+	                    
+	                    <br><br>
 	                </tr>
 			</c:forEach>
 		</c:when>
@@ -56,11 +59,15 @@ input.LinkButton {
 	</table>
 	
 	<form name="Details" action="Details" method="get">
-		<input type="button" value="Add user" onclick="JavaScript:window.location='Register.jsp';">
+		<input type="button" value="Add user" onclick="JavaScript:window.location='/Secured/Register.jsp';">
 	</form>
 	
-	<form name="Details" action="Details" method="get">
-		<input type="button" value="Delete User" onclick>
+	<form name="Add Event" action="FetchLocationCategory" method="post">
+		<input type="submit" value="Add Event">
+	</form>
+	 
+	<form name="Logout" action="Logout" method="post">
+		<input type="submit" value="Log Out">
 	</form>
 
 </body>

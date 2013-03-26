@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
- * Servlet Filter implementation class LoginFilter
+ * Servlet Filter implementation class AdminFilter
  */
-@WebFilter("/LoginFilter")
-public class LoginFilter implements Filter {
+@WebFilter("/AdminFilter")
+public class AdminFilter implements Filter {
 
     /**
      * Default constructor. 
      */
-    public LoginFilter() {
+    public AdminFilter() {
         // TODO Auto-generated constructor stub
     }
 
@@ -34,32 +34,29 @@ public class LoginFilter implements Filter {
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
 	 */
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
-		System.out.println("In LoginFilter");
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest)request).getSession(false);
 		
-    	if ( (session != null) && (session.getAttribute("user") != null) 
-    			&& (session.getAttribute("events") != null)) {
-    		System.out.println ("FILTER user!= null");
-    		System.out.println ("FILTER user "+ session.getAttribute("user"));
-    		System.out.println ("FILTER events "+ session.getAttribute("events"));
-    	//	request.getRequestDispatcher("/Secured/Events.jsp").forward(request, response);
-    		
-    		// pass the request along the filter chain
-    		chain.doFilter(request, response);
-    	}
-    	else {
-    		if (session != null) {
-	    		System.out.println ("FILTER user "+ session.getAttribute("user"));
-	    		session.removeAttribute("user");
-	    		session.invalidate();
-	    		request.getRequestDispatcher("/Login.jsp").forward(request, response);
-	    		return;
+    	if (session != null) {
+    		int loginId = Integer.parseInt((String) session.getAttribute("userId"));
+    		if ( (loginId == 1) && (session.getAttribute("events") != null) 
+    				&& (session.getAttribute("user") != null) ){
+    			System.out.println ("FILTER user!= null");
+    			System.out.println ("FILTER userId = "+ loginId);
+        		System.out.println ("FILTER user "+ session.getAttribute("user"));
+        		System.out.println ("FILTER events "+ session.getAttribute("events"));
+
+        		// pass the request along the filter chain
+        		chain.doFilter(request, response);
     		}
+    		
+    		else {
+	    		request.getRequestDispatcher("/Login.jsp").forward(request, response);
+    		}
+    	} else {
     		request.getRequestDispatcher("/Login.jsp").forward(request, response);
     	}
-}
+	}
 
 	/**
 	 * @see Filter#init(FilterConfig)

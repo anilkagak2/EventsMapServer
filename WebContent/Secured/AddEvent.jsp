@@ -10,6 +10,16 @@
 
 </head>
 <body>
+	<c:if test="${not empty sessionScope.error}">
+		<h2>ERROR! ${sessionScope.error}
+		</h2>
+		<c:remove var="sessionScope.error" />
+	</c:if>
+
+	<form name="BackToHome" action="Details" method="get">
+		<input type="button" value="Back to Home" onclick="JavaScript:window.location='/Secured/Admin.jsp';">
+	</form>
+
 	<form name="addEvent" method="get" action="AddEvent" onsubmit="return checkAddEventForm();">
 	<table>
 		<tr><td>Title</td>

@@ -16,16 +16,6 @@ import java.util.List;
  * Servlet implementation class FetchLocationCategory
  */
 
-/*class MainLand{
-  public int mainLandId;
-  public String mainLand;
-} */
-
-/*class Category{
-  public int categoryId;
-  public String category;
-}  */
-
 @WebServlet("/FetchLocationCategory")
 public class FetchLocationCategory extends HttpServlet {
 
@@ -51,22 +41,41 @@ public class FetchLocationCategory extends HttpServlet {
 		request.setAttribute("user", user);
         request.setAttribute("mainland", mainland);
         request.setAttribute("category", category);
-        request.getRequestDispatcher("/AddEvent.jsp").forward(request, response);
+        request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
 	}
     
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
             
          try{
+        	 /*
+        	  * THIS FEATURE MAY LEAD TO TROUBLE WHEN SERVER IS UP & RUNNING
+        	  * BUT NEW LOCATIONS ARE ADDED & THEN mainland needs to be changed 
+        	  * OR
+        	  * BETTER APPROACH WOULD BE TO SET mainland & category in session
+        	  * OR 
+        	  * LOAD THE VARIABLES EACH TIME THE METHOD IS CALLED
+        	  */
+        	 /*
+        	  * TODO Apply the strategy of querying the database every time request comes
+        	  * make mainland & category local to this function & hence everything will work as desired
+        	  * */
         	 if (!mainland.isEmpty() && !category.isEmpty()) {
         		 System.out.println("mainland and category not null");
         	     sendResponse(request, response);
+        	     return;
         	 }
         	 
         	HttpSession session = request.getSession(false);
         	if (session != null) {
         		user = session.getAttribute("user").toString();
+        	} else {
+        		// SERIOUS ERROR IN EXECUTION FLOW
+        		System.out.println("Serious erorr in execution flow.. session null");
+        		request.getRequestDispatcher("/Login.jsp").forward(request, response);
+        		return;
         	}
+        	
             String mysqlUser = "root";
             String mysqlPass = "root";
             String url = "jdbc:mysql://localhost:3306/EventsMapServer";
@@ -100,7 +109,6 @@ public class FetchLocationCategory extends HttpServlet {
 	             rs.close();
 	             s.close();
 	             connection.close();
-            
             }
             else{
             	System.out.println("Database connection failed.");
