@@ -111,49 +111,11 @@
 <script src="js/jquery/jquery.datePicker.js" type="text/javascript"></script>
 <script type="text/javascript" charset="utf-8">
 	$(function() {
-
 		// initialise the "Select date" link
-		$('#date-pick').datePicker(
-		// associate the link with a date picker
-		{
-			createButton : false,
-			startDate : '01/01/2005',
-			endDate : '31/12/2020'
-		}).bind(
-		// when the link is clicked display the date picker
-		'click', function() {
-			updateSelects($(this).dpGetSelected()[0]);
-			$(this).dpDisplay();
-			return false;
-		}).bind(
-		// when a date is selected update the SELECTs
-		'dateSelected', function(e, selectedDate, $td, state) {
-			updateSelects(selectedDate);
-		}).bind('dpClosed', function(e, selected) {
-			updateSelects(selected[0]);
-		});
-
-		var updateSelects = function(selectedDate) {
-			var selectedDate = new Date(selectedDate);
-			$('#d option[value=' + selectedDate.getDate() + ']').attr(
-					'selected', 'selected');
-			$('#m option[value=' + (selectedDate.getMonth() + 1) + ']').attr(
-					'selected', 'selected');
-			$('#y option[value=' + (selectedDate.getFullYear()) + ']').attr(
-					'selected', 'selected');
-		}
-		// listen for when the selects are changed and update the picker
-		$('#d, #m, #y').bind('change', function() {
-			var d = new Date($('#y').val(), $('#m').val() - 1, $('#d').val());
-			$('#date-pick').dpSetSelected(d.asString());
-		});
-
-		// default the position of the selects to today
-		var today = new Date();
-		updateSelects(today.getTime());
-
-		// and update the datePicker to reflect it...
-		$('#d').trigger('change');
+		$('#startdatepicker').datePicker();
+		$('#enddatepicker').datePicker();
+		$('#endTimePicker').timepicker({ 'step': 15 });
+		$('#startTimePicker').timepicker({ 'step': 15 });
 	});
 </script>
 
@@ -367,21 +329,34 @@ input.LinkButton {
 													</td>
 													<td></td>
 												</tr>
+												<tr>
+													<th valign="top">Start date:</th>
+													<td class="noheight">
+														<!--  // TODO Leap Year Feb29 --> <input name="startDate"
+														type="text" id="startdatepicker" />
+													</td>
+													<td></td>
+												</tr>
+
 
 												<tr>
 													<th valign="top">Start Time:</th>
-													<td><input type="datetime" class="inp-form"
-														name="starttime"></td>
+													<td><input type="datetime" class="inp-form"	name="starttime" id="startTimePicker"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
 												</tr>
-
+												<tr>
+													<th valign="top">End date:</th>
+													<td class="noheight"><input name="endDate" type="text"
+														id="enddatepicker" /></td>
+													<td></td>
+												</tr>
 												<tr>
 													<th valign="top">End Time:</th>
-													<td><input type="datetime" class="inp-form"
+													<td><input type="datetime" class="inp-form" id="endTimePicker"
 														name="endtime"></td>
 													<td>
 														<div class="error-left"></div>
@@ -417,34 +392,7 @@ input.LinkButton {
 													<td></td>
 												</tr>
 
-												<tr>
-													<th valign="top">Select a date:</th>
-													<td class="noheight">
 
-														<table border="0" cellpadding="0" cellspacing="0">
-															<tr valign="top">
-																<td>
-																	<form id="chooseDateForm" action="#">
-
-																		<select id="d" class="styledselect-day">
-																			<option value="">dd</option>
-																		</select>
-																</td>
-																<td><select id="m" class="styledselect-month">
-																		<option value="">mmm</option>
-																</select></td>
-																<td><select id="y" class="styledselect-year">
-																		<option value="">yyyy</option>
-																</select>
-																	</form></td>
-																<td><a href="" id="date-pick"><img
-																		src="images/forms/icon_calendar.jpg" alt="" /></a></td>
-															</tr>
-														</table>
-
-													</td>
-													<td></td>
-												</tr>
 
 												<tr>
 													<th>&nbsp;</th>
