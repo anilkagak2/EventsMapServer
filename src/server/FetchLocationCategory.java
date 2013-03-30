@@ -31,7 +31,8 @@ public class FetchLocationCategory extends HttpServlet {
                 connection.close();
                 System.out.println("Database connection terminated");
             } catch (Exception e) {
-            	System.out.println(e.toString());
+            	System.out.println(e.toString()+ "\n Exception Stack: \n");
+                e.printStackTrace();
             }
         }
 	}
@@ -112,14 +113,15 @@ public class FetchLocationCategory extends HttpServlet {
             }
             else{
             	System.out.println("Database connection failed.");
-            	request.getRequestDispatcher("/Events.jsp").forward(request, response);
+            	request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
             }
        // List<Passenger> passengers = service.list();
         sendResponse(request, response);
     }catch(Exception e)
     {
         closeConnection();
-        System.out.println(e.toString());
+        System.out.println(e.toString()+ "\n Exception Stack: \n");
+        e.printStackTrace();
     }
 }
 }

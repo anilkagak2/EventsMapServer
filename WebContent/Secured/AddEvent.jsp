@@ -20,7 +20,7 @@
 		<input type="button" value="Back to Home" onclick="JavaScript:window.location='/Secured/Admin.jsp';">
 	</form>
 
-	<form name="addEvent" method="get" action="AddEvent" onsubmit="return checkAddEventForm();">
+	<form name="addEvent" method="post" action="AddEvent" onsubmit="return checkAddEventForm();">
 	<table>
 		<tr><td>Title</td>
 			<td><input type="text" name="title"></td></tr>
@@ -53,9 +53,8 @@
 		  <option value="3">CANCELLED</option>
 		  <option value="4">COMPLETED</option>
 		  </select>
-		<form name="Add Event" action="AddEvent" method="post">
+	<!--  	<form name="Add Event" action="AddEvent" method="post">-->
 		<input type="submit" value="Add">
-	</form>
 	</table>
 	</form>
 	

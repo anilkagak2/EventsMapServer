@@ -11,11 +11,9 @@ import java.util.List;
 public class Login extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	public static final String admin="vp"; 			// Define admin's post here
-	public static final int adminId=1; 			// Define admin's post here
 	private Connection connection;
 	private String user;
-	private long loginId;
+	private int loginId;
 	
 	/*
 	 * Initialize these 3 arrays from use data from database. 
@@ -70,7 +68,8 @@ public class Login extends HttpServlet {
                 connection.close();
                 System.out.println("Database connection terminated");
             } catch (Exception e) {
-            	System.out.println(e.toString());
+            	System.out.println(e.toString()+ "\n Exception Stack: \n");
+                e.printStackTrace();
             }
         }
 	}
@@ -80,15 +79,17 @@ public class Login extends HttpServlet {
 			throws IOException, ServletException {
 		try {
 			// TODO: Should loginId be of type long or int 
-			if(loginId == adminId) {
+			if(loginId == Declarations.adminId) {
 				request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
 			}
 			else {
-				request.getRequestDispatcher("/Events.jsp").forward(request, response);
+				request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
 			}
 		} catch (Exception e){
 			System.out.println("Some error occurred.. go n have fun.. :P");
-			request.getRequestDispatcher("/Events.jsp").forward(request, response);
+			System.out.println(e.toString()+ "\n Exception Stack: \n");
+	        e.printStackTrace();
+			request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
 			return;
 		}
 	}
@@ -99,7 +100,8 @@ public class Login extends HttpServlet {
 		try {
 			request.getRequestDispatcher("/Login.jsp").forward(request, response);
 		} catch (Exception e){
-			
+			System.out.println(e.toString()+ "\n Exception Stack: \n");
+	        e.printStackTrace();
 		}
 	}
 	
@@ -110,9 +112,11 @@ public class Login extends HttpServlet {
         try {
         	/* Use previous session, if it exists. */
         	HttpSession session = request.getSession(false);
-        	if ( (session != null) && (session.getAttribute("user") != null)) {
-        		user = request.getParameter("user");
-        		loginId = Long.parseLong(request.getParameter("loginId"));
+        	if ( (session != null) && (session.getAttribute("user") != null)
+        			&& (session.getAttribute("loginId") != null)) {
+        		user = session.getAttribute("user").toString();
+        		System.out.println("loginId "+ session.getAttribute("loginId").toString());
+        		loginId = Integer.parseInt(session.getAttribute("loginId").toString());
         		redirectToDashBoard (request, response);
         		return;
         	}
@@ -129,6 +133,8 @@ public class Login extends HttpServlet {
             }
                 catch(Exception e){
                 	System.out.println("error..!!" );
+                	System.out.println(e.toString()+ "\n Exception Stack: \n");
+                    e.printStackTrace();
             }
             
             // Create Connection
@@ -230,7 +236,8 @@ public class Login extends HttpServlet {
             
             else System.out.println("Cannot connect to the database\n");
         } catch (Exception e) {
-        	System.out.println(e.toString());
+        	System.out.println(e.toString()+ "\n Exception Stack: \n");
+            e.printStackTrace();
         }
 }
  

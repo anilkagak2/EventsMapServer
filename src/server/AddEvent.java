@@ -25,24 +25,75 @@ public class AddEvent extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
     protected void closeConnection () {
 		if (connection != null) {
             try {
                 connection.close();
                 System.out.println("Database connection terminated");
             } catch (Exception e) {
-            	System.out.println(e.toString());
+            	System.out.println(e.toString()+ "\n Exception Stack: \n");
+                e.printStackTrace();
             }
         }
 	}
+  
+    /* LocationId corresponding to mainland,subland pair. */
+    protected int getLocationId (int mainland, String subland) {
+    	int locationId = 0;
+    	
+    	try {
+    		Statement s = connection.createStatement();
+	    	s.executeQuery("SELECT * FROM Location WHERE mainLandId = '"+mainland+"' AND subLand = '"+subland+"'");
+	    	ResultSet rs = s.getResultSet();
+	    	if(!rs.next()) {
+	    		s.executeUpdate("INSERT INTO Location(mainLandId, subLand) VALUES ('"+mainland+"', '"+subland+"')");
+	    		s.executeQuery("SELECT * FROM Location WHERE mainLandId = '"+mainland+"' AND subLand = '"+subland+"'");
+	    		ResultSet rs1 = s.getResultSet();
+	    	
+	    		rs1.next();
+	    		locationId = rs1.getInt("locationId");
+	        	rs1.close();
+	    	}
+	    	else locationId = rs.getInt("locationId");
+
+	    	rs.close ();
+	    	s.close ();
+    	} catch (Exception e){
+			System.out.println("Cannot insert into the database :(");
+			System.out.println(e.toString()+ "\n Exception Stack: \n");
+	        e.printStackTrace();
+			closeConnection();
+		//	request.getRequestDispatcher("/Events.jsp").forward(request, response);
+		}
+    	System.out.println ("");
+    	return locationId;
+    }
     
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+    /* Execute insert query. */
+    protected boolean modificationQuery (String query) {
+    	boolean result = true;
+    	
+    	try {
+	    	Statement s = connection.createStatement();
+	    	System.out.println(query);
+	    	s.executeUpdate(query);
+	    	s.close();
+    	}
+    	catch (Exception e) {
+    		result = false;
+    		System.out.println(e.toString()+ "\n Exception Stack: \n");
+	        e.printStackTrace();
+    	}
+    	return result;
+    }
+    
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user = "";
 		int loginId = 0;
+		String action="";
 		HttpSession session = request.getSession(false);
     	if (session != null) {
     		user = session.getAttribute("user").toString();
@@ -63,8 +114,10 @@ public class AddEvent extends HttpServlet {
 			locationId = 0;
 			startTime = Timestamp.valueOf(request.getParameter("starttime"));
 			endTime = Timestamp.valueOf(request.getParameter("endtime"));
+			action = request.getParameter("action");
     	} catch (Exception e){
-    		System.out.println(e.toString());
+    		System.out.println(e.toString()+ "\n Exception Stack: \n");
+            e.printStackTrace();
     		request.getSession().setAttribute("error", e.toString());
     		request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
     		return;
@@ -85,55 +138,49 @@ public class AddEvent extends HttpServlet {
 	        Class.forName("com.mysql.jdbc.Driver").newInstance();
 	        connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
 	        if(connection!=null){
-	        	Statement s = connection.createStatement();
-	        	Statement s1 = connection.createStatement();
-	        	s1.executeQuery("SELECT * FROM Location WHERE mainLandId = '"+mainland+"' AND subLand = '"+subland+"'");
-	        	ResultSet rs = s1.getResultSet();
-	        	if(!rs.next()){
-	        		s.executeUpdate("INSERT INTO Location(mainLandId, subLand) VALUES ('"+mainland+"', '"+subland+"')");
-	        		s.executeQuery("SELECT * FROM Location WHERE mainLandId = '"+mainland+"' AND subLand = '"+subland+"'");
-	        		ResultSet rs1 = s.getResultSet();
-	        		try {
-	        			rs1.next();
-	        			locationId = rs1.getInt("locationId");
-	        		} catch (Exception e){
-	        			System.out.println("Cannot insert into the database :(");
-	        			closeConnection();
-	        			request.getRequestDispatcher("/Events.jsp").forward(request, response);
-	        			return;
-	        		}
-		        	rs1.close();
-	        	}
-	        	else{
-	        		locationId = rs.getInt("locationId");
-	        	}
-	        	
-	        	String query = "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
-	        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
-	        	System.out.println(query);
-	        	s.executeUpdate(query);
-	        	s.close();
-	        	s1.close();
-	        	rs.close();
+	        	locationId = getLocationId(mainland, subland);
 
-	        	closeConnection();
-	        	request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
-	        	return;
-	        }
-	        
-		}catch(Exception e){
+	        	// TODO Think about where should the action parameter be in the form
+	        	// --> in session or in request ?
+	        	String query = "";
+	        	if (action.equals("INSERT")) {
+	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
+	        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
+	        	}
+	        	else if (action.equals("UPDATE")) {
+	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
+		        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
+	        	}
+	        	else if (action.equals("DELETE")) {
+	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
+		        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
+	        	}
+	        	else {
+	        		String error = "INVALID QUERY";
+	        		request.setAttribute("error", error);
+	        		closeConnection();
+		        	request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+		        	return;
+	        	}
+
+	        	if (!modificationQuery(query)) {
+	        		closeConnection();
+		        	request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+		        	return;
+	        	}
+	        	else System.out.println ("Cannot insert some problem occurred.\n");
+	        } 
+		} catch(Exception e) {
 			closeConnection();
-			System.out.println(e.toString());
-			request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+			System.out.println(e.toString()+ "\n Exception Stack: \n");
+	        e.printStackTrace();
+	        
+	        if (loginId == Declarations.adminId)
+	        	request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
+	        else
+	        	request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
 			return;
 		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 	}
 
 }
