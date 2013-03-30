@@ -259,10 +259,6 @@ input.LinkButton {
 							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
 					</ul>
 
-					<ul class="select">
-						<li><a href="FetchLocationCategory"><b>Add Event</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]-->
-					</ul>
 					<div class="clear"></div>
 
 					<c:choose>
@@ -278,151 +274,220 @@ input.LinkButton {
 						<li><a href="${homePage}"><b>Back To Home</b> <!--[if IE 7]><!--></a>
 							<!--<![endif]--></li>
 					</ul>
-
-					<c:if test="${not empty sessionScope.error}">
-						<h2>ERROR! ${sessionScope.error}
-						</h2>
-						<c:remove var="sessionScope.error" />
-					</c:if>
-
-					<!-- start id-form -->
-					
-					<form name="addEvent" method="post" action="AddEvent">
-							<table>
-								<tr><td>Title</td>
-									<td><input type="text" name="title"></td></tr>
-								<tr><td>Content</td>
-									<td><input type="text" name="content"></td></tr>
-						
-								<!--  <label> Main Land: -->
-								<select name="mainland">
-									<c:forEach items="${mainland}" var="mainland">
-										<option value="${mainland.mainLandId}"><c:out value="${mainland.mainLand}" /></option>
-									</c:forEach>
-								</select>
-								<!-- </label> -->
-						
-								<tr><td>subLand</td>
-									<td><input type="text" name="subland"></td></tr>
-								<tr><td>Start Time</td>
-									<td><input type="datetime" name="starttime">
-								<tr><td>End Time</td>
-									<td><input type="datetime" name="endtime">
-								<label>Category: <select name="category">
-								  <c:forEach items="${category}" var="category">
-								     <option value="${category.categoryId}"><c:out value="${category.category}" /></option>
-								 </c:forEach>
-								  </select>
-								  </label>
-								<select name="status">
-								  <option value="1">ONGOING</option>
-								  <option value="2">SCHEDULED</option>
-								  <option value="3">CANCELLED</option>
-								  <option value="4">COMPLETED</option>
-								  </select>
-							<!--  	<form name="Add Event" action="AddEvent" method="post">-->
-								<input type="submit" value="Add">
-							</table>
-						</form>
-					
-					<table border="0" cellpadding="0" cellspacing="0" id="id-form">
-						<tr>
-							<th valign="top">Product name:</th>
-							<td><input type="text" class="inp-form" /></td>
-							<td></td>
-						</tr>
-						
-						<tr>
-							<th valign="top">Product name:</th>
-							<td><input type="text" class="inp-form-error" /></td>
-							<td>
-								<div class="error-left"></div>
-								<div class="error-inner">This field is required.</div>
-							</td>
-						</tr>
-						<tr>
-							<th valign="top">Status:</th>
-							<td>
-								<select class="styledselect_form_1" name="status">
-									<option value="1">ONGOING</option>
-									<option value="2">SCHEDULED</option>
-									<option value="3">CANCELLED</option>
-									<option value="4">COMPLETED</option>
-								</select>
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<th valign="top">Sub Category:</th>
-							<td><select class="styledselect_form_1">
-									<option value="">All</option>
-									<option value="">Products</option>
-									<option value="">Categories</option>
-									<option value="">Clients</option>
-									<option value="">News</option>
-							</select></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th valign="top">Price:</th>
-							<td><input type="text" class="inp-form" /></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th valign="top">Select a date:</th>
-							<td class="noheight">
-
-								<table border="0" cellpadding="0" cellspacing="0">
-									<tr valign="top">
-										<td>
-											<form id="chooseDateForm" action="#">
-
-												<select id="d" class="styledselect-day">
-													<option value="">dd</option>
-												</select>
-										</td>
-										<td><select id="m" class="styledselect-month">
-												<option value="">mmm</option>
-										</select></td>
-										<td><select id="y" class="styledselect-year">
-												<option value="">yyyy</option>
-										</select>
-											</form></td>
-										<td><a href="" id="date-pick"><img
-												src="images/forms/icon_calendar.jpg" alt="" /></a></td>
-									</tr>
-								</table>
-
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<th valign="top">Description:</th>
-							<td><textarea rows="" cols="" class="form-textarea"></textarea></td>
-							<td></td>
-						</tr>
-						<tr>
-							<th>Image 1:</th>
-							<td><input type="file" class="file_1" /></td>
-							<td>
-								<div class="bubble-left"></div>
-								<div class="bubble-inner">JPEG, GIF 5MB max per image</div>
-								<div class="bubble-right"></div>
-							</td>
-						</tr>
-						<tr>
-							<th>&nbsp;</th>
-							<td valign="top"><input type="button" value=""
-								class="form-submit" /> <input type="reset" value=""
-								class="form-reset" /></td>
-							<td></td>
-						</tr>
-					</table>
-					<!-- end id-form  -->
 				</div>
 			</div>
 			<!-- start nav -->
 		</div>
 	</div>
+
+
+	<div class="clear"></div>
+
+	<!-- start content-outer -->
+	<div id="content-outer">
+		<!-- start content -->
+		<div id="content">
+
+
+			<div id="page-heading">
+				<h1>Add Event</h1>
+			</div>
+
+
+			<table border="0" width="100%" cellpadding="0" cellspacing="0"
+				id="content-table">
+				<tr>
+					<th rowspan="3" class="sized"><img
+						src="images/shared/side_shadowleft.jpg" width="20" height="300"
+						alt="" /></th>
+					<th class="topleft"></th>
+					<td id="tbl-border-top">&nbsp;</td>
+					<th class="topright"></th>
+					<th rowspan="3" class="sized"><img
+						src="images/shared/side_shadowright.jpg" width="20" height="300"
+						alt="" /></th>
+				</tr>
+				<tr>
+					<td id="tbl-border-left"></td>
+					<td>
+						<!--  start content-table-inner -->
+						<div id="content-table-inner">
+
+							<table border="0" width="100%" cellpadding="0" cellspacing="0">
+								<tr valign="top">
+									<td><c:if test="${not empty sessionScope.error}">
+											<h2>ERROR! ${sessionScope.error}</h2>
+											<c:remove var="sessionScope.error" />
+										</c:if> <!-- start id-form -->
+										<form name="addEvent" method="post" action="AddEvent">
+											<table border="0" cellpadding="0" cellspacing="0"
+												id="id-form">
+												<tr>
+													<th valign="top">Title:</th>
+													<td><input type="text" class="inp-form" name="title"></td>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">Content:</th>
+													<td><input type="text" class="inp-form" name="content"></td>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">MainLand:</th>
+													<td><select name="mainland">
+															<c:forEach items="${mainland}" var="mainland">
+																<option value="${mainland.mainLandId}">
+																	<c:out value="${mainland.mainLand}" />
+																</option>
+															</c:forEach>
+													</select>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">SubLand:</th>
+													<td><input type="text" class="inp-form" name="subland"></td>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">Start Time:</th>
+													<td><input type="datetime" class="inp-form"
+														name="starttime"></td>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">End Time:</th>
+													<td><input type="datetime" class="inp-form"
+														name="endtime"></td>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">Status:</th>
+													<td><select class="styledselect_form_1" name="status">
+															<option value="1">ONGOING</option>
+															<option value="2">SCHEDULED</option>
+															<option value="3">CANCELLED</option>
+															<option value="4">COMPLETED</option>
+													</select></td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">Category:</th>
+													<td><select name="category">
+															<c:forEach items="${category}" var="category">
+																<option value="${category.categoryId}">
+																	<c:out value="${category.category}" />
+																</option>
+															</c:forEach>
+													</select>
+													<td>
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">Select a date:</th>
+													<td class="noheight">
+
+														<table border="0" cellpadding="0" cellspacing="0">
+															<tr valign="top">
+																<td>
+																	<form id="chooseDateForm" action="#">
+
+																		<select id="d" class="styledselect-day">
+																			<option value="">dd</option>
+																		</select>
+																</td>
+																<td><select id="m" class="styledselect-month">
+																		<option value="">mmm</option>
+																</select></td>
+																<td><select id="y" class="styledselect-year">
+																		<option value="">yyyy</option>
+																</select>
+																	</form></td>
+																<td><a href="" id="date-pick"><img
+																		src="images/forms/icon_calendar.jpg" alt="" /></a></td>
+															</tr>
+														</table>
+
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th>&nbsp;</th>
+													<td valign="top"><input type="button" value=""
+														class="form-submit" /> <input type="reset" value=""
+														class="form-reset" /></td>
+													<td></td>
+												</tr>
+											</table>
+										</form> <!-- end id-form  -->
+								<tr>
+									<td><img src="images/shared/blank.gif" width="695"
+										height="1" alt="blank" /></td>
+									<td></td>
+								</tr>
+							</table>
+
+							<div class="clear"></div>
+
+
+						</div> <!--  end content-table-inner  -->
+					</td>
+					<td id="tbl-border-right"></td>
+				</tr>
+				<tr>
+					<th class="sized bottomleft"></th>
+					<td id="tbl-border-bottom">&nbsp;</td>
+					<th class="sized bottomright"></th>
+				</tr>
+			</table>
+
+
+			<div class="clear">&nbsp;</div>
+
+		</div>
+		<!--  end content -->
+		<div class="clear">&nbsp;</div>
+	</div>
+	<!--  end content-outer -->
+
+
+	<div class="clear">&nbsp;</div>
+
+
 </body>
 </html>
