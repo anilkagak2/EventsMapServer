@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry exported="true" kind="lib" path="/home/ak2/Downloads/mysql-connector-java-5.1.24/mysql-connector-java-5.1.24-bin.jar">
+	<classpathentry kind="lib" path="E:/Dropbox/coding/CampusMap/mysql-connector-java-5.1.24-bin.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
@@ -19,7 +19,7 @@
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/classes"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry exported="true" kind="lib" path="/home/ak2/Downloads/jstl-1.2.jar">
+	<classpathentry kind="lib" path="E:/Dropbox/coding/CampusMap/jstl-1.2.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
