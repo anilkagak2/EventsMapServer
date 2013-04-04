@@ -28,12 +28,17 @@ public class Logout extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		System.out.println("Logging out.");
 		HttpSession session = request.getSession(false);
 		if (session != null) {
+			System.out.println("Removing the attributes");
 			session.removeAttribute("user");
 			session.removeAttribute("loginId");
+			
+			System.out.println("events "+ session.getAttribute("events"));
 			session.removeAttribute("events");
 			session.invalidate();
+			System.out.println("events "+ session);
 		}
 		
 		request.getRequestDispatcher("/Login.jsp").forward(request, response);

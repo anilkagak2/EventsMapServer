@@ -57,14 +57,6 @@ $(document).pngFix( );
 	<div id="login-inner">
 	
 	<form name="loginForm" method="post" action="Login" onsubmit="return checkLoginForm();" >
-	<!-- <table>
-		<tr><td>Webmail-Id</td><td><input type="text" name="user"></td></tr>
-		<tr><td>Password</td><td><input type="password" name="pass"></td></tr>
-		<tr><td></td><td><input type="submit" value="Login"></td></tr>
-		<!-- <tr><td></td><td><a href="/Secured/Register.jsp">Register Here</a></td></tr> -->
-	<!-- </table>  -->
-
-	
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<th>Webmail-Id</th>
