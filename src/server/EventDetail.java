@@ -12,6 +12,18 @@ public class EventDetail {
 	public String category;			
 	public String status;
 	
+	// New attributes
+	public String mainLand;
+	public String subLand;
+	
+	public String getSubLand (){
+		return subLand;
+	}
+	
+	public String getMainLand (){
+		return mainLand;
+	}
+	
 	public String getCategory (){
 		return category;
 	}

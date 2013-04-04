@@ -77,6 +77,7 @@ public class AddEvent extends HttpServlet {
 	    	Statement s = connection.createStatement();
 	    	System.out.println(query);
 	    	s.executeUpdate(query);
+	    	System.out.println("done query");
 	    	s.close();
     	}
     	catch (Exception e) {
@@ -101,6 +102,7 @@ public class AddEvent extends HttpServlet {
     	}
 		
     	String title, content, subland;
+    	String eventId;
     	int category, mainland, status, locationId;
     	Timestamp startTime, endTime;
     	
@@ -115,6 +117,8 @@ public class AddEvent extends HttpServlet {
 			startTime = Timestamp.valueOf(request.getParameter("starttime"));
 			endTime = Timestamp.valueOf(request.getParameter("endtime"));
 			action = request.getParameter("action");
+			
+			//action = "INSERT";
     	} catch (Exception e){
     		System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
@@ -130,6 +134,11 @@ public class AddEvent extends HttpServlet {
 		System.out.println(category);
 		System.out.println(mainland);
 		System.out.println(status);
+		System.out.println(startTime);
+		System.out.println(endTime);
+		
+		System.out.println("action");
+		System.out.println(action);
 		
 		try{
 			String mysqlUser = "root";
@@ -148,26 +157,35 @@ public class AddEvent extends HttpServlet {
 	        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
 	        	}
 	        	else if (action.equals("UPDATE")) {
-	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
-		        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
+	        		eventId = request.getParameter("eventId");
+	        		System.out.println(eventId);
+	        		query= "UPDATE Event SET title='"+ title +"', content='"+content+"', postedBy='"+loginId+"'," +
+	        				" categoryId='"+category+"', status='"+status+"', locationId='"+locationId+"', startTime='"+startTime+"', endTime='" +endTime+"'"
+		        			+"WHERE eventId='"+eventId+"'";
 	        	}
 	        	else if (action.equals("DELETE")) {
-	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
-		        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
+	        		eventId = request.getParameter("eventId");
+	        		System.out.println(eventId);
+	        		query= "DELETE FROM Event WHERE eventId='"+eventId+"'";
 	        	}
 	        	else {
 	        		String error = "INVALID QUERY";
 	        		request.setAttribute("error", error);
 	        		closeConnection();
-		        	request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+		        	//request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+		        	request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
 		        	return;
 	        	}
 
-	        	if (!modificationQuery(query)) {
+	        	System.out.println(query);
+	        	// Query successfully executed
+	        	if (modificationQuery(query)) {
 	        		closeConnection();
-		        	request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+		        	//request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+		        	request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
 		        	return;
 	        	}
+	        	// Query Failed
 	        	else System.out.println ("Cannot insert some problem occurred.\n");
 	        } 
 		} catch(Exception e) {

@@ -4,20 +4,84 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri">${req.requestURI}</c:set>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Add Event</title>
 
+<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
+
 <link rel="stylesheet" href="css/screen.css" type="text/css"
 	media="screen" title="default" />
+
+<link
+	href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" type="text/css" media="screen"
+	href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+
 <!--[if IE]>
 <link rel="stylesheet" media="all" type="text/css" href="css/pro_dropline_ie.css" />
 <![endif]-->
 
 <!--  jquery core -->
 <script src="js/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
+
+<!-- 
+<script type="text/javascript"
+	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+	
+</script>
+<script type="text/javascript"
+	src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js">
+	
+</script>
+<script type="text/javascript"
+	src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.min.js">
+	
+</script>
+<script type="text/javascript"
+	src="http://tarruda.github.com/bootstrap-datetimepicker/assets/js/bootstrap-datetimepicker.pt-BR.js">
+	
+</script>
+-->
+
+<script type="text/javascript"
+	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+
+</script>
+<script type="text/javascript"
+	src="js/jquery/bootstrap/bootstrap.min.js">
+	
+</script>
+<script type="text/javascript"
+	src="js/jquery/bootstrap/bootstrap-datetimepicker.min.js">
+	
+</script>
+<script type="text/javascript"
+	src="js/jquery/bootstrap/bootstrap-datetimepicker.pt-BR.js">
+	
+</script>
+
+
+<script type="text/javascript">
+	$(function() {
+		$('#startDatetimepicker').datetimepicker({
+			language : 'en',
+			format: 'yyyy-MM-dd hh:mm:ss',
+		});
+		
+		$('#endDatetimepicker').datetimepicker({
+			language : 'en',
+			format: 'yyyy-MM-dd hh:mm:ss',
+		});
+	});
+</script>
 
 <!--  checkbox styling script -->
 <script src="js/jquery/ui.core.js" type="text/javascript"></script>
@@ -72,18 +136,6 @@
 	});
 </script>
 
-<!--  styled file upload script -->
-<script src="js/jquery/jquery.filestyle.js" type="text/javascript"></script>
-<script type="text/javascript" charset="utf-8">
-	$(function() {
-		$("input.file_1").filestyle({
-			image : "images/forms/upload_file.gif",
-			imageheight : 29,
-			imagewidth : 78,
-			width : 300
-		});
-	});
-</script>
 
 <!-- Custom jquery scripts -->
 <script src="js/jquery/custom_jquery.js" type="text/javascript"></script>
@@ -102,20 +154,6 @@
 			top : -35,
 			left : 5
 		});
-	});
-</script>
-
-<!--  date picker script -->
-<link rel="stylesheet" href="css/datePicker.css" type="text/css" />
-<script src="js/jquery/date.js" type="text/javascript"></script>
-<script src="js/jquery/jquery.datePicker.js" type="text/javascript"></script>
-<script type="text/javascript" charset="utf-8">
-	$(function() {
-		// initialise the "Select date" link
-		$('#startdatepicker').datePicker();
-		$('#enddatepicker').datePicker();
-		$('#endTimePicker').timepicker({ 'step': 15 });
-		$('#startTimePicker').timepicker({ 'step': 15 });
 	});
 </script>
 
@@ -225,10 +263,10 @@ input.LinkButton {
 
 					<c:choose>
 						<c:when test="${sessionScope.loginId == 1}">
-							<c:set var="homePage" value="/Secured/Admin.jsp" />
+							<c:set var="homePage" value="Secured/Admin.jsp" />
 						</c:when>
 						<c:otherwise>
-							<c:set var="homePage" value="/General/Events.jsp" />
+							<c:set var="homePage" value="General/Events.jsp" />
 						</c:otherwise>
 					</c:choose>
 
@@ -281,12 +319,41 @@ input.LinkButton {
 											<h2>ERROR! ${sessionScope.error}</h2>
 											<c:remove var="sessionScope.error" />
 										</c:if> <!-- start id-form -->
+										
+										<c:choose>
+											<c:when test="${not empty updateEvent}">
+												<c:set var="Utitle" 	value="${updateEvent.title}" />
+												<c:set var="UeventId" 	value="${updateEvent.eventId}" />
+												<c:set var="Ucontent" 	value="${updateEvent.content}" />
+												<c:set var="Umainland" 	value="${updateEvent.mainLand}" />
+												<c:set var="Usubland" 	value="${updateEvent.subLand}" />
+												<c:set var="Ustatus" 	value="${updateEvent.status}" />
+												<c:set var="Ucategory" 	value="${updateEvent.category}" />												
+												<fmt:formatDate var="Ustarttime" value="${updateEvent.startTime}" 	pattern="yyyy-MM-dd HH:mm:ss" />
+												<fmt:formatDate var="Uendtime" 	value="${updateEvent.endTime}" 		pattern="yyyy-MM-dd HH:mm:ss" />
+					
+												<c:set var="Uaction" 	value="UPDATE" />
+											</c:when>
+											<c:otherwise>
+												<c:set var="Utitle" 	value="" />
+												<c:set var="UeventId" 	value="" />
+												<c:set var="Ucontent" 	value="" />
+												<c:set var="Umainland" 	value="" />
+												<c:set var="Usubland" 	value="" />
+												<c:set var="Ustatus" 	value="" />
+												<c:set var="Ucategory" 	value="" />
+												<c:set var="Ustarttime" value="" />
+												<c:set var="Uendtime" 	value="" />
+												<c:set var="Uaction" 	value="INSERT" />
+											</c:otherwise>
+										</c:choose>
+										
 										<form name="addEvent" method="post" action="AddEvent">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
 												<tr>
 													<th valign="top">Title:</th>
-													<td><input type="text" class="inp-form" name="title"></td>
+													<td><input type="text" class="inp-form" name="title" value="${Utitle}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -296,7 +363,7 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Content:</th>
-													<td><input type="text" class="inp-form" name="content"></td>
+													<td><input type="text" class="inp-form" name="content" value="${Ucontent}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -306,7 +373,7 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">MainLand:</th>
-													<td><select name="mainland">
+													<td><select name="mainland" selected="${Umainland}">
 															<c:forEach items="${mainland}" var="mainland">
 																<option value="${mainland.mainLandId}">
 																	<c:out value="${mainland.mainLand}" />
@@ -322,52 +389,51 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">SubLand:</th>
-													<td><input type="text" class="inp-form" name="subland"></td>
+													<td><input type="text" class="inp-form" name="subland" value="${Usubland}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
 												</tr>
-												<tr>
-													<th valign="top">Start date:</th>
-													<td class="noheight">
-														<!--  // TODO Leap Year Feb29 --> <input name="startDate"
-														type="text" id="startdatepicker" />
-													</td>
-													<td></td>
-												</tr>
-
 
 												<tr>
 													<th valign="top">Start Time:</th>
-													<td><input type="datetime" class="inp-form"	name="starttime" id="startTimePicker"></td>
-													<td>
-														<div class="error-left"></div>
-														<div class="error-inner">This field is required.</div>
-													</td>
-													<td></td>
-												</tr>
-												<tr>
-													<th valign="top">End date:</th>
-													<td class="noheight"><input name="endDate" type="text"
-														id="enddatepicker" /></td>
-													<td></td>
-												</tr>
-												<tr>
-													<th valign="top">End Time:</th>
-													<td><input type="datetime" class="inp-form" id="endTimePicker"
-														name="endtime"></td>
-													<td>
-														<div class="error-left"></div>
-														<div class="error-inner">This field is required.</div>
+													<td class="noheight">
+														<div class="well">
+															<div id="startDatetimepicker" class="input-append">
+																<input data-format="yyyy-MM-dd HH:mm:ss" name="starttime" value="${Ustarttime}" type="text"></input>
+																
+																<span class="add-on"> <i
+																	data-time-icon="icon-time"
+																	data-date-icon="icon-calendar"> </i>
+																</span>
+															</div>
+														</div>
 													</td>
 													<td></td>
 												</tr>
 
 												<tr>
+													<th valign="top">End Time:</th>
+													<td class="noheight">
+														<div class="well">
+															<div id="endDatetimepicker" class="input-append">
+																<input data-format="yyyy-MM-dd HH:mm:ss" name="endtime" value="${Uendtime}" type="text"></input>
+																<span class="add-on"> <i
+																	data-time-icon="icon-time"
+																	data-date-icon="icon-calendar"> </i>
+																</span>
+															</div>
+														</div>
+													</td>
+													<td></td>
+												</tr>
+
+
+												<tr>
 													<th valign="top">Status:</th>
-													<td><select class="styledselect_form_1" name="status">
+													<td><select class="styledselect_form_1" name="status" selected="${Ustatus}">
 															<option value="1">ONGOING</option>
 															<option value="2">SCHEDULED</option>
 															<option value="3">CANCELLED</option>
@@ -378,7 +444,7 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Category:</th>
-													<td><select name="category">
+													<td><select name="category" selected="${Ucategory}">
 															<c:forEach items="${category}" var="category">
 																<option value="${category.categoryId}">
 																	<c:out value="${category.category}" />
@@ -396,9 +462,12 @@ input.LinkButton {
 
 												<tr>
 													<th>&nbsp;</th>
-													<td valign="top"><input type="button" value=""
-														class="form-submit" /> <input type="reset" value=""
-														class="form-reset" /></td>
+													<td valign="top">
+														<input type="hidden" value="${Uaction}" name="action"/>
+														<input type="hidden" value="${UeventId}" name="eventId"/>
+														<input type="submit" value="Submit" style="width:100px;height:40px"/>
+													 	<input type="reset" value="Reset" style="width:100px;height:40px" />
+													 </td>
 													<td></td>
 												</tr>
 											</table>

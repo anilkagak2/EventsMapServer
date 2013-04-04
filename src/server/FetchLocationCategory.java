@@ -22,8 +22,6 @@ public class FetchLocationCategory extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private Connection connection;
     private String user;
-    List<MainLand> mainland = new ArrayList<MainLand>();
-    List<Category> category = new ArrayList<Category>();
    
 	protected void closeConnection () {
 		if (connection != null) {
@@ -37,11 +35,47 @@ public class FetchLocationCategory extends HttpServlet {
         }
 	}
 	
+	private boolean fetchEventToUpdate (HttpServletRequest request, int eventId) 
+			throws ServletException, IOException {
+		boolean ret = true;
+		try {
+			Statement s = connection.createStatement();
+			String query = "Select E.title, E.content, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
+							"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.eventId = '"+eventId+"'" +
+							" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+			
+			s.executeQuery(query);
+			System.out.println (query);
+			ResultSet rs = s.getResultSet();
+			EventDetail event = new EventDetail();
+			event.eventId = eventId;
+			if(rs.next ())
+			{
+				event.title = rs.getString("title");
+				event.content = rs.getString("content");
+				event.startTime = rs.getTimestamp("startTime");
+				event.endTime = rs.getTimestamp("endTime");
+				event.category = rs.getString("category");
+				event.status = rs.getString("status");
+			
+        		event.modifiedTime = rs.getTimestamp("modifiedTime");		// Newly Introduced
+        		event.status = rs.getString("status");
+        		event.mainLand = rs.getString("mainLand");
+        		event.subLand = rs.getString("subLand");
+			} else ret=false;
+			
+			request.setAttribute("updateEvent", event);
+			rs.close();
+		} catch (Exception e){
+			System.out.println(e.toString()+ "\n Exception Stack: \n");
+            e.printStackTrace();
+            ret = false;
+		}
+		return ret;
+	}
+	
 	private void sendResponse (HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException {
-		request.setAttribute("user", user);
-        request.setAttribute("mainland", mainland);
-        request.setAttribute("category", category);
         request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
 	}
     
@@ -59,12 +93,18 @@ public class FetchLocationCategory extends HttpServlet {
 			 * TODO Apply the strategy of querying the database every time request comes
 			 * make mainland & category local to this function & hence everything will work as desired
 			 * */
-			if (!mainland.isEmpty() && !category.isEmpty()) {
+			
+			String action = request.getParameter("action");
+			System.out.println(action);
+			
+			/* if (!mainland.isEmpty() && !category.isEmpty()) {
 				System.out.println("mainland and category not null");
 				sendResponse(request, response);
 				return;
-			}
+			} */
 
+		    List<MainLand> mainland = new ArrayList<MainLand>();
+		    List<Category> category = new ArrayList<Category>();
 			HttpSession session = request.getSession(false);
 			if (session != null) {
 				user = session.getAttribute("user").toString();
@@ -105,20 +145,37 @@ public class FetchLocationCategory extends HttpServlet {
 					category.add(temp);
 				}
 
+				// UPDATE
+				if (action.equals("UPDATE")) {
+					int eventId = Integer.parseInt(request.getParameter("eventId"));
+					System.out.println(eventId);
+					if (!fetchEventToUpdate(request, eventId)) {
+						System.out.println("FATAL ERROR: Update Action was set but no events to update.");
+						request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
+						return;
+					}
+				}
+				
 				rs.close();
 				s.close();
 				connection.close();
+				
+				// set the attributes required
+				request.setAttribute("user", user);
+		        request.setAttribute("mainland", mainland);
+		        request.setAttribute("category", category);
 			}
 			else{
 				System.out.println("Database connection failed.");
 				request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
+				return;
 			}
 			// List<Passenger> passengers = service.list();
 			sendResponse(request, response);
 		}catch(Exception e)
 		{
 			closeConnection();
-			System.out.println(e.toString()+ "\n Exception Stack: \n");
+			System.out.println("Fetch Location Category"+e.toString()+ "\n Exception Stack: \n");
 			e.printStackTrace();
 		}
 	}
