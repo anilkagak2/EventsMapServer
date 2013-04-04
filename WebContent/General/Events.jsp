@@ -245,7 +245,7 @@ input.LinkButton {
 				<a href="" id="acc-settings">Settings</a>
 				<div class="clear">&nbsp;</div>
 				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-details">Personal details </a>
+				<a href="FetchDetails" id="acc-details">Personal details </a>
 			</div>
 			</div>
 			<!--  end account-content -->

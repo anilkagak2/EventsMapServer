@@ -157,6 +157,34 @@
 	});
 </script>
 
+<!-- Javascript for validation checks -->
+ <script type="text/javascript">
+ function checkCreateLoginForm (){
+   var x = document.forms["createForm"];
+   
+   /* email filter */
+   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+   
+   if (x["user"].value == null || x["user"].value==""){
+     alert ("Invalid user name field.");
+     return false;
+   }
+   else if ((x["pass"].value != x["repass"].value)){
+    alert ("Password & Re-passwords do not match.");
+    return false;
+   }
+   else if (!filter.test(x["email"].value)){
+     alert ("Invalid Email Id.");
+     return false;
+   }
+   else if (x["post"].value == "" || x["post"].value==null){
+     alert("Post invalid.");
+     return false;
+   }
+   else return true;
+ }
+ </script>
+
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
 <script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -164,25 +192,6 @@
 		$(document).pngFix();
 	});
 </script>
-
-<!-- <style>
-a.LinkButton {
-  border-style: solid;
-  border-width : 1px 1px 1px 1px;
-  text-decoration : none;
-  padding : 4px;
-  border-color : #000000;
-}
-
-input.LinkButton {
-  border-style: solid;
-  border-width : 1px 1px 1px 1px;
-  text-decoration : none;
-  padding : 4px;
-  border-color : #000000;
-}
-
-</style> -->
 
 </head>
 <body>
@@ -234,7 +243,7 @@ input.LinkButton {
 						<a href="" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
-						<a href="" id="acc-details">Personal details </a>
+						<a href="FetchDetails" id="acc-details">Personal details </a>
 					</div>
 				</div>
 				<!--  end account-content -->
