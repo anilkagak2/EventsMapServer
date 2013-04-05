@@ -48,10 +48,10 @@ public class ChangePassword extends HttpServlet {
             Statement s = connection.createStatement();
             /* Changed the Table structure--> loginId = INT & userName = user */
             //s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+ user +"'");
-            //s.executeQuery("update Login set passwdHash=sha2('''',256) where loginId=2);
+            s.executeQuery("update Login set passwdHash=sha2('"+pass+"'+,256) where loginId="+userId);
         }
 		}catch(Exception e){
-			
+			System.out.println(e.getMessage());
 		}
 		request.getSession();
 		
