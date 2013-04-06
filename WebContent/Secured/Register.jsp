@@ -240,7 +240,7 @@
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="" id="acc-settings">Settings</a>
+						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="FetchDetails" id="acc-details">Personal details </a>
@@ -329,7 +329,7 @@
 											<c:remove var="sessionScope.error" />
 										</c:if> <!-- start id-form -->
 			
-										<form name="addEvent" method="post" action="AddEvent">
+										<form name="Register" method="post" action="Register">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
 												<tr>
@@ -374,7 +374,7 @@
 												
 												<tr>
 													<th valign="top">Post:</th>
-													<td><input type="text" class="inp-form" name="email"></td>
+													<td><input type="text" class="inp-form" name="post"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>

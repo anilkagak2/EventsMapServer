@@ -178,7 +178,7 @@
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="" id="acc-settings">Settings</a>
+						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="FetchDetails" id="acc-details">Personal details </a>
@@ -237,7 +237,8 @@
 
 
 			<div id="page-heading">
-				<h1>User Details</h1>
+				<h1>Settings
+				</h1>
 			</div>
 
 
@@ -265,7 +266,7 @@
 									<th valign="top">Webmail Id</th>
 									<td class="noheight">
 										<div class="well">
-											<c:out value="${user.userName}"/>
+											
 										</div>
 									</td>
 									<td></td>
@@ -275,7 +276,7 @@
 									<th valign="top">Login Id</th>
 									<td class="noheight">
 										<div class="well">
-											<c:out value="${user.loginId}"/>
+											
 										</div>
 									</td>
 									<td></td>
@@ -285,7 +286,7 @@
 									<th valign="top">Email</th>
 									<td class="noheight">
 										<div class="well">
-											<c:out value="${user.emailId}"/>
+											
 										</div>
 									</td>
 									<td></td>
@@ -295,7 +296,7 @@
 									<th valign="top">Post</th>
 									<td class="noheight">
 										<div class="well">
-											<c:out value="${user.post}"/>
+											
 										</div>
 									</td>
 									<td></td>

@@ -243,7 +243,7 @@ input.LinkButton {
 			<!--  start account-content -->	
 			<div class="account-content">
 			<div class="account-drop-inner">
-				<a href="" id="acc-settings">Settings</a>
+				<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
 				<div class="clear">&nbsp;</div>
 				<div class="acc-line">&nbsp;</div>
 				<a href="FetchDetails" id="acc-details">Personal details </a>
@@ -274,7 +274,9 @@ input.LinkButton {
 		
 		<ul class="select"><li><a href="FetchLocationCategory"><b>Add Event</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		</ul>
-		<ul class="select"><li><a href="AllUser"><b>Add User</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="select"><li><a href="Secured/Register.jsp"><b>Add User</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		</ul>
+		<ul class="select"><li><a href="AllUser"><b>Show Users</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		</ul>
 		<div class="clear"></div>
 		</div>
