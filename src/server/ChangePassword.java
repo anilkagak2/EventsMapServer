@@ -33,6 +33,10 @@ public class ChangePassword extends HttpServlet {
 		// TODO Auto-generated method stub
 		int userId = Integer.parseInt(request.getParameter("id"));
 		String pass = request.getParameter("password");
+		boolean del = false;
+		if (request.getParameter("del") != null){
+			del = true;
+		}
 		try{
 		// Create Connection
         String mysqlUser = Declarations.mysqlUser;
@@ -46,12 +50,19 @@ public class ChangePassword extends HttpServlet {
         // Execute Queries by checking passHash
         if (connection != null) {
             Statement s = connection.createStatement();
-            /* Changed the Table structure--> loginId = INT & userName = user */
-            //s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+ user +"'");
-            s.executeQuery("update Login set passwdHash=sha2('"+pass+"'+,256) where loginId="+userId);
+            String query = "";
+            if(del){
+            	query = "DELETE FROM `Login` WHERE `loginId` = "+userId;
+            }else{
+            
+            query = "update Login set passwdHash=sha2('"+pass+"',256) where loginId="+userId;
+            //System.out.println(query);
+            }
+            s.executeUpdate(query);
+            
         }
 		}catch(Exception e){
-			System.out.println(e.getMessage());
+			System.out.println("Error in change password : "+e.getMessage());
 		}
 		request.getSession();
 		

@@ -40,17 +40,40 @@
 	}
 	//-->
 
+	function delete_account(id) {
+		var r = confirm("Are you sure you want to delete user id " + id);
+		if (r == true) {
+			$
+					.post(
+							"ChangePassword",
+							{
+								id : id,
+								del : true
+							},
+							function(data, status) {
+								document.getElementById(id + "success").innerHTML = "<p style='color:green'>Deleted<p>";
+							});
+
+		}
+	}
+
 	function changePassword(id) {
 		if (document.getElementById(id + "new").value == document
 				.getElementById(id + "confirm").value) {
 			document.getElementById(id + "error").innerHTML = "";
 
-			$.post("ChangePassword", {
-				id : id,
-				password : document.getElementById(id + "new").value
-			}, function(data, status) {
-				alert("Data: " + data + "\nStatus: " + status);
-			});
+			$
+					.post(
+							"ChangePassword",
+							{
+								id : id,
+								password : document.getElementById(id + "new").value
+							},
+							function(data, status) {
+								document.getElementById(id + "success").innerHTML = "<p style='color:green'>Password Changed<p>";
+								toggle_visibility(id + 'set');
+								toggle_visibility(id + 'reset');
+							});
 
 		} else {
 			document.getElementById(id + "error").innerHTML = "<p style='color:red'>Not Matching <p>";
@@ -319,6 +342,9 @@ input.LinkButton {
 									<td align="center">${user.userName}</td>
 									<td align="center">${user.emailId }</td>
 									<td align="center">${user.post }</td>
+									<td id="${user.loginId}remove" style="display: block;"><input
+										type="Button" value="Delete"
+										onclick="delete_account('${user.loginId}');" /></td>
 									<td id="${user.loginId}set" style="display: block;"><input
 										type="Button"
 										onclick="toggle_visibility('${user.loginId}set');toggle_visibility('${user.loginId}reset');"
@@ -342,6 +368,7 @@ input.LinkButton {
 
 										</table>
 									</td>
+									<td id='${user.loginId}success'></td>
 								</tr>
 							</c:forEach>
 						</table>
