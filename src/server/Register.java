@@ -7,6 +7,8 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.catalina.Session;
+
 /**
  * Servlet implementation class Register
  */
@@ -85,7 +87,11 @@ public class Register extends HttpServlet {
 	             
 	             // TODO VP Section to VP's DashBoard
 	             // request.getRequestDispatcher("/Events.jsp").forward(request, response);
-	             request.getRequestDispatcher("/Login.jsp").forward(request, response);
+	             int loginId = Integer.parseInt(request.getSession().getAttribute("loginId").toString());
+	             if (loginId == Declarations.adminId)
+	 	        	request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
+	 	        else
+	 	        	request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
 	    }
 	    else{
 	            System.out.println("Cannot connect to the database\n");

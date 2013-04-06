@@ -4,11 +4,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri">${req.requestURI}</c:set>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Events</title>
+
+<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
 <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen" title="default" />
 <!--[if IE]>
@@ -236,10 +242,10 @@ input.LinkButton {
 			<!--  start account-content -->	
 			<div class="account-content">
 			<div class="account-drop-inner">
-				<a href="" id="acc-settings">Settings</a>
+				<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
 				<div class="clear">&nbsp;</div>
 				<div class="acc-line">&nbsp;</div>
-				<a href="" id="acc-details">Personal details </a>
+				<a href="FetchDetails" id="acc-details">Personal details </a>
 			</div>
 			</div>
 			<!--  end account-content -->
@@ -265,7 +271,7 @@ input.LinkButton {
 		</li>
 		</ul>
 		
-		<ul class="select"><li><a href="FetchLocationCategory"><b>Add Event</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="select"><li><a href="FetchLocationCategory?action=INSERT"><b>Add Event</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		</ul>
 		<div class="clear"></div>
 		</div>
@@ -338,6 +344,12 @@ input.LinkButton {
 									<li>Address 	<c:out 				value="${events[i].location}" /></li>
 									<li>Content 	<c:out 				value="${events[i].content}" /></li>
 									<li>Event Id 	<fmt:formatNumber 	value="${events[i].eventId}" /></li>
+									<li>
+										<form action="FetchLocationCategory">
+										<input type="hidden" name="eventId" value="${events[i].eventId}" />
+										<input type="submit" name="action" value="UPDATE" />
+										</form>	
+									</li>
 								</ul>
 					            <br><br>
 							</div>

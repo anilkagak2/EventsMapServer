@@ -253,7 +253,7 @@ input.LinkButton {
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="" id="acc-settings">Settings</a>
+						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="" id="acc-details">Personal details </a>
@@ -285,10 +285,10 @@ input.LinkButton {
 
 					<c:choose>
 						<c:when test="${sessionScope.loginId == 1}">
-							<c:set var="homePage" value="/Secured/Admin.jsp" />
+							<c:set var="homePage" value="Secured/Admin.jsp" />
 						</c:when>
 						<c:otherwise>
-							<c:set var="homePage" value="/General/Events.jsp" />
+							<c:set var="homePage" value="General/Events.jsp" />
 						</c:otherwise>
 					</c:choose>
 
