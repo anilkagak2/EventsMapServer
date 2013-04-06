@@ -41,9 +41,9 @@ public class Details extends HttpServlet {
 	
 	//setting db connecn
 	try{
-	    String mysqlUser = "root";
-	    String mysqlPass = "root";
-	    String url = "jdbc:mysql://localhost:3306/EventsMapServer";
+	    String mysqlUser = Declarations.mysqlUser;
+	    String mysqlPass = Declarations.mysqlPass;
+	    String url = Declarations.url;
 	    Class.forName("com.mysql.jdbc.Driver").newInstance();
 	    connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
 	    System.out.println("Checking your identity.."+ user +"\n");
