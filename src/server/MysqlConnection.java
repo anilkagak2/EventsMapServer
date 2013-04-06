@@ -11,9 +11,9 @@ public class MysqlConnection {
 	private Connection connection;
 
 	protected Connection openConnection () {
-		String mysqlUser = "root";
-	    String mysqlPass = "root";
-	    String url = "jdbc:mysql://localhost:3306/EventsMapServer";
+		String mysqlUser = Declarations.mysqlUser;
+	    String mysqlPass = Declarations.mysqlPass;
+	    String url = Declarations.url;
 	    try {
 		    Class.forName("com.mysql.jdbc.Driver").newInstance();
 			connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);

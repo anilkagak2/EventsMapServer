@@ -84,4 +84,26 @@
     <servlet-name>UpdateEvent</servlet-name>
     <url-pattern>/UpdateEvent</url-pattern>
   </servlet-mapping>
+  
+    <servlet>
+    <description></description>
+    <display-name>AllUser</display-name>
+    <servlet-name>AllUser</servlet-name>
+    <servlet-class>server.AllUser</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AllUser</servlet-name>
+    <url-pattern>/AllUser</url-pattern>
+  </servlet-mapping>
+  
+   <servlet>
+    <description></description>
+    <display-name>ChangePassword</display-name>
+    <servlet-name>ChangePassword</servlet-name>
+    <servlet-class>server.ChangePassword</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChangePassword</servlet-name>
+    <url-pattern>/ChangePassword</url-pattern>
+  </servlet-mapping>
 </web-app>
