@@ -13,6 +13,7 @@ public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection connection;
 	private String user;
+	private String email;
 	private int loginId;
 	
 	/*
@@ -115,6 +116,7 @@ public class Login extends HttpServlet {
         	if ( (session != null) && (session.getAttribute("user") != null)
         			&& (session.getAttribute("loginId") != null)) {
         		user = session.getAttribute("user").toString();
+        		email = session.getAttribute("email").toString();
         		System.out.println("loginId "+ session.getAttribute("loginId").toString());
         		loginId = Integer.parseInt(session.getAttribute("loginId").toString());
         		redirectToDashBoard (request, response);
@@ -122,8 +124,9 @@ public class Login extends HttpServlet {
         	}
         	
         	/* No Previous Session */
-            user = request.getParameter("user");
-            loginId = -1;		// ERROR
+          //  user = request.getParameter("user");
+        	email = request.getParameter ("email");
+        	loginId = -1;		// ERROR
             String pass = request.getParameter("pass");
             String final_hash = "";
 
@@ -144,15 +147,18 @@ public class Login extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
             
-            System.out.println("Checking your identity.."+ user +"\n");
+            System.out.println("Checking your identity.."+ email +"\n");
 
             // Execute Queries by checking passHash
             if (connection != null) {
                 Statement s = connection.createStatement();
                 /* Changed the Table structure--> loginId = INT & userName = user */
                 //s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+ user +"'");
-                s.executeQuery("SELECT * FROM Login where userName = '"+ user +"'");
+                //s.executeQuery("SELECT * FROM Login where userName = '"+ user +"'");
+                String query = "SELECT * FROM Login where email = '"+ email +"'";
+                s.executeQuery(query);
                 ResultSet rs = s.getResultSet();
+                System.out.println (query);
                 boolean found = false;
                 while (rs.next()) {
                     String pass_hash = rs.getString("passwdHash");
@@ -160,10 +166,12 @@ public class Login extends HttpServlet {
                     System.out.println("pass_hash " + pass_hash);
                     if (final_hash.equals(pass_hash)) {
                     	loginId = rs.getInt("loginId");
+                    	user = rs.getString("userName");
                     	session = request.getSession(true);
 
                     	// TODO use session object instead of passed user data
                     	session.setAttribute("user", user);
+                    	session.setAttribute("email", email);
                     	session.setAttribute("loginId", loginId);
                     	session.removeAttribute("events");
                     	System.out.println("login  Id is "+loginId);
@@ -174,7 +182,7 @@ public class Login extends HttpServlet {
                     			" Please proceed further\n");
                     	
                     	Statement s1 = connection.createStatement();
-                    	String query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
+                    	query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
                     					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+loginId+"'" +
                     					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
                     	System.out.println(query);
