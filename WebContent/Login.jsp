@@ -60,7 +60,7 @@ $(document).pngFix( );
 		<table border="0" cellpadding="0" cellspacing="0">
 		<tr>
 			<th>Webmail-Id</th>
-			<td><input type="text"  class="login-inp" name="user" /></td>
+			<td><input type="text"  class="login-inp" name="email" /></td>
 		</tr>
 		<tr>
 			<th>Password</th>
