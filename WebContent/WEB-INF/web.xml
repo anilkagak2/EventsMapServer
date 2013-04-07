@@ -113,4 +113,23 @@
     <url-pattern>/GetEvents</url-pattern>
   </servlet-mapping>
 
-</web-app>
+  <filter>
+	<filter-name>LoginFilter</filter-name>
+	<filter-class>server.LoginFilter</filter-class>        
+  </filter>
+  <filter-mapping>
+     <filter-name>LoginFilter</filter-name>
+     <url-pattern>/General/*</url-pattern>
+     <url-pattern>/Secured/*</url-pattern>
+  </filter-mapping>
+    
+  <filter>
+     <filter-name>AdminFilter</filter-name>
+     <filter-class>server.AdminFilter</filter-class>        
+  </filter>
+  <filter-mapping>
+     <filter-name>AdminFilter</filter-name>
+     <url-pattern>/Secured/*</url-pattern>
+   </filter-mapping>
+ 
+  </web-app>
