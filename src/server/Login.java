@@ -196,6 +196,10 @@ public class Login extends HttpServlet {
                     		//event.status = status_enum[rs1.getInt("status")];
                     		event.status = rs1.getString("status");
                     		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
+                    		
+                    	
+                    		
+                    		
                  		    events.add(event);
                     	}
                      	

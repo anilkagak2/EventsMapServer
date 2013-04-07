@@ -14,7 +14,7 @@
 	href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Add Event</title>
+<title>Users</title>
 
 <link rel="stylesheet" href="css/screen.css" type="text/css"
 	media="screen" title="default" />
@@ -58,10 +58,11 @@
 	}
 
 	function changePassword(id) {
-		if (document.getElementById(id + "new").value == document
-				.getElementById(id + "confirm").value) {
-			document.getElementById(id + "error").innerHTML = "";
+		var pass = document.getElementById(id + "new_pass").value;
+		var confPass = document.getElementById(id + "confirm_pass").value
+		if (pass == confPass && pass != '') {
 
+			document.getElementById(id + "error").innerHTML = "";
 			$
 					.post(
 							"ChangePassword",
@@ -76,7 +77,7 @@
 							});
 
 		} else {
-			document.getElementById(id + "error").innerHTML = "<p style='color:red'>Not Matching <p>";
+			document.getElementById(id + "error").innerHTML = "<p style='color:red'>Not Matching/Empty<p>";
 		}
 	}
 

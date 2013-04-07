@@ -272,7 +272,7 @@ input.LinkButton {
 		</li>
 		</ul>
 		
-		<ul class="select"><li><a href="FetchLocationCategory"><b>Add Event</b><!--[if IE 7]><!--></a><!--<![endif]-->
+		<ul class="select"><li><a href="FetchLocationCategory?action=INSERT"><b>Add Event</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		</ul>
 		<ul class="select"><li><a href="Secured/Register.jsp"><b>Add User</b><!--[if IE 7]><!--></a><!--<![endif]-->
 		</ul>

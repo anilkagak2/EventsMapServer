@@ -12,6 +12,11 @@ public class EventDetail {
 	public String category;			
 	public String status;
 	
+	public String postedByName;
+	public String postedByPost;
+	public String postedByMail;
+	
+	
 	// New attributes
 	public String mainLand;
 	public String subLand;
