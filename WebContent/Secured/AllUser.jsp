@@ -254,7 +254,7 @@ input.LinkButton {
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
+						<a href="General/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="" id="acc-details">Personal details </a>

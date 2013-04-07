@@ -12,7 +12,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Register</title>
+<title>Add Event</title>
 
 <base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
@@ -157,34 +157,6 @@
 	});
 </script>
 
-<!-- Javascript for validation checks -->
- <script type="text/javascript">
- function checkCreateLoginForm (){
-   var x = document.forms["createForm"];
-   
-   /* email filter */
-   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-   
-   if (x["user"].value == null || x["user"].value==""){
-     alert ("Invalid user name field.");
-     return false;
-   }
-   else if ((x["pass"].value != x["repass"].value)){
-    alert ("Password & Re-passwords do not match.");
-    return false;
-   }
-   else if (!filter.test(x["email"].value)){
-     alert ("Invalid Email Id.");
-     return false;
-   }
-   else if (x["post"].value == "" || x["post"].value==null){
-     alert("Post invalid.");
-     return false;
-   }
-   else return true;
- }
- </script>
-
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
 <script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -192,6 +164,25 @@
 		$(document).pngFix();
 	});
 </script>
+
+<!-- <style>
+a.LinkButton {
+  border-style: solid;
+  border-width : 1px 1px 1px 1px;
+  text-decoration : none;
+  padding : 4px;
+  border-color : #000000;
+}
+
+input.LinkButton {
+  border-style: solid;
+  border-width : 1px 1px 1px 1px;
+  text-decoration : none;
+  padding : 4px;
+  border-color : #000000;
+}
+
+</style> -->
 
 </head>
 <body>
@@ -284,7 +275,7 @@
 
 
 			<div id="page-heading">
-				<h1>Register</h1>
+				<h1>Add Event</h1>
 			</div>
 
 
@@ -309,20 +300,48 @@
 
 							<table border="0" width="100%" cellpadding="0" cellspacing="0">
 								<tr valign="top">
-									<td><div style="color: #FF0000;">
+									<td>
+										<div style="color: #FF0000;">
 										<c:if test="${not empty error}">
 											<h2>ERROR! ${error}</h2>
 											<c:remove var="sessionScope.error" />
 										</c:if> 
 										</div>
 										<!-- start id-form -->
-			
-										<form name="Register" method="post" action="Register">
+										<c:choose>
+											<c:when test="${not empty updateEvent}">
+												<c:set var="Utitle" 	value="${updateEvent.title}" />
+												<c:set var="UeventId" 	value="${updateEvent.eventId}" />
+												<c:set var="Ucontent" 	value="${updateEvent.content}" />
+												<c:set var="Umainland" 	value="${updateEvent.mainLand}" />
+												<c:set var="Usubland" 	value="${updateEvent.subLand}" />
+												<c:set var="Ustatus" 	value="${updateEvent.status}" />
+												<c:set var="Ucategory" 	value="${updateEvent.category}" />												
+												<fmt:formatDate var="Ustarttime" value="${updateEvent.startTime}" 	pattern="yyyy-MM-dd HH:mm:ss" />
+												<fmt:formatDate var="Uendtime" 	value="${updateEvent.endTime}" 		pattern="yyyy-MM-dd HH:mm:ss" />
+					
+												<c:set var="Uaction" 	value="UPDATE" />
+											</c:when>
+											<c:otherwise>
+												<c:set var="Utitle" 	value="" />
+												<c:set var="UeventId" 	value="" />
+												<c:set var="Ucontent" 	value="" />
+												<c:set var="Umainland" 	value="" />
+												<c:set var="Usubland" 	value="" />
+												<c:set var="Ustatus" 	value="" />
+												<c:set var="Ucategory" 	value="" />
+												<c:set var="Ustarttime" value="" />
+												<c:set var="Uendtime" 	value="" />
+												<c:set var="Uaction" 	value="INSERT" />
+											</c:otherwise>
+										</c:choose>
+										
+										<form name="addEvent" method="post" action="AddEvent">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
 												<tr>
-													<th valign="top">User:</th>
-													<td><input type="text" class="inp-form" name="user"></td>
+													<th valign="top">Title:</th>
+													<td><input type="text" class="inp-form" name="title" value="${Utitle}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -331,8 +350,8 @@
 												</tr>
 
 												<tr>
-													<th valign="top">Email:</th>
-													<td><input type="text" class="inp-form" name="email"></td>
+													<th valign="top">Content:</th>
+													<td><input type="text" class="inp-form" name="content" value="${Ucontent}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -341,8 +360,14 @@
 												</tr>
 
 												<tr>
-													<th valign="top">Password:</th>
-													<td><input type="password" class="inp-form" name="pass"></td>
+													<th valign="top">MainLand:</th>
+													<td><select name="mainland" selected="${Umainland}">
+															<c:forEach items="${mainland}" var="mainland">
+																<option value="${mainland.mainLandId}">
+																	<c:out value="${mainland.mainLand}" />
+																</option>
+															</c:forEach>
+													</select>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -351,29 +376,84 @@
 												</tr>
 
 												<tr>
-													<th valign="top">Re-Password:</th>
-													<td><input type="password" class="inp-form" name="repass"></td>
+													<th valign="top">SubLand:</th>
+													<td><input type="text" class="inp-form" name="subland" value="${Usubland}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
 												</tr>
-												
+
 												<tr>
-													<th valign="top">Post:</th>
-													<td><input type="text" class="inp-form" name="post"></td>
+													<th valign="top">Start Time:</th>
+													<td class="noheight">
+														<div class="well">
+															<div id="startDatetimepicker" class="input-append">
+																<input data-format="yyyy-MM-dd HH:mm:ss" name="starttime" value="${Ustarttime}" type="text"></input>
+																
+																<span class="add-on"> <i
+																	data-time-icon="icon-time"
+																	data-date-icon="icon-calendar"> </i>
+																</span>
+															</div>
+														</div>
+													</td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">End Time:</th>
+													<td class="noheight">
+														<div class="well">
+															<div id="endDatetimepicker" class="input-append">
+																<input data-format="yyyy-MM-dd HH:mm:ss" name="endtime" value="${Uendtime}" type="text"></input>
+																<span class="add-on"> <i
+																	data-time-icon="icon-time"
+																	data-date-icon="icon-calendar"> </i>
+																</span>
+															</div>
+														</div>
+													</td>
+													<td></td>
+												</tr>
+
+
+												<tr>
+													<th valign="top">Status:</th>
+													<td><select class="styledselect_form_1" name="status" selected="${Ustatus}">
+															<option value="1">ONGOING</option>
+															<option value="2">SCHEDULED</option>
+															<option value="3">CANCELLED</option>
+															<option value="4">COMPLETED</option>
+													</select></td>
+													<td></td>
+												</tr>
+
+												<tr>
+													<th valign="top">Category:</th>
+													<td><select name="category" selected="${Ucategory}">
+															<c:forEach items="${category}" var="category">
+																<option value="${category.categoryId}">
+																	<c:out value="${category.category}" />
+																</option>
+															</c:forEach>
+													</select>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
 												</tr>
+
+
 
 												<tr>
 													<th>&nbsp;</th>
 													<td valign="top">
-														<input type="submit" value="Create" style="width:100px;height:40px"/>
+														<input type="hidden" value="${Uaction}" name="action"/>
+														<input type="hidden" value="${UeventId}" name="eventId"/>
+														<input type="submit" value="Submit" style="width:100px;height:40px"/>
 													 	<input type="reset" value="Reset" style="width:100px;height:40px" />
 													 </td>
 													<td></td>
