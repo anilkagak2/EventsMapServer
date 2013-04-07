@@ -167,12 +167,14 @@ public class Login extends HttpServlet {
                     if (final_hash.equals(pass_hash)) {
                     	loginId = rs.getInt("loginId");
                     	user = rs.getString("userName");
+                    	//String post = rs.getString("post");
                     	session = request.getSession(true);
 
                     	// TODO use session object instead of passed user data
                     	session.setAttribute("user", user);
                     	session.setAttribute("email", email);
                     	session.setAttribute("loginId", loginId);
+                    	//session.setAttribute("post", post);
                     	session.removeAttribute("events");
                     	System.out.println("login  Id is "+loginId);
                     	found = true;
@@ -204,9 +206,7 @@ public class Login extends HttpServlet {
                     		//event.status = status_enum[rs1.getInt("status")];
                     		event.status = rs1.getString("status");
                     		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
-                    		
-                    	
-                    		
+                    		           		
                     		
                  		    events.add(event);
                     	}

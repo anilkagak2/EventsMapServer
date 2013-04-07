@@ -16,5 +16,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="E:/Dropbox/coding/CampusMap/mysql-connector-java-5.1.24-bin.jar"/>
 	<classpathentry kind="lib" path="E:/Dropbox/coding/CampusMap/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="E:/Dropbox/coding/CampusMap/gson-2.2.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

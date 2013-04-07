@@ -20,6 +20,7 @@ public class EventDetail {
 	// New attributes
 	public String mainLand;
 	public String subLand;
+	public String mapId;
 	
 	public String getSubLand (){
 		return subLand;
