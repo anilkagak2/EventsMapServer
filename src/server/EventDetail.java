@@ -16,6 +16,12 @@ public class EventDetail {
 	public String mainLand;
 	public String subLand;
 	
+	public int postedBy;
+	
+	public int getPostedBy (){
+		return postedBy;
+	}
+	
 	public String getSubLand (){
 		return subLand;
 	}

@@ -193,21 +193,6 @@
 			<!--  start nav -->
 			<div class="nav">
 				<div class="table">
-
-					<ul class="select">
-						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Dashboard Details 1</a></li>
-									<li><a href="#nogo">Dashboard Details 2</a></li>
-									<li><a href="#nogo">Dashboard Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="clear"></div>
-
 					<c:choose>
 						<c:when test="${sessionScope.loginId == 1}">
 							<c:set var="homePage" value="Secured/Admin.jsp" />
@@ -216,10 +201,10 @@
 							<c:set var="homePage" value="General/Events.jsp" />
 						</c:otherwise>
 					</c:choose>
-
+		
 					<ul class="select">
-						<li><a href="${homePage}"><b>Back To Home</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--></li>
+						<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
+						</li>
 					</ul>
 				</div>
 			</div>

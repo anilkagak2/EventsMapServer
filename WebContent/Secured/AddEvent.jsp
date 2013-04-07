@@ -246,21 +246,6 @@ input.LinkButton {
 			<!--  start nav -->
 			<div class="nav">
 				<div class="table">
-
-					<ul class="select">
-						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Dashboard Details 1</a></li>
-									<li><a href="#nogo">Dashboard Details 2</a></li>
-									<li><a href="#nogo">Dashboard Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="clear"></div>
-
 					<c:choose>
 						<c:when test="${sessionScope.loginId == 1}">
 							<c:set var="homePage" value="Secured/Admin.jsp" />
@@ -269,10 +254,10 @@ input.LinkButton {
 							<c:set var="homePage" value="General/Events.jsp" />
 						</c:otherwise>
 					</c:choose>
-
+					
 					<ul class="select">
-						<li><a href="${homePage}"><b>Back To Home</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--></li>
+						<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
+						</li>
 					</ul>
 				</div>
 			</div>
@@ -315,11 +300,14 @@ input.LinkButton {
 
 							<table border="0" width="100%" cellpadding="0" cellspacing="0">
 								<tr valign="top">
-									<td><c:if test="${not empty sessionScope.error}">
-											<h2>ERROR! ${sessionScope.error}</h2>
+									<td>
+										<div style="color: #FF0000;">
+										<c:if test="${not empty error}">
+											<h2>ERROR! ${error}</h2>
 											<c:remove var="sessionScope.error" />
-										</c:if> <!-- start id-form -->
-										
+										</c:if> 
+										</div>
+										<!-- start id-form -->
 										<c:choose>
 											<c:when test="${not empty updateEvent}">
 												<c:set var="Utitle" 	value="${updateEvent.title}" />

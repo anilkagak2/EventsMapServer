@@ -2,6 +2,10 @@ package server;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +20,9 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/AddEvent")
 public class AddEvent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final String insert="INSERT";
+	private static final String update="UPDATE";
+	private static final String delete="DELETE";
     Connection connection;   
     /**
      * @see HttpServlet#HttpServlet()
@@ -75,7 +82,6 @@ public class AddEvent extends HttpServlet {
     	
     	try {
 	    	Statement s = connection.createStatement();
-	    	System.out.println(query);
 	    	s.executeUpdate(query);
 	    	System.out.println("done query");
 	    	s.close();
@@ -102,7 +108,7 @@ public class AddEvent extends HttpServlet {
     	}
 		
     	String title, content, subland;
-    	String eventId;
+    	String eventId = "-1";
     	int category, mainland, status, locationId;
     	Timestamp startTime, endTime;
     	
@@ -122,7 +128,7 @@ public class AddEvent extends HttpServlet {
     	} catch (Exception e){
     		System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
-    		request.getSession().setAttribute("error", e.toString());
+    		request.setAttribute("error", e.getMessage());
     		request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
     		return;
     	}
@@ -152,18 +158,18 @@ public class AddEvent extends HttpServlet {
 	        	// TODO Think about where should the action parameter be in the form
 	        	// --> in session or in request ?
 	        	String query = "";
-	        	if (action.equals("INSERT")) {
+	        	if (action.equals(insert)) {
 	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
 	        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
 	        	}
-	        	else if (action.equals("UPDATE")) {
+	        	else if (action.equals(update)) {
 	        		eventId = request.getParameter("eventId");
 	        		System.out.println(eventId);
 	        		query= "UPDATE Event SET title='"+ title +"', content='"+content+"', postedBy='"+loginId+"'," +
 	        				" categoryId='"+category+"', status='"+status+"', locationId='"+locationId+"', startTime='"+startTime+"', endTime='" +endTime+"'"
 		        			+"WHERE eventId='"+eventId+"'";
 	        	}
-	        	else if (action.equals("DELETE")) {
+	        	else if (action.equals(delete)) {
 	        		eventId = request.getParameter("eventId");
 	        		System.out.println(eventId);
 	        		query= "DELETE FROM Event WHERE eventId='"+eventId+"'";
@@ -172,23 +178,115 @@ public class AddEvent extends HttpServlet {
 	        		String error = "INVALID QUERY";
 	        		request.setAttribute("error", error);
 	        		closeConnection();
-		        	//request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
 		        	request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
 		        	return;
 	        	}
 
+	        	String[] enum_status = {"ONGOING", "SCHEDULED", "CANCELLED", "COMPLETED"};
 	        	System.out.println(query);
 	        	// Query successfully executed
 	        	if (modificationQuery(query)) {
+	        		EventDetail event = new EventDetail();
+	        		event.title= title;
+                    event.content=content;
+                    event.postedBy=loginId;
+    				event.startTime=startTime;
+    				event.endTime=endTime;
+    				List<EventDetail> events = (List<EventDetail>) request.getSession().getAttribute("events");
+    				if (action.equals(insert))
+    					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime" +
+        					" FROM Event E, Location L, Category C, MainLand M WHERE " +
+        					" E.title='"+ title +"' AND E.content='"+content+"' AND E.postedBy='"+loginId+"' AND " + "E.categoryId='"+category+
+        					"' AND E.status='"+enum_status[status-1]+ "' AND E.startTime='"+startTime+"' AND E.endTime='" +endTime +"' AND E.locationId='"+locationId+"'"+
+        					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+    				
+    				//
+    				
+    				else if (action.equals(update))
+    					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime " +
+            					" FROM Event E, Location L, Category C, MainLand M WHERE " +
+            					" E.eventId='"+ eventId+ "' AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId " +
+            					" AND C.categoryId = E.categoryId";
+
+            		System.out.println (query);
+        			Statement s = connection.createStatement();
+        			s.executeQuery(query);
+                    ResultSet rs = s.getResultSet();                    
+                    if (rs.next()) {
+                        event.eventId = rs.getInt("eventId");
+                        event.status  = rs.getString("status");
+        				event.category = rs.getString("category");
+        				event.modifiedTime = rs.getTimestamp("modifiedTime");
+                		event.location = rs.getString("mainLand") + " (" +subland+")";
+                        System.out.println("inserted event's id is " + event.eventId);
+                    } else {
+                    	String error = "Error: could not add the event to events list for this session";
+                    	request.setAttribute("error", error);
+                		request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
+                		return;
+                    }
+                    
+	        		if (action.equals(insert)) {
+        				events.add(event);
+	        		} else if (action.equals(update)) {
+	        			//ListIterator<EventDetail> it = events.listIterator();
+    					System.out.println ("Size "+events.size ());
+	        			for (int i=0; i<events.size (); i++) {
+	        				EventDetail e = events.get(i);
+	        				if (e.eventId == event.eventId) {
+	        					System.out.println ("Setting the new event instead of current.");
+	        					events.set (i, event);
+	        					System.out.println ("new eventid " + events.get(i).eventId);
+	        					break;
+	        				}
+	        			}
+	        			/*while (it.hasNext()) {
+	        				EventDetail e = it.next ();
+	        				if (e.eventId == event.eventId) {
+	        					System.out.println ("Setting the new event instead of current.");
+	        					System.out.println (e.eventId);
+	        					System.out.println (event.eventId);
+	        					it.set(event);
+	        					System.out.println ("After setting");
+	        					
+	        					break;
+	        				}
+	        			}*/
+	        			/*int index = events.indexOf(event);
+	        			if (index == -1) {
+	        				String error = "Error: could not update the event in events list for this session";
+	                    	request.setAttribute("error", error);
+	                		request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
+	                		return;
+	        			}
+	        			else events.set(index, event); */
+	        		}
+	        		
+	        		session.setAttribute("events", events);
 	        		closeConnection();
-		        	//request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
 		        	request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
 		        	return;
 	        	}
 	        	// Query Failed
-	        	else System.out.println ("Cannot insert some problem occurred.\n");
-	        } 
-		} catch(Exception e) {
+	        	else {
+	        		System.out.println ("Cannot insert some problem occurred.\n");
+	        		String error = "Error: could not update or insert the event in the database";
+                	request.setAttribute("error", error);
+            		request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
+            		return;
+	        	}
+	        }
+		}
+		catch (SQLException e) {
+		    	System.out.println("Error : " + e.toString());
+		    	e.printStackTrace();
+		    	String error = e.getMessage();
+		    	System.out.println (e.getMessage());
+				request.setAttribute("error", error);
+		        request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
+		        return;
+		}
+		catch(Exception e) {
 			closeConnection();
 			System.out.println(e.toString()+ "\n Exception Stack: \n");
 	        e.printStackTrace();
