@@ -8,13 +8,19 @@ public class EventDetail {
 	public Timestamp modifiedTime; 
 	public String title;
 	public String content;	
-	public  String location;
-	public String category;			
+	public String location;
+	public String category;
 	public String status;
+	
+	public String categoryValue;
+	public String postedByName;
+	public String postedByPost;
+	public String postedByMail;
 	
 	// New attributes
 	public String mainLand;
 	public String subLand;
+	public String mapId;
 	
 	public int postedBy;
 	
