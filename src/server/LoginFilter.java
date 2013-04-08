@@ -39,12 +39,21 @@ public class LoginFilter implements Filter {
 		System.out.println("In LoginFilter");
 		HttpSession session = ((HttpServletRequest)request).getSession(false);
 		
-    	if ( (session != null) && (session.getAttribute("user") != null) 
+    	if ( (session != null) && (session.getAttribute("user") != null)
+    			&& (session.getAttribute("loginId") != null)
     			&& (session.getAttribute("events") != null)) {
     		System.out.println ("FILTER user!= null");
     		System.out.println ("FILTER user "+ session.getAttribute("user"));
     		System.out.println ("FILTER events "+ session.getAttribute("events"));
-    	//	request.getRequestDispatcher("/Secured/Events.jsp").forward(request, response);
+    		
+    		HttpServletRequest Rrequest = (HttpServletRequest)request;
+    		String uri = Rrequest.getRequestURI (); 
+    		System.out.println ("FILTER request uri "+ uri);
+    		if (uri.equals (Declarations.loginPage)) {
+    			String home = Declarations.homePage(Rrequest);
+    			System.out.println ("FILTER request home "+ home);
+    			request.getRequestDispatcher(home).forward(request, response);
+    		}
     		
     		// pass the request along the filter chain
     		chain.doFilter(request, response);
