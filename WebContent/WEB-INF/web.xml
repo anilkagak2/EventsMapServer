@@ -45,7 +45,6 @@
     <servlet-name>FetchLocationCategory</servlet-name>
     <url-pattern>   /FetchLocationCategory  </url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <display-name>   FetchDetails   </display-name>
     <servlet-name>FetchDetails</servlet-name>
@@ -55,7 +54,6 @@
     <servlet-name>FetchDetails</servlet-name>
     <url-pattern>   /FetchDetails  </url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <display-name>   AddEvent   </display-name>
     <servlet-name>AddEvent</servlet-name>
@@ -84,8 +82,7 @@
     <servlet-name>UpdateEvent</servlet-name>
     <url-pattern>/UpdateEvent</url-pattern>
   </servlet-mapping>
-  
-    <servlet>
+  <servlet>
     <description></description>
     <display-name>AllUser</display-name>
     <servlet-name>AllUser</servlet-name>
@@ -95,8 +92,7 @@
     <servlet-name>AllUser</servlet-name>
     <url-pattern>/AllUser</url-pattern>
   </servlet-mapping>
-  
-   <servlet>
+  <servlet>
     <description></description>
     <display-name>ChangePassword</display-name>
     <servlet-name>ChangePassword</servlet-name>
@@ -106,4 +102,34 @@
     <servlet-name>ChangePassword</servlet-name>
     <url-pattern>/ChangePassword</url-pattern>
   </servlet-mapping>
-</web-app>
+  <servlet>
+    <description></description>
+    <display-name>GetEvents</display-name>
+    <servlet-name>GetEvents</servlet-name>
+    <servlet-class>server.GetEvents</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetEvents</servlet-name>
+    <url-pattern>/GetEvents</url-pattern>
+  </servlet-mapping>
+
+  <filter>
+	<filter-name>LoginFilter</filter-name>
+	<filter-class>server.LoginFilter</filter-class>        
+  </filter>
+  <filter-mapping>
+     <filter-name>LoginFilter</filter-name>
+     <url-pattern>/General/*</url-pattern>
+     <url-pattern>/Secured/*</url-pattern>
+  </filter-mapping>
+    
+  <filter>
+     <filter-name>AdminFilter</filter-name>
+     <filter-class>server.AdminFilter</filter-class>        
+  </filter>
+  <filter-mapping>
+     <filter-name>AdminFilter</filter-name>
+     <url-pattern>/Secured/*</url-pattern>
+   </filter-mapping>
+ 
+  </web-app>

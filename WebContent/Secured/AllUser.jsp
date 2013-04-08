@@ -14,7 +14,7 @@
 	href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Add Event</title>
+<title>Users</title>
 
 <link rel="stylesheet" href="css/screen.css" type="text/css"
 	media="screen" title="default" />
@@ -58,10 +58,11 @@
 	}
 
 	function changePassword(id) {
-		if (document.getElementById(id + "new").value == document
-				.getElementById(id + "confirm").value) {
-			document.getElementById(id + "error").innerHTML = "";
+		var pass = document.getElementById(id + "new_pass").value;
+		var confPass = document.getElementById(id + "confirm_pass").value
+		if (pass == confPass && pass != '') {
 
+			document.getElementById(id + "error").innerHTML = "";
 			$
 					.post(
 							"ChangePassword",
@@ -76,7 +77,7 @@
 							});
 
 		} else {
-			document.getElementById(id + "error").innerHTML = "<p style='color:red'>Not Matching <p>";
+			document.getElementById(id + "error").innerHTML = "<p style='color:red'>Not Matching/Empty<p>";
 		}
 	}
 
@@ -253,7 +254,7 @@ input.LinkButton {
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
+						<a href="General/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="" id="acc-details">Personal details </a>
@@ -268,21 +269,6 @@ input.LinkButton {
 			<!--  start nav -->
 			<div class="nav">
 				<div class="table">
-
-					<ul class="select">
-						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Dashboard Details 1</a></li>
-									<li><a href="#nogo">Dashboard Details 2</a></li>
-									<li><a href="#nogo">Dashboard Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="clear"></div>
-
 					<c:choose>
 						<c:when test="${sessionScope.loginId == 1}">
 							<c:set var="homePage" value="Secured/Admin.jsp" />
@@ -293,9 +279,11 @@ input.LinkButton {
 					</c:choose>
 
 					<ul class="select">
-						<li><a href="${homePage}"><b>Back To Home</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--></li>
+						<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
+						</li>
 					</ul>
+
+					<div class="clear"></div>
 				</div>
 			</div>
 			<!-- start nav -->

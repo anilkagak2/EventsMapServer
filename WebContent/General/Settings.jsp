@@ -14,14 +14,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Settings</title>
 
-<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
+<base
+	href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
 <link rel="stylesheet" href="css/screen.css" type="text/css"
 	media="screen" title="default" />
 
-<link
-	href="css/bootstrap-combined.min.css"
-	rel="stylesheet">
+<link href="css/bootstrap-combined.min.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" media="screen"
 	href="css/bootstrap-datetimepicker.min.css">
 
@@ -34,7 +33,7 @@
 
 <script type="text/javascript"
 	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-
+	
 </script>
 <script type="text/javascript"
 	src="js/jquery/bootstrap/bootstrap.min.js">
@@ -46,6 +45,7 @@
 </script>
 <script type="text/javascript"
 	src="js/jquery/bootstrap/bootstrap-datetimepicker.pt-BR.js">
+	
 </script>
 
 
@@ -54,6 +54,27 @@
 <script src="js/jquery/ui.checkbox.js" type="text/javascript"></script>
 <script src="js/jquery/jquery.bind.js" type="text/javascript"></script>
 <script type="text/javascript">
+	function changePassword(id) {
+		var pass = document.getElementById("new_pass").value;
+		var confPass = document.getElementById("confirm_pass").value;
+		if (pass == confPass && pass != '') {
+			document.getElementById("error").innerHTML = "";
+
+			$
+					.post(
+							"ChangePassword",
+							{
+								id : id,
+								password : document.getElementById("new_pass").value
+							},
+							function(data, status) {
+								document.getElementById("error").innerHTML = "<h5 style='color:green'>Password Changed</h5>";
+							});
+
+		} else {
+			document.getElementById("error").innerHTML = "<h5 style='color:red'>New and Confirm password are not matching or empty </h5>";
+		}
+	}
 	$(function() {
 		$('input').checkBox();
 		$('#toggle-all').click(function() {
@@ -143,7 +164,7 @@
 			<div id="logo">
 				<!--  ${user} from the Login.java doPost -->
 				<c:if test="${not empty sessionScope.user}">
-					<h1 style="color: orange">Hi ${sessionScope.user}</h1>
+					<h1 style="color: orange">Welcome ${sessionScope.user}</h1>
 				</c:if>
 			</div>
 			<!-- end logo -->
@@ -178,7 +199,7 @@
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
+						<a href="General/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="FetchDetails" id="acc-details">Personal details </a>
@@ -194,33 +215,19 @@
 			<div class="nav">
 				<div class="table">
 
-					<ul class="select">
-						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Dashboard Details 1</a></li>
-									<li><a href="#nogo">Dashboard Details 2</a></li>
-									<li><a href="#nogo">Dashboard Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="clear"></div>
-
-					<c:choose>
-						<c:when test="${sessionScope.loginId == 1}">
-							<c:set var="homePage" value="Secured/Admin.jsp" />
-						</c:when>
-						<c:otherwise>
-							<c:set var="homePage" value="General/Events.jsp" />
-						</c:otherwise>
-					</c:choose>
-
-					<ul class="select">
-						<li><a href="${homePage}"><b>Back To Home</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--></li>
-					</ul>
+				<c:choose>
+					<c:when test="${sessionScope.loginId == 1}">
+						<c:set var="homePage" value="Secured/Admin.jsp" />
+					</c:when>
+					<c:otherwise>
+						<c:set var="homePage" value="General/Events.jsp" />
+					</c:otherwise>
+				</c:choose>
+		
+				<ul class="select">
+					<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
+					</li>
+				</ul>
 				</div>
 			</div>
 			<!-- start nav -->
@@ -237,8 +244,7 @@
 
 
 			<div id="page-heading">
-				<h1>Settings
-				</h1>
+				<h1>Settings</h1>
 			</div>
 
 
@@ -260,48 +266,33 @@
 					<td>
 						<!--  start content-table-inner -->
 						<div id="content-table-inner">
+							<h4>Change Password</h4>
+							<table border="0" width="50%" cellpadding="100" cellspacing="10"
+								style="text-align: center;">
+								<col width="80">
+								<col width="80">
 
-							<table border="0" width="25%" cellpadding="0" cellspacing="0" style="text-align:center;">
-								<tr valign="top">
-									<th valign="top">Webmail Id</th>
-									<td class="noheight">
-										<div class="well">
-											
-										</div>
-									</td>
-									<td></td>
+								<tr>
+									<td align="left">New Password</td>
+									<td><input id="new_pass" type="password" name="new_pass" /></td>
 								</tr>
-								
-								<tr valign="top">
-									<th valign="top">Login Id</th>
-									<td class="noheight">
-										<div class="well">
-											
-										</div>
-									</td>
-									<td></td>
+
+								<tr>
+									<td align="left">Retype New Password</td>
+									<td><input id="confirm_pass" type="password"
+										name="confirm_pass" /></td>
 								</tr>
-								
-								<tr valign="top">
-									<th valign="top">Email</th>
-									<td class="noheight">
-										<div class="well">
-											
-										</div>
-									</td>
-									<td></td>
+
+								<tr>
+									<td align="left"><input
+										onclick="changePassword('${sessionScope.loginId}');"
+										type="button" name="confirm_pass" value=" Change Password " /></td>
 								</tr>
-								
-								<tr valign="top">
-									<th valign="top">Post</th>
-									<td class="noheight">
-										<div class="well">
-											
-										</div>
-									</td>
-									<td></td>
-								</tr>
-										
+
+
+								<tr id="error" align="left"></tr>
+
+
 								<tr>
 									<td><img src="images/shared/blank.gif" width="695"
 										height="1" alt="blank" /></td>

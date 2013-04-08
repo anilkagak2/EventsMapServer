@@ -43,7 +43,7 @@ public class FetchDetails extends HttpServlet {
 	
 	private void sendResponse (HttpServletRequest request, HttpServletResponse response) 
 			throws ServletException, IOException {
-		        request.getRequestDispatcher("/Secured/Details.jsp").forward(request, response);
+		        request.getRequestDispatcher(Declarations.userDetails).forward(request, response);
 	}
     
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -88,9 +88,9 @@ public class FetchDetails extends HttpServlet {
 			else{
 				System.out.println("Database connection failed.");
 				
-				String home="/General/Events.jsp";
+				String home=Declarations.userHome;
 				if (loginId == 1)
-					home = "/Secured/Admin.jsp";
+					home = Declarations.adminHome;
 				
 				request.getRequestDispatcher(home).forward(request, response);
 				return;
