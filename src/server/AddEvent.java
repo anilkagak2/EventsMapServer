@@ -123,8 +123,6 @@ public class AddEvent extends HttpServlet {
 			startTime = Timestamp.valueOf(request.getParameter("starttime"));
 			endTime = Timestamp.valueOf(request.getParameter("endtime"));
 			action = request.getParameter("action");
-			
-			//action = "INSERT";
     	} catch (Exception e){
     		System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
@@ -193,20 +191,36 @@ public class AddEvent extends HttpServlet {
     				event.startTime=startTime;
     				event.endTime=endTime;
     				List<EventDetail> events = (List<EventDetail>) request.getSession().getAttribute("events");
-    				if (action.equals(insert))
+    				//PreparedStatement s = null;
+    				if (action.equals(insert)) {
     					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime" +
         					" FROM Event E, Location L, Category C, MainLand M WHERE " +
         					" E.title='"+ title +"' AND E.content='"+content+"' AND E.postedBy='"+loginId+"' AND " + "E.categoryId='"+category+
         					"' AND E.status='"+enum_status[status-1]+ "' AND E.startTime='"+startTime+"' AND E.endTime='" +endTime +"' AND E.locationId='"+locationId+"'"+
         					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+    					
+    					/*query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime" +
+            					" FROM Event E, Location L, Category C, MainLand M WHERE " +
+            					" E.title='"+ title +"' AND E.content='"+content+"' AND E.postedBy='"+loginId+"' AND " + "E.categoryId='"+category+
+            					"' AND E.status='"+enum_status[status-1]+ "' AND E.startTime='"+startTime+"' AND E.endTime='" +endTime +"' AND E.locationId='"+locationId+"'"+
+            					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+    					s = connection.prepareStatement(query);
+    					s.setString (1, title);
+    					s.setString (2, content);
+    					s.setInt (3, loginId);
+    					s.setInt (4, category);
+    					s.setString (5, enum_status[status-1]);
+    					s.setTimestamp(6, startTime);
+    					s.setTimestamp(7, endTime);
+    					s.setInt(8, locationId);*/
+    				}
     				
-    				//
-    				
-    				else if (action.equals(update))
+    				else if (action.equals(update)) {
     					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime " +
             					" FROM Event E, Location L, Category C, MainLand M WHERE " +
             					" E.eventId='"+ eventId+ "' AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId " +
             					" AND C.categoryId = E.categoryId";
+    				}
 
             		System.out.println (query);
         			Statement s = connection.createStatement();

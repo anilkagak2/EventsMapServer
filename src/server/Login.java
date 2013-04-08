@@ -80,12 +80,8 @@ public class Login extends HttpServlet {
 			throws IOException, ServletException {
 		try {
 			// TODO: Should loginId be of type long or int 
-			if(loginId == Declarations.adminId) {
-				request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
-			}
-			else {
-				request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
-			}
+			String home = Declarations.homePage(request);
+			request.getRequestDispatcher(home).forward(request, response);
 		} catch (Exception e){
 			System.out.println("Some error occurred.. go n have fun.. :P");
 			System.out.println(e.toString()+ "\n Exception Stack: \n");
@@ -151,11 +147,13 @@ public class Login extends HttpServlet {
 
             // Execute Queries by checking passHash
             if (connection != null) {
-                Statement s = connection.createStatement();
-                String query = "SELECT * FROM Login where email = '"+ email +"'";
-                s.executeQuery(query);
-                ResultSet rs = s.getResultSet();
+                String query = "SELECT * FROM Login where email = ? ";
+                PreparedStatement s = connection.prepareStatement(query);
+                s.setString(1, email);
                 System.out.println (query);
+                System.out.println (s.toString());
+                s.executeQuery();
+                ResultSet rs = s.getResultSet();
                 boolean found = false;
                 while (rs.next()) {
                     String pass_hash = rs.getString("passwdHash");
@@ -177,13 +175,15 @@ public class Login extends HttpServlet {
                     	// NOT USEFUL --> will go into server log & not to the user
                     	System.out.println ("You are authenticated now.\n"+ user +
                     			" Please proceed further\n");
+
+                    	query = "Select E.eventId, E.title, E.content, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
+            					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = ? " +
+            					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+                    	PreparedStatement s1 = connection.prepareStatement(query);
+                    	s1.setInt(1, loginId);
                     	
-                    	Statement s1 = connection.createStatement();
-                    	query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
-                    					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+loginId+"'" +
-                    					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
                     	System.out.println(query);
-                    	s1.executeQuery(query);
+                    	s1.executeQuery();
                     	ResultSet rs1 = s1.getResultSet();
                     	boolean eventsEmpty = true;
                     	List<EventDetail> events = new ArrayList<EventDetail>();
@@ -193,6 +193,7 @@ public class Login extends HttpServlet {
                     		System.out.println ("GOt a record matching");
                     		EventDetail event = new EventDetail();
                     		event.eventId = rs1.getLong("eventId");
+                    		event.content = rs1.getString ("content");
                     		event.title = rs1.getString("title");
                     		event.startTime = rs1.getTimestamp("startTime");
                     		event.modifiedTime = rs1.getTimestamp("modifiedTime");		// Newly Introduced
