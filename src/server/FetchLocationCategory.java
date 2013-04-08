@@ -76,7 +76,7 @@ public class FetchLocationCategory extends HttpServlet {
 	
 	private void sendResponse (HttpServletRequest request, HttpServletResponse response) 
 	throws ServletException, IOException {
-        request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+        request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
 	}
     
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -111,7 +111,7 @@ public class FetchLocationCategory extends HttpServlet {
 			} else {
 				// SERIOUS ERROR IN EXECUTION FLOW
 				System.out.println("Serious erorr in execution flow.. session null");
-				request.getRequestDispatcher("/Login.jsp").forward(request, response);
+				request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
 				return;
 			}
 

@@ -242,7 +242,7 @@ input.LinkButton {
 			<!--  start account-content -->	
 			<div class="account-content">
 			<div class="account-drop-inner">
-				<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
+				<a href="General/Settings.jsp" id="acc-settings">Settings</a>
 				<div class="clear">&nbsp;</div>
 				<div class="acc-line">&nbsp;</div>
 				<a href="FetchDetails" id="acc-details">Personal details </a>
@@ -258,17 +258,18 @@ input.LinkButton {
 		<div class="nav">
 		<div class="table">
 		
-		<ul class="select"><li><a href="#nogo"><b>Dashboard</b><!--[if IE 7]><!--></a><!--<![endif]-->
-		<!--[if lte IE 6]><table><tr><td><![endif]-->
-		<div class="select_sub">
-			<ul class="sub">
-				<li><a href="#nogo">Dashboard Details 1</a></li>
-				<li><a href="#nogo">Dashboard Details 2</a></li>
-				<li><a href="#nogo">Dashboard Details 3</a></li>
-			</ul>
-		</div>
-		<!--[if lte IE 6]></td></tr></table></a><![endif]-->
-		</li>
+		<c:choose>
+			<c:when test="${sessionScope.loginId == 1}">
+				<c:set var="homePage" value="Secured/Admin.jsp" />
+			</c:when>
+			<c:otherwise>
+				<c:set var="homePage" value="General/Events.jsp" />
+			</c:otherwise>
+		</c:choose>
+		
+		<ul class="select">
+			<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
+			</li>
 		</ul>
 		
 		<ul class="select"><li><a href="FetchLocationCategory?action=INSERT"><b>Add Event</b><!--[if IE 7]><!--></a><!--<![endif]-->
@@ -335,7 +336,7 @@ input.LinkButton {
 								<c:out value="</tr><tr>" escapeXml="false"/>
 							</c:if>
 							<td>
-						  	<div class="left"><a href=""><img src="images/forms/icon_plus.gif" width="21" height="21" alt="" /></a></div>
+						  	<div class="left"><a href="${homePage}"><img src="images/forms/icon_plus.gif" width="21" height="21" alt="" /></a></div>
 				           	<div class="right">
 								<h5><c:out 				value="${events[i].title}" /></h5>
 								<ul class="greyarrow">

@@ -7,8 +7,6 @@ import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.apache.catalina.Session;
-
 /**
  * Servlet implementation class Register
  */
@@ -55,6 +53,12 @@ public class Register extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
+    
+    // get the return page for the current user
+    String returnPage = Declarations.homePage(request);
+    
+    // If it's not administrator then, return
+    if (returnPage != Declarations.adminHome) return;
 
     try{
         user = request.getParameter("user");
@@ -65,7 +69,12 @@ public class Register extends HttpServlet {
     }
 
     catch(Exception e){
-    	System.out.println("Error..!! - in register");
+    	System.out.println("Error. in register");
+    	e.printStackTrace();
+    	String error = "Error: Incomplete or Invalid Form Submitted";
+		request.setAttribute("error", error);
+    	request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+    	return;
     }
 
     try{
@@ -85,37 +94,51 @@ public class Register extends HttpServlet {
 	             s.executeUpdate(query);
 	             s.close();
 	             
-	             // TODO VP Section to VP's DashBoard
-	             // request.getRequestDispatcher("/Events.jsp").forward(request, response);
-	             int loginId = Integer.parseInt(request.getSession().getAttribute("loginId").toString());
-	             if (loginId == Declarations.adminId)
-	 	        	request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
-	 	        else
-	 	        	request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
+	             request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+	             return;
 	    }
 	    else{
 	            System.out.println("Cannot connect to the database\n");
+	            request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+	            return;
 	    }
+    }
+    catch (SQLException e) {
+    	System.out.println("Error : " + e.toString());
+    	e.printStackTrace();
+    	String error = e.getMessage();
+    	System.out.println (e.getMessage());
+		request.setAttribute("error", error);
+        request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+        return;
     }
     catch(Exception e){
             System.out.println("Error : " + e.toString());
+            request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
     }
 }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-    	// TODO VP Section
- /*   	HttpSession session = request.getSession(false);
-    	if (session != null && (session.getAttribute("user").toString () != "vp") ) { */
+    	/* If admin is not the current user, then return Home
+    	 * */
+    	String returnPage = Declarations.homePage(request);
+    	if (returnPage == Declarations.adminHome)
     		processRequest(request, response);
-    	/*}
-    	else { 
-    		request.getRequestDispatcher("/Login.jsp").forward(request, response);
-    	}*/
+    	else {
+    		System.out.println ("Error: something malicious going on.");
+    		request.getRequestDispatcher(returnPage).forward(request, response);
+    	}
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
-	    processRequest(request, response);
+		String returnPage = Declarations.homePage(request);
+    	if (returnPage == Declarations.adminHome)
+    		processRequest(request, response);
+    	else{
+    		System.out.println ("Error: something malicious going on.");
+    		request.getRequestDispatcher(returnPage).forward(request, response);
+    	}
 	}
 }

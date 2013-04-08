@@ -199,7 +199,7 @@
 				<!--  start account-content -->
 				<div class="account-content">
 					<div class="account-drop-inner">
-						<a href="Secured/Settings.jsp" id="acc-settings">Settings</a>
+						<a href="General/Settings.jsp" id="acc-settings">Settings</a>
 						<div class="clear">&nbsp;</div>
 						<div class="acc-line">&nbsp;</div>
 						<a href="FetchDetails" id="acc-details">Personal details </a>
@@ -215,33 +215,19 @@
 			<div class="nav">
 				<div class="table">
 
-					<ul class="select">
-						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Dashboard Details 1</a></li>
-									<li><a href="#nogo">Dashboard Details 2</a></li>
-									<li><a href="#nogo">Dashboard Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="clear"></div>
-
-					<c:choose>
-						<c:when test="${sessionScope.loginId == 1}">
-							<c:set var="homePage" value="Secured/Admin.jsp" />
-						</c:when>
-						<c:otherwise>
-							<c:set var="homePage" value="General/Events.jsp" />
-						</c:otherwise>
-					</c:choose>
-
-					<ul class="select">
-						<li><a href="${homePage}"><b>Back To Home</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--></li>
-					</ul>
+				<c:choose>
+					<c:when test="${sessionScope.loginId == 1}">
+						<c:set var="homePage" value="Secured/Admin.jsp" />
+					</c:when>
+					<c:otherwise>
+						<c:set var="homePage" value="General/Events.jsp" />
+					</c:otherwise>
+				</c:choose>
+		
+				<ul class="select">
+					<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
+					</li>
+				</ul>
 				</div>
 			</div>
 			<!-- start nav -->

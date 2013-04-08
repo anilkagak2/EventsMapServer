@@ -22,6 +22,12 @@ public class EventDetail {
 	public String subLand;
 	public String mapId;
 	
+	public int postedBy;
+	
+	public int getPostedBy (){
+		return postedBy;
+	}
+	
 	public String getSubLand (){
 		return subLand;
 	}

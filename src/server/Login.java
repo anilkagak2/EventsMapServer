@@ -152,9 +152,6 @@ public class Login extends HttpServlet {
             // Execute Queries by checking passHash
             if (connection != null) {
                 Statement s = connection.createStatement();
-                /* Changed the Table structure--> loginId = INT & userName = user */
-                //s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+ user +"'");
-                //s.executeQuery("SELECT * FROM Login where userName = '"+ user +"'");
                 String query = "SELECT * FROM Login where email = '"+ email +"'";
                 s.executeQuery(query);
                 ResultSet rs = s.getResultSet();
@@ -167,14 +164,12 @@ public class Login extends HttpServlet {
                     if (final_hash.equals(pass_hash)) {
                     	loginId = rs.getInt("loginId");
                     	user = rs.getString("userName");
-                    	//String post = rs.getString("post");
                     	session = request.getSession(true);
 
                     	// TODO use session object instead of passed user data
                     	session.setAttribute("user", user);
                     	session.setAttribute("email", email);
                     	session.setAttribute("loginId", loginId);
-                    	//session.setAttribute("post", post);
                     	session.removeAttribute("events");
                     	System.out.println("login  Id is "+loginId);
                     	found = true;
@@ -203,22 +198,14 @@ public class Login extends HttpServlet {
                     		event.modifiedTime = rs1.getTimestamp("modifiedTime");		// Newly Introduced
                     		event.endTime = rs1.getTimestamp("endTime");
                     		event.category = rs1.getString("category");
-                    		//event.status = status_enum[rs1.getInt("status")];
                     		event.status = rs1.getString("status");
                     		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
-                    		           		
-                    		
                  		    events.add(event);
                     	}
                      	
                     	rs1.close ();
                     	s1.close ();
                     	session.setAttribute("events", events);
-                    	
-                    	/*List<EventDetail> ls = (List<EventDetail>)(session.getAttribute("events"));
-                    	for (int i=0; i<ls.size(); i++) {
-                    		System.out.println ("item "+i +"  "+ ls.get(i));
-                    	}*/
                     	
                     	break;
                     }
@@ -228,7 +215,7 @@ public class Login extends HttpServlet {
                 s.close();
                 
                 // no cache
-          /*      response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+          /*    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
                 response.setHeader("Pragma", "no-cache"); 	// HTTP 1.0.
                 response.setDateHeader("Expires", 0); 		// Proxies.
              */   
