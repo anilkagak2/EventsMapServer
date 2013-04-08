@@ -83,16 +83,17 @@ public class GetEvents extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Connection connection = DriverManager.getConnection(url, mysqlUser,
 					mysqlPass);
-
+			
+			
 			if (connection != null) {
 				Statement s = connection.createStatement();
 				s.executeQuery(query);
 				System.out.println(query);
 				ResultSet rs = s.getResultSet();
-
-				EventDetail event = new EventDetail();
+		
 
 				while (rs.next()) {
+					EventDetail event = new EventDetail();
 					event.title = rs.getString("title");
 					event.category = rs.getString("Category");
 					event.categoryValue = rs.getString("content");
@@ -109,8 +110,6 @@ public class GetEvents extends HttpServlet {
 					//System.out.println("Added in json\n");
 					listEvents.add(event);
 				}
-				
-
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
