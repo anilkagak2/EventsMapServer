@@ -94,7 +94,8 @@ public class Register extends HttpServlet {
 	             s.executeUpdate(query);
 	             s.close();
 	             
-	             request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+	             //request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+	             request.getRequestDispatcher(returnPage).forward(request, response);
 	             return;
 	    }
 	    else{

@@ -100,6 +100,7 @@ public class AddEvent extends HttpServlet {
 		String user = "";
 		int loginId = 0;
 		String action="";
+		String returnHome = Declarations.homePage(request);
 		HttpSession session = request.getSession(false);
     	if (session != null) {
     		user = session.getAttribute("user").toString();
@@ -300,7 +301,8 @@ public class AddEvent extends HttpServlet {
 	        		
 	        		session.setAttribute("events", events);
 	        		closeConnection();
-		        	request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
+		        	//request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
+	        		request.getRequestDispatcher(returnHome).forward(request, response);
 		        	return;
 	        	}
 	        	// Query Failed
