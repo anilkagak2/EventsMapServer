@@ -1,6 +1,7 @@
 package server;
 
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.validator.routines.EmailValidator;
 import javax.servlet.http.HttpSession;
 
 public class Declarations {
@@ -15,6 +16,10 @@ public class Declarations {
 	public static final String registerHome = "/Secured/Register.jsp";
 	public static final String adminHome = "/Secured/Admin.jsp";
 	
+	/*
+	 * Maps loginId to HomePage of the user via checking the session field &
+	 * comparing the loginId with adminId.
+	 * */
 	public static String homePage (HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (request == null || session == null) return loginHome;
@@ -29,5 +34,11 @@ public class Declarations {
 				return loginHome;
 			}
 		}
+	}
+	
+	/* Checks */
+	/* Email Field check */
+	public static boolean isValidEmail (String email) {
+		return EmailValidator.getInstance().isValid(email);
 	}
 }

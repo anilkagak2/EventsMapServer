@@ -124,11 +124,17 @@ public class Login extends HttpServlet {
         	}
         	
         	/* No Previous Session */
-          //  user = request.getParameter("user");
         	email = request.getParameter ("email");
         	loginId = -1;		// ERROR
-            String pass = request.getParameter("pass");
-            String final_hash = "";
+        	String pass = request.getParameter("pass");
+        	String final_hash = "";
+        	if (!Declarations.isValidEmail(email) || pass.equals("")) {
+        		System.out.println ("Invalid email or password entries.\n");
+        		String error = "Error: Email or Password entries not valid";
+            	request.setAttribute("error", error);
+        		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
+        		return;
+        	}
 
             try{
                 final_hash = hash(pass);
@@ -222,8 +228,12 @@ public class Login extends HttpServlet {
                 closeConnection ();
                 System.out.println("Response.");
                 if (!found) {
+                	System.out.println ("Invalid email or password entries.\n");
+            		String error = "Error: No user with this (email, password) pair";
+                	request.setAttribute("error", error);
+            		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
                 	System.out.println("Home.");
-                	redirectToLoginHome(request, response);
+//                	redirectToLoginHome(request, response);
                 	return;
                 }
                 else {
