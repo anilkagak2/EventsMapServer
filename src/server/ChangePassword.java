@@ -33,6 +33,9 @@ public class ChangePassword extends HttpServlet {
 		// TODO Auto-generated method stub
 		int userId = Integer.parseInt(request.getParameter("id"));
 		String pass = request.getParameter("password");
+		String userName = request.getParameter("userName");
+		String webmail = request.getParameter("webmail");
+		
 		boolean del = false;
 		if (request.getParameter("del") != null){
 			del = true;
@@ -51,13 +54,11 @@ public class ChangePassword extends HttpServlet {
         if (connection != null) {
             Statement s = connection.createStatement();
             String query = "";
-            if(del){
-            	query = "DELETE FROM `Login` WHERE `loginId` = "+userId;
-            }else{
             
-            query = "update Login set passwdHash=sha2('"+pass+"',256) where loginId="+userId;
+            
+            query = "update Login set passwdHash=sha2('"+pass+"',256),  where loginId="+userId;
             //System.out.println(query);
-            }
+            
             s.executeUpdate(query);
             
         }

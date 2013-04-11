@@ -73,7 +73,7 @@ public class GetEvents extends HttpServlet {
 		if (postedByPost != "")
 			query += " and L.post=" + postedByPost;
 
-		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ";
+		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ORDER BY E.startTime";
 		System.out.println(query);
 
 		try {
