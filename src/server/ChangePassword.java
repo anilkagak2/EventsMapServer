@@ -3,6 +3,7 @@ package server;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.Statement;
 
 import javax.servlet.ServletException;
@@ -44,28 +45,27 @@ public class ChangePassword extends HttpServlet {
         String url = Declarations.url;
         Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
-        
-  
 
         // Execute Queries by checking passHash
         if (connection != null) {
-            Statement s = connection.createStatement();
+            PreparedStatement s = null;
             String query = "";
             if(del){
-            	query = "DELETE FROM `Login` WHERE `loginId` = "+userId;
+            	query = "DELETE FROM `Login` WHERE `loginId` = ?";
+            	s = connection.prepareStatement(query);
+            	s.setInt(1, userId);
             }else{
-            
-            query = "update Login set passwdHash=sha2('"+pass+"',256) where loginId="+userId;
-            //System.out.println(query);
+              query = "update Login set passwdHash=sha2(?,256) where loginId= ?";
+              s = connection.prepareStatement(query);
+              s.setString (1, pass);
+          	  s.setInt (2, userId);
+          	  System.out.println(s.toString());
             }
-            s.executeUpdate(query);
-            
+            s.executeUpdate();
         }
 		}catch(Exception e){
 			System.out.println("Error in change password : "+e.getMessage());
 		}
-		request.getSession();
-		
 	}
 
 }
