@@ -123,6 +123,8 @@ public class AddEvent extends HttpServlet {
 			startTime = Timestamp.valueOf(request.getParameter("starttime"));
 			endTime = Timestamp.valueOf(request.getParameter("endtime"));
 			action = request.getParameter("action");
+			
+			//action = "INSERT";
     	} catch (Exception e){
     		System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
@@ -235,12 +237,14 @@ public class AddEvent extends HttpServlet {
     					s.setTimestamp(7, endTime);
     					s.setInt(8, locationId);
     				}
+
     				
     				else if (action.equals(update)) {
     					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime " +
             					" FROM Event E, Location L, Category C, MainLand M " +
             					" WHERE E.eventId= ? AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId " +
             					" AND C.categoryId = E.categoryId";
+    				
     					s = connection.prepareStatement(query);
     					s.setInt(1, Integer.parseInt(eventId));
     				}

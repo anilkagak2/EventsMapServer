@@ -36,9 +36,9 @@ public class AdminFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpSession session = ((HttpServletRequest)request).getSession(false);
-		System.out.println ("In admin filter");
+		
     	if (session != null) {
-    		int loginId = Integer.parseInt(session.getAttribute("loginId").toString());
+    		int loginId = Integer.parseInt((String) session.getAttribute("userId"));
     		if ( (loginId == 1) && (session.getAttribute("events") != null) 
     				&& (session.getAttribute("user") != null) ){
     			System.out.println ("FILTER user!= null");

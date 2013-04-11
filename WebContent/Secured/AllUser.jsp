@@ -40,22 +40,6 @@
 	}
 	//-->
 
-	function delete_account(id) {
-		var r = confirm("Are you sure you want to delete user id " + id);
-		if (r == true) {
-			$
-					.post(
-							"ChangePassword",
-							{
-								id : id,
-								del : true
-							},
-							function(data, status) {
-								document.getElementById(id + "success").innerHTML = "<p style='color:green'>Deleted<p>";
-							});
-
-		}
-	}
 
 	function changePassword(id) {
 		var pass = document.getElementById(id + "new_pass").value;
@@ -67,6 +51,8 @@
 					.post(
 							"ChangePassword",
 							{
+								userName : document.getElementById(id + "userName").value,
+								webmail : document.getElementById(id + "webmail").value,	
 								id : id,
 								password : document.getElementById(id + "new").value
 							},
@@ -330,21 +316,22 @@ input.LinkButton {
 									<td align="center">${user.userName}</td>
 									<td align="center">${user.emailId }</td>
 									<td align="center">${user.post }</td>
-									<td id="${user.loginId}remove" style="display: block;"><input
-										type="Button" value="Delete"
-										onclick="delete_account('${user.loginId}');" /></td>
 									<td id="${user.loginId}set" style="display: block;"><input
 										type="Button"
 										onclick="toggle_visibility('${user.loginId}set');toggle_visibility('${user.loginId}reset');"
-										value="Reset Password" /></td>
+										value="Reset Account" /></td>
 
 									<td>
 										<table style="display: none;" id="${user.loginId}reset">
 											<tr>
+												<th>User Name</th>
+												<th>Webmail</th>
 												<th>New Password</th>
 												<th>Confirm</th>
 											</tr>
 											<tr>
+												<td><input id="${user.loginId}userName" type='text' value='${user.userName}' /></td>
+												<td><input id="${user.loginId}webmail" type='text' value='${user.emailId }'/></td>
 												<td><input id="${user.loginId}new" type='password' /></td>
 												<td><input id="${user.loginId}confirm" type='password' /></td>
 												<td><input type='Button' value="Submit"

@@ -181,7 +181,6 @@ public class FetchLocationCategory extends HttpServlet {
 			closeConnection();
 			System.out.println("Fetch Location Category"+e.toString()+ "\n Exception Stack: \n");
 			e.printStackTrace();
-			request.getRequestDispatcher(returnHome).forward(request, response);
 		}
 	}
 	

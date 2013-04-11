@@ -53,7 +53,7 @@
 
 <script type="text/javascript"
 	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-
+	
 </script>
 <script type="text/javascript"
 	src="js/jquery/bootstrap/bootstrap.min.js">
@@ -73,12 +73,12 @@
 	$(function() {
 		$('#startDatetimepicker').datetimepicker({
 			language : 'en',
-			format: 'yyyy-MM-dd hh:mm:ss',
+			format : 'yyyy-MM-dd hh:mm:ss',
 		});
-		
+
 		$('#endDatetimepicker').datetimepicker({
 			language : 'en',
-			format: 'yyyy-MM-dd hh:mm:ss',
+			format : 'yyyy-MM-dd hh:mm:ss',
 		});
 	});
 </script>
@@ -158,32 +158,29 @@
 </script>
 
 <!-- Javascript for validation checks -->
- <script type="text/javascript">
- function checkCreateLoginForm (){
-   var x = document.forms["createForm"];
-   
-   /* email filter */
-   var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-   
-   if (x["user"].value == null || x["user"].value==""){
-     alert ("Invalid user name field.");
-     return false;
-   }
-   else if ((x["pass"].value != x["repass"].value)){
-    alert ("Password & Re-passwords do not match.");
-    return false;
-   }
-   else if (!filter.test(x["email"].value)){
-     alert ("Invalid Email Id.");
-     return false;
-   }
-   else if (x["post"].value == "" || x["post"].value==null){
-     alert("Post invalid.");
-     return false;
-   }
-   else return true;
- }
- </script>
+<script type="text/javascript">
+	function checkCreateLoginForm() {
+		var x = document.forms["createForm"];
+
+		/* email filter */
+		var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+		if (x["user"].value == null || x["user"].value == "") {
+			alert("Invalid user name field.");
+			return false;
+		} else if ((x["pass"].value != x["repass"].value)) {
+			alert("Password & Re-passwords do not match.");
+			return false;
+		} else if (!filter.test(x["email"].value)) {
+			alert("Invalid Email Id.");
+			return false;
+		} else if (x["post"].value == "" || x["post"].value == null) {
+			alert("Post invalid.");
+			return false;
+		} else
+			return true;
+	}
+</script>
 
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
 <script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
@@ -202,10 +199,11 @@
 		<div id="page-top">
 
 			<!-- start logo -->
-			<div id="logo">
+			<div id="logo" style="height: 24px; width: 176px;">
 				<!--  ${user} from the Login.java doPost -->
 				<c:if test="${not empty sessionScope.user}">
-					<h1 style="color: orange">Hi ${sessionScope.user}</h1>
+					<h1 style="color: orange; font-size: 22px">Hi
+						${sessionScope.user}</h1>
 				</c:if>
 			</div>
 			<!-- end logo -->
@@ -263,7 +261,7 @@
 							<c:set var="homePage" value="General/Events.jsp" />
 						</c:otherwise>
 					</c:choose>
-					
+
 					<ul class="select">
 						<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
 						</li>
@@ -310,13 +308,12 @@
 							<table border="0" width="100%" cellpadding="0" cellspacing="0">
 								<tr valign="top">
 									<td><div style="color: #FF0000;">
-										<c:if test="${not empty error}">
-											<h2>ERROR! ${error}</h2>
-											<c:remove var="sessionScope.error" />
-										</c:if> 
-										</div>
-										<!-- start id-form -->
-			
+											<c:if test="${not empty error}">
+												<h2>ERROR! ${error}</h2>
+												<c:remove var="sessionScope.error" />
+											</c:if>
+										</div> <!-- start id-form -->
+
 										<form name="Register" method="post" action="Register">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
@@ -342,7 +339,8 @@
 
 												<tr>
 													<th valign="top">Password:</th>
-													<td><input type="password" class="inp-form" name="pass"></td>
+													<td><input type="password" class="inp-form"
+														name="pass"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -352,14 +350,15 @@
 
 												<tr>
 													<th valign="top">Re-Password:</th>
-													<td><input type="password" class="inp-form" name="repass"></td>
+													<td><input type="password" class="inp-form"
+														name="repass"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
 												</tr>
-												
+
 												<tr>
 													<th valign="top">Post:</th>
 													<td><input type="text" class="inp-form" name="post"></td>
@@ -372,10 +371,9 @@
 
 												<tr>
 													<th>&nbsp;</th>
-													<td valign="top">
-														<input type="submit" value="Create" style="width:100px;height:40px"/>
-													 	<input type="reset" value="Reset" style="width:100px;height:40px" />
-													 </td>
+													<td valign="top"><input type="submit" value="Create"
+														style="width: 100px; height: 40px" /> <input type="reset"
+														value="Reset" style="width: 100px; height: 40px" /></td>
 													<td></td>
 												</tr>
 											</table>

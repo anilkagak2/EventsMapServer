@@ -7,7 +7,6 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -114,8 +113,8 @@ public class GetEvents extends HttpServlet {
 				while (rs.next()) {
 					EventDetail event = new EventDetail();
 					event.title = rs.getString("title");
-					event.category = rs.getString("Category");
-					event.categoryValue = rs.getString("content");
+					event.categoryValue = rs.getString("Category");
+					event.content = rs.getString("content");
 					event.endTime = rs.getTimestamp("endTime");
 					event.eventId = rs.getLong("eventId");
 					event.mainLand = rs.getString("mainLand");
@@ -126,6 +125,7 @@ public class GetEvents extends HttpServlet {
 					event.postedByName = rs.getString("userName");
 					event.postedByPost = rs.getString("post");
 					event.startTime = rs.getTimestamp("startTime");
+					event.status = rs.getString("status");
 					//System.out.println("Added in json\n");
 					listEvents.add(event);
 				}

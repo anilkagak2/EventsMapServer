@@ -14,7 +14,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Add Event</title>
 
-<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
+<base
+	href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
 <link rel="stylesheet" href="css/screen.css" type="text/css"
 	media="screen" title="default" />
@@ -53,7 +54,7 @@
 
 <script type="text/javascript"
 	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
-
+	
 </script>
 <script type="text/javascript"
 	src="js/jquery/bootstrap/bootstrap.min.js">
@@ -73,12 +74,12 @@
 	$(function() {
 		$('#startDatetimepicker').datetimepicker({
 			language : 'en',
-			format: 'yyyy-MM-dd hh:mm:ss',
+			format : 'yyyy-MM-dd hh:mm:ss',
 		});
-		
+
 		$('#endDatetimepicker').datetimepicker({
 			language : 'en',
-			format: 'yyyy-MM-dd hh:mm:ss',
+			format : 'yyyy-MM-dd hh:mm:ss',
 		});
 	});
 </script>
@@ -193,10 +194,11 @@ input.LinkButton {
 		<div id="page-top">
 
 			<!-- start logo -->
-			<div id="logo">
+			<div id="logo" style="height: 24px; width: 176px;">
 				<!--  ${user} from the Login.java doPost -->
 				<c:if test="${not empty sessionScope.user}">
-					<h1 style="color: orange">Hi ${sessionScope.user}</h1>
+					<h1 style="color: orange; font-size: 22px">Hi
+						${sessionScope.user}</h1>
 				</c:if>
 			</div>
 			<!-- end logo -->
@@ -254,7 +256,7 @@ input.LinkButton {
 							<c:set var="homePage" value="General/Events.jsp" />
 						</c:otherwise>
 					</c:choose>
-					
+
 					<ul class="select">
 						<li><a href="${homePage}"><b>Dashboard</b> <!--[if IE 7]><!--></a>
 						</li>
@@ -302,46 +304,49 @@ input.LinkButton {
 								<tr valign="top">
 									<td>
 										<div style="color: #FF0000;">
-										<c:if test="${not empty error}">
-											<h2>ERROR! ${error}</h2>
-											<c:remove var="sessionScope.error" />
-										</c:if> 
-										</div>
-										<!-- start id-form -->
-										<c:choose>
+											<c:if test="${not empty error}">
+												<h2>ERROR! ${error}</h2>
+												<c:remove var="sessionScope.error" />
+											</c:if>
+										</div> <!-- start id-form --> <c:choose>
 											<c:when test="${not empty updateEvent}">
-												<c:set var="Utitle" 	value="${updateEvent.title}" />
-												<c:set var="UeventId" 	value="${updateEvent.eventId}" />
-												<c:set var="Ucontent" 	value="${updateEvent.content}" />
-												<c:set var="Umainland" 	value="${updateEvent.mainLand}" />
-												<c:set var="Usubland" 	value="${updateEvent.subLand}" />
-												<c:set var="Ustatus" 	value="${updateEvent.status}" />
-												<c:set var="Ucategory" 	value="${updateEvent.category}" />												
-												<fmt:formatDate var="Ustarttime" value="${updateEvent.startTime}" 	pattern="yyyy-MM-dd HH:mm:ss" />
-												<fmt:formatDate var="Uendtime" 	value="${updateEvent.endTime}" 		pattern="yyyy-MM-dd HH:mm:ss" />
-					
-												<c:set var="Uaction" 	value="UPDATE" />
+												<c:set var="Utitle" value="${updateEvent.title}" />
+												<c:set var="UeventId" value="${updateEvent.eventId}" />
+												<c:set var="Ucontent" value="${updateEvent.content}" />
+												<c:set var="Umainland" value="${updateEvent.mainLand}" />
+												<c:set var="Usubland" value="${updateEvent.subLand}" />
+												<c:set var="Ustatus" value="${updateEvent.status}" />
+												<c:set var="Ucategory" value="${updateEvent.category}" />
+												<fmt:formatDate var="Ustarttime"
+													value="${updateEvent.startTime}"
+													pattern="yyyy-MM-dd HH:mm:ss" />
+												<fmt:formatDate var="Uendtime"
+													value="${updateEvent.endTime}"
+													pattern="yyyy-MM-dd HH:mm:ss" />
+
+												<c:set var="Uaction" value="UPDATE" />
 											</c:when>
 											<c:otherwise>
-												<c:set var="Utitle" 	value="" />
-												<c:set var="UeventId" 	value="" />
-												<c:set var="Ucontent" 	value="" />
-												<c:set var="Umainland" 	value="" />
-												<c:set var="Usubland" 	value="" />
-												<c:set var="Ustatus" 	value="" />
-												<c:set var="Ucategory" 	value="" />
+												<c:set var="Utitle" value="" />
+												<c:set var="UeventId" value="" />
+												<c:set var="Ucontent" value="" />
+												<c:set var="Umainland" value="" />
+												<c:set var="Usubland" value="" />
+												<c:set var="Ustatus" value="" />
+												<c:set var="Ucategory" value="" />
 												<c:set var="Ustarttime" value="" />
-												<c:set var="Uendtime" 	value="" />
-												<c:set var="Uaction" 	value="INSERT" />
+												<c:set var="Uendtime" value="" />
+												<c:set var="Uaction" value="INSERT" />
 											</c:otherwise>
 										</c:choose>
-										
+
 										<form name="addEvent" method="post" action="AddEvent">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
 												<tr>
 													<th valign="top">Title:</th>
-													<td><input type="text" class="inp-form" name="title" value="${Utitle}"></td>
+													<td><input type="text" class="inp-form" name="title"
+														value="${Utitle}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -351,7 +356,8 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Content:</th>
-													<td><input type="text" class="inp-form" name="content" value="${Ucontent}"></td>
+													<td><input type="text" class="inp-form" name="content"
+														value="${Ucontent}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -377,7 +383,8 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">SubLand:</th>
-													<td><input type="text" class="inp-form" name="subland" value="${Usubland}"></td>
+													<td><input type="text" class="inp-form" name="subland"
+														value="${Usubland}"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -390,8 +397,9 @@ input.LinkButton {
 													<td class="noheight">
 														<div class="well">
 															<div id="startDatetimepicker" class="input-append">
-																<input data-format="yyyy-MM-dd HH:mm:ss" name="starttime" value="${Ustarttime}" type="text"></input>
-																
+																<input data-format="yyyy-MM-dd HH:mm:ss"
+																	name="starttime" value="${Ustarttime}" type="text"></input>
+
 																<span class="add-on"> <i
 																	data-time-icon="icon-time"
 																	data-date-icon="icon-calendar"> </i>
@@ -407,9 +415,9 @@ input.LinkButton {
 													<td class="noheight">
 														<div class="well">
 															<div id="endDatetimepicker" class="input-append">
-																<input data-format="yyyy-MM-dd HH:mm:ss" name="endtime" value="${Uendtime}" type="text"></input>
-																<span class="add-on"> <i
-																	data-time-icon="icon-time"
+																<input data-format="yyyy-MM-dd HH:mm:ss" name="endtime"
+																	value="${Uendtime}" type="text"></input> <span
+																	class="add-on"> <i data-time-icon="icon-time"
 																	data-date-icon="icon-calendar"> </i>
 																</span>
 															</div>
@@ -421,7 +429,8 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Status:</th>
-													<td><select class="styledselect_form_1" name="status" selected="${Ustatus}">
+													<td><select class="styledselect_form_1" name="status"
+														selected="${Ustatus}">
 															<option value="1">ONGOING</option>
 															<option value="2">SCHEDULED</option>
 															<option value="3">CANCELLED</option>
@@ -450,12 +459,12 @@ input.LinkButton {
 
 												<tr>
 													<th>&nbsp;</th>
-													<td valign="top">
-														<input type="hidden" value="${Uaction}" name="action"/>
-														<input type="hidden" value="${UeventId}" name="eventId"/>
-														<input type="submit" value="Submit" style="width:100px;height:40px"/>
-													 	<input type="reset" value="Reset" style="width:100px;height:40px" />
-													 </td>
+													<td valign="top"><input type="hidden"
+														value="${Uaction}" name="action" /> <input type="hidden"
+														value="${UeventId}" name="eventId" /> <input type="submit"
+														value="Submit" style="width: 100px; height: 40px" /> <input
+														type="reset" value="Reset"
+														style="width: 100px; height: 40px" /></td>
 													<td></td>
 												</tr>
 											</table>

@@ -121,7 +121,6 @@
      <filter-name>LoginFilter</filter-name>
      <url-pattern>/General/*</url-pattern>
      <url-pattern>/Secured/*</url-pattern>
-     <url-pattern>/Login.jsp</url-pattern>
   </filter-mapping>
     
   <filter>
