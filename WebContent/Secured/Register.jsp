@@ -14,8 +14,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Register</title>
 
-<base
-	href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
+<base href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
 
 <link rel="stylesheet" href="css/screen.css" type="text/css"
 	media="screen" title="default" />

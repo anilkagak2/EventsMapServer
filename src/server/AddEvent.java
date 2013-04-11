@@ -76,13 +76,12 @@ public class AddEvent extends HttpServlet {
     	return locationId;
     }
     
-    /* Execute insert query. */
-    protected boolean modificationQuery (String query) {
+    /* Execute update queries. */
+    protected boolean modificationQuery (PreparedStatement s) {
     	boolean result = true;
-    	
+    	if (s == null) return false;
     	try {
-	    	Statement s = connection.createStatement();
-	    	s.executeUpdate(query);
+	    	s.executeUpdate();
 	    	System.out.println("done query");
 	    	s.close();
     	}
@@ -101,6 +100,7 @@ public class AddEvent extends HttpServlet {
 		String user = "";
 		int loginId = 0;
 		String action="";
+		String returnHome = Declarations.homePage(request);
 		HttpSession session = request.getSession(false);
     	if (session != null) {
     		user = session.getAttribute("user").toString();
@@ -129,7 +129,7 @@ public class AddEvent extends HttpServlet {
     		System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
     		request.setAttribute("error", e.getMessage());
-    		request.getRequestDispatcher("/Secured/AddEvent.jsp").forward(request, response);
+    		request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
     		return;
     	}
 		
@@ -157,22 +157,48 @@ public class AddEvent extends HttpServlet {
 
 	        	// TODO Think about where should the action parameter be in the form
 	        	// --> in session or in request ?
+	        	PreparedStatement s = null;
 	        	String query = "";
 	        	if (action.equals(insert)) {
 	        		query= "INSERT INTO Event(title, content, postedBy, categoryId, status, locationId, startTime, endTime) " +
-	        			"VALUES ('"+title+"', '"+content+"', '"+loginId+"', '"+category+"', '"+status+"', '"+locationId+"', '"+startTime+"', '"+endTime+"')";
+		        			"VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+	        		s = connection.prepareStatement(query);
+	        		s.setString (1, title);
+					s.setString (2, content);
+					s.setInt (3, loginId);
+					s.setInt (4, category);
+					s.setInt (5, status);
+					s.setInt (6, locationId);
+					s.setTimestamp(7, startTime);
+					s.setTimestamp(8, endTime);
 	        	}
 	        	else if (action.equals(update)) {
 	        		eventId = request.getParameter("eventId");
 	        		System.out.println(eventId);
-	        		query= "UPDATE Event SET title='"+ title +"', content='"+content+"', postedBy='"+loginId+"'," +
-	        				" categoryId='"+category+"', status='"+status+"', locationId='"+locationId+"', startTime='"+startTime+"', endTime='" +endTime+"'"
-		        			+"WHERE eventId='"+eventId+"'";
+	        		query= " UPDATE Event SET title=?, content=?, postedBy=?, categoryId=?, status=?, locationId=?, startTime=?, endTime=?, modifiedTime=? " +
+		        		   " WHERE eventId=? ";
+	        		java.util.Date modified = new java.util.Date();
+	        		Timestamp modifiedTime = new Timestamp(modified.getTime());
+	        		s = connection.prepareStatement(query);
+	        		s.setString (1, title);
+					s.setString (2, content);
+					s.setInt (3, loginId);
+					s.setInt (4, category);
+					s.setInt (5, status);
+					s.setInt (6, locationId);
+					s.setTimestamp(7, startTime);
+					s.setTimestamp(8, endTime);
+					s.setTimestamp(9, modifiedTime);
+					s.setInt (10, Integer.parseInt(eventId));
 	        	}
 	        	else if (action.equals(delete)) {
+	        		/* Not in USE
+	        		 * */
 	        		eventId = request.getParameter("eventId");
 	        		System.out.println(eventId);
-	        		query= "DELETE FROM Event WHERE eventId='"+eventId+"'";
+	        		query= "DELETE FROM Event WHERE eventId=?";
+	        		s = connection.prepareStatement(query);
+	        		s.setInt (1, Integer.parseInt(eventId));
 	        	}
 	        	else {
 	        		String error = "INVALID QUERY";
@@ -185,7 +211,8 @@ public class AddEvent extends HttpServlet {
 	        	String[] enum_status = {"ONGOING", "SCHEDULED", "CANCELLED", "COMPLETED"};
 	        	System.out.println(query);
 	        	// Query successfully executed
-	        	if (modificationQuery(query)) {
+	        	//if (modificationQuery(query)) {
+	        	if (modificationQuery(s)) {
 	        		EventDetail event = new EventDetail();
 	        		event.title= title;
                     event.content=content;
@@ -193,24 +220,38 @@ public class AddEvent extends HttpServlet {
     				event.startTime=startTime;
     				event.endTime=endTime;
     				List<EventDetail> events = (List<EventDetail>) request.getSession().getAttribute("events");
-    				if (action.equals(insert))
-    					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime" +
-        					" FROM Event E, Location L, Category C, MainLand M WHERE " +
-        					" E.title='"+ title +"' AND E.content='"+content+"' AND E.postedBy='"+loginId+"' AND " + "E.categoryId='"+category+
-        					"' AND E.status='"+enum_status[status-1]+ "' AND E.startTime='"+startTime+"' AND E.endTime='" +endTime +"' AND E.locationId='"+locationId+"'"+
-        					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
     				
-    				//
-    				
-    				else if (action.equals(update))
-    					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime " +
+    				if (action.equals(insert)) {
+    					query = " Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime" +
             					" FROM Event E, Location L, Category C, MainLand M WHERE " +
-            					" E.eventId='"+ eventId+ "' AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId " +
+            					" E.title= ? AND E.content= ? AND E.postedBy= ? AND E.categoryId= ? AND E.status= ?" +
+            					" AND E.startTime= ? AND E.endTime= ? AND E.locationId=? "+
+            					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+    					s = connection.prepareStatement(query);
+    					s.setString (1, title);
+    					s.setString (2, content);
+    					s.setInt (3, loginId);
+    					s.setInt (4, category);
+    					s.setString (5, enum_status[status-1]);
+    					s.setTimestamp(6, startTime);
+    					s.setTimestamp(7, endTime);
+    					s.setInt(8, locationId);
+    				}
+
+    				
+    				else if (action.equals(update)) {
+    					query = "Select E.eventId, M.mainLand, C.category, E.status, E.modifiedTime " +
+            					" FROM Event E, Location L, Category C, MainLand M " +
+            					" WHERE E.eventId= ? AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId " +
             					" AND C.categoryId = E.categoryId";
+    				
+    					s = connection.prepareStatement(query);
+    					s.setInt(1, Integer.parseInt(eventId));
+    				}
 
             		System.out.println (query);
-        			Statement s = connection.createStatement();
-        			s.executeQuery(query);
+            		System.out.println (s.toString());
+            		s.executeQuery();
                     ResultSet rs = s.getResultSet();                    
                     if (rs.next()) {
                         event.eventId = rs.getInt("eventId");
@@ -264,7 +305,8 @@ public class AddEvent extends HttpServlet {
 	        		
 	        		session.setAttribute("events", events);
 	        		closeConnection();
-		        	request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
+		        	//request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
+	        		request.getRequestDispatcher(returnHome).forward(request, response);
 		        	return;
 	        	}
 	        	// Query Failed

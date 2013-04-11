@@ -5,8 +5,8 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,19 +61,30 @@ public class GetEvents extends HttpServlet {
 		List<EventDetail> listEvents = new ArrayList<EventDetail>();
 
 		String query = "";
-
-		query += "Select * FROM Event E , MainLand ML ,Login L,Category C, Location LOC WHERE ";
-		query += "E.endTime>'" + endingAfter + "'";
+		
+		query = "Select * FROM Event E , MainLand ML ,Login L,Category C, Location LOC WHERE E.endTime > ? ";
 		if (category != "")
-			query += " and C.category=" + category;
+			query += " and C.category= ? ";
 		if (mainLand != "")
-			query += " and ML.mainLand=" + mainLand;
+			query += " and ML.mainLand= ? ";
 		if (postedByName != "")
-			query += " and L.userName=" + postedByName;
+			query += " and L.userName= ? ";
 		if (postedByPost != "")
-			query += " and L.post=" + postedByPost;
-
-		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ORDER BY E.startTime";
+			query += " and L.post= ? ";
+		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ";
+		
+//		query += "Select * FROM Event E , MainLand ML ,Login L,Category C, Location LOC WHERE ";
+//		query += "E.endTime>'" + endingAfter + "'";
+//		if (category != "")
+//			query += " and C.category=" + category;
+//		if (mainLand != "")
+//			query += " and ML.mainLand=" + mainLand;
+//		if (postedByName != "")
+//			query += " and L.userName=" + postedByName;
+//		if (postedByPost != "")
+//			query += " and L.post=" + postedByPost;
+//
+//		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ";
 		System.out.println(query);
 
 		try {
@@ -81,17 +92,24 @@ public class GetEvents extends HttpServlet {
 			String mysqlPass = Declarations.mysqlPass;
 			String url = Declarations.url;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			Connection connection = DriverManager.getConnection(url, mysqlUser,
-					mysqlPass);
-			
+			Connection connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
 			
 			if (connection != null) {
-				Statement s = connection.createStatement();
-				s.executeQuery(query);
+				PreparedStatement s = connection.prepareStatement(query);
+				s.setTimestamp(1, endingAfter);
+
+				/* Set the parameters now. */
+				int j=2;
+				if (category != "") s.setString (j++, category);
+				if (mainLand != "") s.setString (j++, mainLand);
+				if (postedByName != "") s.setString(j++, postedByName);
+				if (postedByPost != "") s.setString(j++, postedByPost);
+				
+				s.executeQuery();
+				System.out.println(s.toString());
 				System.out.println(query);
 				ResultSet rs = s.getResultSet();
 		
-
 				while (rs.next()) {
 					EventDetail event = new EventDetail();
 					event.title = rs.getString("title");

@@ -38,7 +38,7 @@ public class AdminFilter implements Filter {
 		HttpSession session = ((HttpServletRequest)request).getSession(false);
 		
     	if (session != null) {
-    		int loginId = Integer.parseInt((String) session.getAttribute("userId"));
+    		int loginId = Integer.parseInt(session.getAttribute("loginId").toString());
     		if ( (loginId == 1) && (session.getAttribute("events") != null) 
     				&& (session.getAttribute("user") != null) ){
     			System.out.println ("FILTER user!= null");

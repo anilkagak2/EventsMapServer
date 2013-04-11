@@ -86,15 +86,21 @@ public class Register extends HttpServlet {
 	    System.out.println("Checking your identity.."+ user +"\n");
 
 	    if(conn!= null){
-	             Statement s = conn.createStatement();
-	             //String query = "INSERT INTO Login (loginId, passwdHash, email, post) VALUES ('"+user+ "','" + hash +
-	             String query = "INSERT INTO Login (userName, passwdHash, email, post) VALUES ('"+user+ "','" + hash + 
-	            		 	"','" + email + "','" + post+"')";
+	    		 PreparedStatement s = null;
+	             String query = "INSERT INTO Login (userName, passwdHash, email, post) VALUES (?,?,?,?)";
+	             s = conn.prepareStatement(query);
+	             s.setString(1, user);
+	             s.setString(2, hash);
+	             s.setString(3, email);
+	             s.setString(4, post);
+	             
 	             System.out.println(query);
-	             s.executeUpdate(query);
+	             System.out.println(s.toString());
+	             s.executeUpdate();
 	             s.close();
 	             
-	             request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+	             //request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+	             request.getRequestDispatcher(returnPage).forward(request, response);
 	             return;
 	    }
 	    else{

@@ -2,6 +2,7 @@ package server;
 
 import java.io.IOException;
 import java.sql.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,13 +40,15 @@ public class FetchLocationCategory extends HttpServlet {
 			throws ServletException, IOException {
 		boolean ret = true;
 		try {
-			Statement s = connection.createStatement();
 			String query = "Select E.title, E.content, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
-							"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.eventId = '"+eventId+"'" +
-							" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.eventId = ? "+
+					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+        	PreparedStatement s = connection.prepareStatement(query);
+        	s.setInt(1, eventId);
+        	System.out.println (query);
+        	System.out.println (s.toString());
+			s.executeQuery();
 			
-			s.executeQuery(query);
-			System.out.println (query);
 			ResultSet rs = s.getResultSet();
 			EventDetail event = new EventDetail();
 			event.eventId = eventId;
@@ -80,6 +83,7 @@ public class FetchLocationCategory extends HttpServlet {
 	}
     
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String returnHome = Declarations.homePage(request);
 		try{
 			/*
 			 * THIS FEATURE MAY LEAD TO TROUBLE WHEN SERVER IS UP & RUNNING
@@ -151,7 +155,7 @@ public class FetchLocationCategory extends HttpServlet {
 					System.out.println(eventId);
 					if (!fetchEventToUpdate(request, eventId)) {
 						System.out.println("FATAL ERROR: Update Action was set but no events to update.");
-						request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
+						request.getRequestDispatcher(returnHome).forward(request, response);
 						return;
 					}
 				}
@@ -167,7 +171,7 @@ public class FetchLocationCategory extends HttpServlet {
 			}
 			else{
 				System.out.println("Database connection failed.");
-				request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
+				request.getRequestDispatcher(returnHome).forward(request, response);
 				return;
 			}
 			// List<Passenger> passengers = service.list();
