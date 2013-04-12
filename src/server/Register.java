@@ -3,6 +3,8 @@ package server;
 import java.security.MessageDigest;
 import javax.servlet.annotation.WebServlet;
 import java.sql.*;
+import java.util.Iterator;
+import java.util.List;
 import java.io.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -21,7 +23,7 @@ public class Register extends HttpServlet {
     String post;
     Connection conn;
 
-     protected String hashFunc(String passwrd)
+    protected String hashFunc(String passwrd)
     		 throws Exception {
         String password = passwrd;
 
@@ -77,7 +79,21 @@ public class Register extends HttpServlet {
 		if (!password.equals(repass)) validityError += "<br /> Both passwords do not match \n";
 		if (password.isEmpty()) validityError += "<br /> Empty password not allowed \n";
 		if (post.isEmpty()) validityError += "<br /> Post cannot be empty \n";
-    	    	
+    	
+		List<String> posts = (List<String>) request.getSession(false).getAttribute("posts");
+		Iterator<String> itr = posts.iterator();
+		boolean found = false;
+		while(itr.hasNext()){
+			if (itr.next ().equalsIgnoreCase(post)) {
+				found = true;
+				validityError += "<br /> Post already in the  \n";
+			}
+		}
+		if (!found) { 
+			posts.add(post);
+			request.getSession(false).setAttribute("posts",posts);
+		}
+		
 		// check the validity error string for any errors
 		if (!validityError.isEmpty()) {
 			System.out.println (validityError);
@@ -117,6 +133,7 @@ public class Register extends HttpServlet {
 	             s.executeUpdate();
 	             s.close();
 	             
+	             Declarations.closeConnection(conn);
 	             //request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
 	             request.getRequestDispatcher(returnPage).forward(request, response);
 	             return;
@@ -128,6 +145,7 @@ public class Register extends HttpServlet {
 	    }
     }
     catch (SQLException e) {
+    	Declarations.closeConnection(conn);
     	System.out.println("Error : " + e.toString());
     	e.printStackTrace();
     	String error = e.getMessage();
@@ -137,8 +155,9 @@ public class Register extends HttpServlet {
         return;
     }
     catch(Exception e){
-            System.out.println("Error : " + e.toString());
-            request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+    	Declarations.closeConnection(conn);
+        System.out.println("Error : " + e.toString());
+        request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
     }
 }
 

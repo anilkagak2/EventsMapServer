@@ -55,6 +55,15 @@
     <url-pattern>   /FetchDetails  </url-pattern>
   </servlet-mapping>
   <servlet>
+    <display-name>   FetchPosts   </display-name>
+    <servlet-name>FetchPosts</servlet-name>
+    <servlet-class>  server.FetchPosts   </servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FetchPosts</servlet-name>
+    <url-pattern>   /FetchPosts  </url-pattern>
+  </servlet-mapping>
+  <servlet>
     <display-name>   AddEvent   </display-name>
     <servlet-name>AddEvent</servlet-name>
     <servlet-class>  server.AddEvent   </servlet-class>
@@ -112,24 +121,29 @@
     <servlet-name>GetEvents</servlet-name>
     <url-pattern>/GetEvents</url-pattern>
   </servlet-mapping>
-
   <filter>
-	<filter-name>LoginFilter</filter-name>
-	<filter-class>server.LoginFilter</filter-class>        
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>server.LoginFilter</filter-class>
   </filter>
   <filter-mapping>
-     <filter-name>LoginFilter</filter-name>
-     <url-pattern>/General/*</url-pattern>
-     <url-pattern>/Secured/*</url-pattern>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>/General/*</url-pattern>
+    <url-pattern>/Secured/*</url-pattern>
   </filter-mapping>
-    
   <filter>
-     <filter-name>AdminFilter</filter-name>
-     <filter-class>server.AdminFilter</filter-class>        
+    <filter-name>PostsFilter</filter-name>
+    <filter-class>server.PostsFilter</filter-class>
   </filter>
   <filter-mapping>
-     <filter-name>AdminFilter</filter-name>
-     <url-pattern>/Secured/*</url-pattern>
-   </filter-mapping>
- 
-  </web-app>
+    <filter-name>PostsFilter</filter-name>
+    <url-pattern>/Login.jsp</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>AdminFilter</filter-name>
+    <filter-class>server.AdminFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AdminFilter</filter-name>
+    <url-pattern>/Secured/*</url-pattern>
+  </filter-mapping>
+</web-app>

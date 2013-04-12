@@ -44,7 +44,6 @@ public class LoginFilter implements Filter {
     		System.out.println ("FILTER user!= null");
     		System.out.println ("FILTER user "+ session.getAttribute("user"));
     		System.out.println ("FILTER events "+ session.getAttribute("events"));
-    	//	request.getRequestDispatcher("/Secured/Events.jsp").forward(request, response);
     		
     		// pass the request along the filter chain
     		chain.doFilter(request, response);
@@ -57,9 +56,12 @@ public class LoginFilter implements Filter {
 	    		request.getRequestDispatcher("/Login.jsp").forward(request, response);
 	    		return;
     		}
-    		request.getRequestDispatcher("/Login.jsp").forward(request, response);
+    		if (request.getAttribute("posts") == null) 
+    			request.getRequestDispatcher("/FetchPosts").forward(request, response);
+    		else
+    			request.getRequestDispatcher("/Login.jsp").forward(request, response);
     	}
-}
+	}
 
 	/**
 	 * @see Filter#init(FilterConfig)

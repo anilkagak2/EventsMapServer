@@ -14,6 +14,7 @@ public class Login extends HttpServlet {
 	private Connection connection;
 	private String user;
 	private String email;
+	private String post;
 	private int loginId;
 	
 	/*
@@ -110,6 +111,17 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
  
+        	List<String> posts = null;
+        try {
+        	posts = Declarations.fetchPosts(null);
+        } catch (Exception e) {
+        	System.out.println("error..!!" );
+        	System.out.println(e.toString()+ "\n Exception Stack: \n");
+            e.printStackTrace();
+            Declarations.errorNotFound(response);
+            return;
+        }
+        
         try {
         	/* Use previous session, if it exists. */
         	HttpSession session = request.getSession(false);
@@ -117,6 +129,7 @@ public class Login extends HttpServlet {
         			&& (session.getAttribute("loginId") != null)) {
         		user = session.getAttribute("user").toString();
         		email = session.getAttribute("email").toString();
+        		post = session.getAttribute("post").toString();
         		System.out.println("loginId "+ session.getAttribute("loginId").toString());
         		loginId = Integer.parseInt(session.getAttribute("loginId").toString());
         		redirectToDashBoard (request, response);
@@ -125,13 +138,16 @@ public class Login extends HttpServlet {
         	
         	/* No Previous Session */
         	email = request.getParameter ("email");
+        	post = request.getParameter ("post");
         	loginId = -1;		// ERROR
         	String pass = request.getParameter("pass");
         	String final_hash = "";
-        	if (!Declarations.isValidEmail(email) || pass.equals("")) {
+        	if (!Declarations.isValidEmail(email) || pass.equals("") || post.isEmpty()) {
         		System.out.println ("Invalid email or password entries.\n");
-        		String error = "Error: Email or Password entries not valid";
+        		String error = "Error: Email or Password or Post entries are not valid";
             	request.setAttribute("error", error);
+//            	List<String> posts = Declarations.fetchPosts(connection);
+            	request.setAttribute("posts", posts);
         		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
         		return;
         	}
@@ -144,6 +160,8 @@ public class Login extends HttpServlet {
                 	System.out.println("error..!!" );
                 	System.out.println(e.toString()+ "\n Exception Stack: \n");
                     e.printStackTrace();
+                    Declarations.errorNotFound(response);
+                    return;
             }
             
             // Create Connection
@@ -153,68 +171,79 @@ public class Login extends HttpServlet {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
             
-            System.out.println("Checking your identity.."+ email +"\n");
+            System.out.println("Checking your identity.."+ email+" at post "+ post +"\n");
 
             // Execute Queries by checking passHash
             if (connection != null) {
-                Statement s = connection.createStatement();
-                String query = "SELECT * FROM Login where email = '"+ email +"'";
-                s.executeQuery(query);
-                ResultSet rs = s.getResultSet();
-                System.out.println (query);
-                boolean found = false;
-                while (rs.next()) {
-                    String pass_hash = rs.getString("passwdHash");
-                    System.out.println("final_hash " + final_hash);
-                    System.out.println("pass_hash " + pass_hash);
-                    if (final_hash.equals(pass_hash)) {
-                    	loginId = rs.getInt("loginId");
-                    	user = rs.getString("userName");
-                    	session = request.getSession(true);
-
-                    	// TODO use session object instead of passed user data
-                    	session.setAttribute("user", user);
-                    	session.setAttribute("email", email);
-                    	session.setAttribute("loginId", loginId);
-                    	session.removeAttribute("events");
-                    	System.out.println("login  Id is "+loginId);
-                    	found = true;
-                    	
-                    	// NOT USEFUL --> will go into server log & not to the user
-                    	System.out.println ("You are authenticated now.\n"+ user +
-                    			" Please proceed further\n");
-                    	
-                    	Statement s1 = connection.createStatement();
-                    	query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
-                    					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = '"+loginId+"'" +
-                    					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
-                    	System.out.println(query);
-                    	s1.executeQuery(query);
-                    	ResultSet rs1 = s1.getResultSet();
-                    	boolean eventsEmpty = true;
-                    	List<EventDetail> events = new ArrayList<EventDetail>();
-                    	while(rs1.next())
-                    	{
-                    		if (eventsEmpty) eventsEmpty = false;
-                    		System.out.println ("GOt a record matching");
-                    		EventDetail event = new EventDetail();
-                    		event.eventId = rs1.getLong("eventId");
-                    		event.title = rs1.getString("title");
-                    		event.startTime = rs1.getTimestamp("startTime");
-                    		event.modifiedTime = rs1.getTimestamp("modifiedTime");		// Newly Introduced
-                    		event.endTime = rs1.getTimestamp("endTime");
-                    		event.category = rs1.getString("category");
-                    		event.status = rs1.getString("status");
-                    		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
-                 		    events.add(event);
-                    	}
-                     	
-                    	rs1.close ();
-                    	s1.close ();
-                    	session.setAttribute("events", events);
-                    	
-                    	break;
-                    }
+              String query = "SELECT * FROM Login where email = ? AND post= ?";
+              PreparedStatement s = connection.prepareStatement(query);
+              s.setString(1, email);
+              s.setString(2, post);
+              System.out.println (query);
+              System.out.println (s.toString());
+              s.executeQuery();
+              ResultSet rs = s.getResultSet();
+              System.out.println (query);
+              boolean found = false;
+              while (rs.next()) {
+	                String pass_hash = rs.getString("passwdHash");
+	                System.out.println("final_hash " + final_hash);
+	                System.out.println("pass_hash " + pass_hash);
+	                if (final_hash.equals(pass_hash)) {
+	                	loginId = rs.getInt("loginId");
+	                	user = rs.getString("userName");
+	                	session = request.getSession(true);
+	
+	                	// TODO use session object instead of passed user data
+	                	session.setAttribute("user", user);
+	                	session.setAttribute("email", email);
+	                	session.setAttribute("post", post);
+	                	session.setAttribute("loginId", loginId);
+	                	session.removeAttribute("events");
+	                	System.out.println("login  Id is "+loginId);
+	                	found = true;
+	                	
+	                	// NOT USEFUL --> will go into server log & not to the user
+	                	System.out.println ("You are authenticated now.\n"+ user +
+	                			" Please proceed further\n");
+	                	
+	                	query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
+	        					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = ? " +
+	        					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
+	                	PreparedStatement s1 = connection.prepareStatement(query);
+	                	s1.setInt(1, loginId);
+	                	
+	                	System.out.println(query);
+	                	System.out.println(s.toString());
+	                	s1.executeQuery();
+	                	ResultSet rs1 = s1.getResultSet();
+	                	boolean eventsEmpty = true;
+	                	List<EventDetail> events = new ArrayList<EventDetail>();
+	                	while(rs1.next())
+	                	{
+	                		if (eventsEmpty) eventsEmpty = false;
+	                		System.out.println ("GOt a record matching");
+	                		EventDetail event = new EventDetail();
+	                		event.eventId = rs1.getLong("eventId");
+	                		event.title = rs1.getString("title");
+	                		event.startTime = rs1.getTimestamp("startTime");
+	                		event.modifiedTime = rs1.getTimestamp("modifiedTime");		// Newly Introduced
+	                		event.endTime = rs1.getTimestamp("endTime");
+	                		event.category = rs1.getString("category");
+	                		event.status = rs1.getString("status");
+	                		event.location = rs1.getString("mainLand") + " (" +rs1.getString("subLand")+ ")";
+	             		    events.add(event);
+	                	}
+	                 	
+	                	rs1.close ();
+	                	s1.close ();
+	                	session.setAttribute("events", events);
+	                	
+//	                	List<String> posts = Declarations.fetchPosts(connection);
+	                	session.setAttribute("posts", posts);
+	                	
+	                	break;
+	                }
                 }
                 // close the result set
                 rs.close();
@@ -231,6 +260,8 @@ public class Login extends HttpServlet {
                 	System.out.println ("Invalid email or password entries.\n");
             		String error = "Error: No user with this (email, password) pair";
                 	request.setAttribute("error", error);
+//                	List<String> posts = Declarations.fetchPosts(connection);
+                	request.setAttribute("posts", posts);
             		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
                 	System.out.println("Home.");
 //                	redirectToLoginHome(request, response);
@@ -247,6 +278,8 @@ public class Login extends HttpServlet {
         } catch (Exception e) {
         	System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
+        	request.setAttribute("posts", posts);
+    		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
         }
 }
  

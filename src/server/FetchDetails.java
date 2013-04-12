@@ -95,7 +95,8 @@ public class FetchDetails extends HttpServlet {
 				request.getRequestDispatcher(home).forward(request, response);
 				return;
 			}
-			// List<Passenger> passengers = service.list();
+
+			closeConnection();
 			sendResponse(request, response);
 		}catch(Exception e)
 		{

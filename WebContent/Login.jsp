@@ -95,6 +95,24 @@ $(document).pngFix( );
 							<td><input type="password" onfocus="this.value=''"
 								class="login-inp" name="pass" /></td>
 						</tr>
+						
+						<tr>
+							<th valign="top">Post:</th>
+							<td><select name="post" selected="${posts[0]}">
+									<c:forEach items="${posts}" var="post">
+										<option value="${post}">
+											<c:out value="${post}" />
+										</option>
+									</c:forEach>
+								</select>
+							</td>
+							<!-- <td>
+								<div class="error-left"></div>
+								<div class="error-inner">This field is required.</div>
+							</td> -->
+							<td></td>
+						</tr>
+						
 						<tr>
 							<th></th>
 							<td valign="top"><input type="checkbox"

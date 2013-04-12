@@ -182,6 +182,23 @@
 	}
 </script>
 
+<script type="text/javascript">
+	/* Code for inserting new dropdown for posts. */
+	function addNewPost () {
+		var newPost = prompt ("Enter new post");
+		if (newPost == "") return;
+		var element = document.getElementById('add');
+		for (var i=0; i<element.length; i++) {
+			if (element.options[i].value.toUpperCase () == newPost.toUpperCase ()) {
+				alert ("Already in the Drop-Down");
+				return;
+			}
+		}
+		element.options[element.length] = new Option(newPost, newPost);
+	}
+</script>
+
+
 <!-- MUST BE THE LAST SCRIPT IN <HEAD></HEAD></HEAD> png fix -->
 <script src="js/jquery/jquery.pngFix.pack.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -330,7 +347,7 @@
 
 												<tr>
 													<th valign="top">Email</th>
-													<td><input type="text" class="inp-form" name="email"></td>
+													<td><input type="text" class="inp-form" name="email" autocomplete="off"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -341,7 +358,7 @@
 												<tr>
 													<th valign="top">Password</th>
 													<td><input type="password" class="inp-form"
-														name="pass"></td>
+														name="pass" autocomplete="off"></td>
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
@@ -362,7 +379,21 @@
 
 												<tr>
 													<th valign="top">Post:</th>
-													<td><input type="text" class="inp-form" name="post"></td>
+													<!-- <td><input type="text" class="inp-form" name="post"></td>  -->
+													
+													<td><select  id="add" name="post" selected="${posts[0]}" autocomplete="off">
+															<c:forEach items="${posts}" var="post">
+																<option value="${post}">
+																	<c:out value="${post}" />
+																</option>
+															</c:forEach>
+														</select>
+													</td>
+													
+													<td>
+														<input type="button" class="input-form" name="addNew" value="Add New Post" onclick="addNewPost()">
+													</td>
+							
 													<td>
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
