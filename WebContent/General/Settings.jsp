@@ -267,6 +267,12 @@
 						<!--  start content-table-inner -->
 						<div id="content-table-inner">
 							<h4>Change Password</h4>
+							<h4>
+								<c:if test="${not empty error}">
+									ERROR! ${error}
+									<c:remove var="error" />
+								</c:if>
+							</h4>
 							<table border="0" width="50%" cellpadding="100" cellspacing="10"
 								style="text-align: center;">
 								<col width="80">

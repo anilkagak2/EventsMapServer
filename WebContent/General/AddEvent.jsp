@@ -470,8 +470,13 @@ input.LinkButton {
 											</table>
 										</form> <!-- end id-form  -->
 								<tr>
-									<td><img src="images/shared/blank.gif" width="695"
-										height="1" alt="blank" /></td>
+									<!-- <td>
+										<img src="images/shared/blank.gif" width="695" height="1" alt="blank" />
+									</td>  -->
+									
+									<td>
+										<img src="images/shared/blank.gif" width="1" height="1" alt="blank" />
+									</td>
 									<td></td>
 								</tr>
 							</table>

@@ -307,18 +307,19 @@
 
 							<table border="0" width="100%" cellpadding="0" cellspacing="0">
 								<tr valign="top">
-									<td><div style="color: #FF0000;">
+									<td>									
+									<div style="color: #FF0000;">
 											<c:if test="${not empty error}">
 												<h2>ERROR! ${error}</h2>
 												<c:remove var="sessionScope.error" />
 											</c:if>
 										</div> <!-- start id-form -->
-
+				
 										<form name="Register" method="post" action="Register">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
 												<tr>
-													<th valign="top">User:</th>
+													<th valign="top">User</th>
 													<td><input type="text" class="inp-form" name="user"></td>
 													<td>
 														<div class="error-left"></div>
@@ -328,7 +329,7 @@
 												</tr>
 
 												<tr>
-													<th valign="top">Email:</th>
+													<th valign="top">Email</th>
 													<td><input type="text" class="inp-form" name="email"></td>
 													<td>
 														<div class="error-left"></div>
@@ -338,7 +339,7 @@
 												</tr>
 
 												<tr>
-													<th valign="top">Password:</th>
+													<th valign="top">Password</th>
 													<td><input type="password" class="inp-form"
 														name="pass"></td>
 													<td>
@@ -349,7 +350,7 @@
 												</tr>
 
 												<tr>
-													<th valign="top">Re-Password:</th>
+													<th valign="top">Re-Password</th>
 													<td><input type="password" class="inp-form"
 														name="repass"></td>
 													<td>
@@ -379,7 +380,7 @@
 											</table>
 										</form> <!-- end id-form  -->
 								<tr>
-									<td><img src="images/shared/blank.gif" width="695"
+									<td><img src="images/shared/blank.gif" width="1"
 										height="1" alt="blank" /></td>
 									<td></td>
 								</tr>

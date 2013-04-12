@@ -64,10 +64,28 @@ public class Register extends HttpServlet {
         user = request.getParameter("user");
         email = request.getParameter("email");
         password = request.getParameter("pass");
+        String repass = request.getParameter("repass");
         hash = hashFunc(password);
         post = request.getParameter("post");
+        
+        /*
+    	 * Check the validity of the parameters obtained
+    	 * */
+    	String validityError = "";
+    	if (user.isEmpty()) validityError += "<br /> User name is empty\n";
+		if (email.isEmpty() || !Declarations.isValidEmail(email)) validityError += "<br /> Email is invalid \n";
+		if (!password.equals(repass)) validityError += "<br /> Both passwords do not match \n";
+		if (password.isEmpty()) validityError += "<br /> Empty password not allowed \n";
+		if (post.isEmpty()) validityError += "<br /> Post cannot be empty \n";
+    	    	
+		// check the validity error string for any errors
+		if (!validityError.isEmpty()) {
+			System.out.println (validityError);
+    		request.setAttribute("error", validityError);
+    		request.getRequestDispatcher(Declarations.registerHome).forward(request, response);
+    		return;
+		}
     }
-
     catch(Exception e){
     	System.out.println("Error. in register");
     	e.printStackTrace();

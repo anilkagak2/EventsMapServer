@@ -112,6 +112,9 @@ public class AddEvent extends HttpServlet {
     	int category, mainland, status, locationId;
     	Timestamp startTime, endTime;
     	
+    	/* Extract the parameters from the JSP form.
+    	 * And handle the errors gently. 
+    	 * */
     	try {
 			title = request.getParameter("title");
 			content = request.getParameter("content");
@@ -124,7 +127,6 @@ public class AddEvent extends HttpServlet {
 			endTime = Timestamp.valueOf(request.getParameter("endtime"));
 			action = request.getParameter("action");
 			
-			//action = "INSERT";
     	} catch (Exception e){
     		System.out.println(e.toString()+ "\n Exception Stack: \n");
             e.printStackTrace();
@@ -133,6 +135,31 @@ public class AddEvent extends HttpServlet {
     		return;
     	}
 		
+    	/*
+    	 * Check the validity of the parameters obtained
+    	 * */
+    	String validityError = "";
+    	if (title.isEmpty()) validityError += "<br /> Title not valid \n";
+		if (content.isEmpty()) validityError += "<br /> Content not valid \n";
+		if (subland.isEmpty()) validityError += "<br /> Subland not valid \n";		// Check if it's really required
+		if (category < 1) validityError += "<br /> Category not valid \n";
+		if (mainland < 1) validityError += "<br /> Mainland not valid \n";
+		if (status < 1) validityError += "<br /> Status not valid \n";
+		java.util.Date modified = new java.util.Date();
+		Timestamp modifiedTime = new Timestamp(modified.getTime());
+		if (startTime.before(modifiedTime)) validityError += "<br /> Start time of the event should be atleast" +
+				" the current time \n";
+		if (endTime.before(startTime)) validityError += "<br /> End time is before the start time of the event \n";
+		if (action.isEmpty()) validityError += "<br /> Something went wrong in submission of form \n";
+    	    	
+		// check the validity error string for any errors
+		if (!validityError.isEmpty()) {
+			System.out.println (validityError);
+    		request.setAttribute("error", validityError);
+    		request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
+    		return;
+		}
+			
 		System.out.println(user);
 		System.out.println(title);
 		System.out.println(content);
@@ -177,8 +204,7 @@ public class AddEvent extends HttpServlet {
 	        		System.out.println(eventId);
 	        		query= " UPDATE Event SET title=?, content=?, postedBy=?, categoryId=?, status=?, locationId=?, startTime=?, endTime=?, modifiedTime=? " +
 		        		   " WHERE eventId=? ";
-	        		java.util.Date modified = new java.util.Date();
-	        		Timestamp modifiedTime = new Timestamp(modified.getTime());
+	        		
 	        		s = connection.prepareStatement(query);
 	        		s.setString (1, title);
 					s.setString (2, content);
