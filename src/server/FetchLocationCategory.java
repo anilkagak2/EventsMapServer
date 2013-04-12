@@ -82,6 +82,7 @@ public class FetchLocationCategory extends HttpServlet {
         request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
 	}
     
+	@SuppressWarnings("unchecked")
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String returnHome = Declarations.homePage(request);
 		try{
@@ -98,17 +99,15 @@ public class FetchLocationCategory extends HttpServlet {
 			 * make mainland & category local to this function & hence everything will work as desired
 			 * */
 			
+			/*
+			 * Store in session as per current DB design, category & mainland don't change freqeuntly
+			 * */
+			
 			String action = request.getParameter("action");
 			System.out.println(action);
 			
-			/* if (!mainland.isEmpty() && !category.isEmpty()) {
-				System.out.println("mainland and category not null");
-				sendResponse(request, response);
-				return;
-			} */
-
-		    List<MainLand> mainland = new ArrayList<MainLand>();
-		    List<Category> category = new ArrayList<Category>();
+		    List<MainLand> mainland = null;
+		    List<Category> category = null;
 			HttpSession session = request.getSession(false);
 			if (session != null) {
 				user = session.getAttribute("user").toString();
@@ -118,7 +117,7 @@ public class FetchLocationCategory extends HttpServlet {
 				request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
 				return;
 			}
-
+			
 			String mysqlUser = Declarations.mysqlUser;
 			String mysqlPass = Declarations.mysqlPass;
 			String url = Declarations.url;
@@ -126,27 +125,44 @@ public class FetchLocationCategory extends HttpServlet {
 			connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
 
 			if(connection!=null){
-				Statement s = connection.createStatement();
-				String query = "SELECT * FROM MainLand";
-				s.executeQuery(query);
-				System.out.println (query);
-				ResultSet rs = s.getResultSet();
-				while(rs.next ())
-				{
-					MainLand temp = new MainLand();
-					temp.mainLandId = rs.getInt("mainLandId");
-					temp.mainLand = rs.getString("mainLand");
-					mainland.add(temp);
-				}
-				rs.close();
-				s.executeQuery("SELECT * FROM Category");
-				rs = s.getResultSet();
-				while(rs.next ())
-				{
-					Category temp = new Category();
-					temp.categoryId = rs.getInt("categoryId");
-					temp.category = rs.getString("category");
-					category.add(temp);
+				mainland = (List<MainLand>) session.getAttribute("mainland");
+				category = (List<Category>) session.getAttribute("category");
+				if (	(mainland != null)
+						&& (category != null)
+						&& (!mainland.isEmpty() )
+						&& (!category.isEmpty() ) ) {
+					System.out.println("mainland and category not null");
+				} 
+				else {
+					mainland = new ArrayList<MainLand>();
+					category = new ArrayList<Category>();
+					Statement s = connection.createStatement();
+					String query = "SELECT * FROM MainLand";
+					s.executeQuery(query);
+					System.out.println (query);
+					ResultSet rs = s.getResultSet();
+					while(rs.next ())
+					{
+						MainLand temp = new MainLand();
+						temp.mainLandId = rs.getInt("mainLandId");
+						temp.mainLand = rs.getString("mainLand");
+						mainland.add(temp);
+					}
+					rs.close();
+					s.executeQuery("SELECT * FROM Category");
+					rs = s.getResultSet();
+					while(rs.next ())
+					{
+						Category temp = new Category();
+						temp.categoryId = rs.getInt("categoryId");
+						temp.category = rs.getString("category");
+						category.add(temp);
+					}
+					rs.close();
+					s.close();
+					
+					session.setAttribute("mainland", mainland);
+			        session.setAttribute("category", category);
 				}
 
 				// UPDATE
@@ -160,14 +176,12 @@ public class FetchLocationCategory extends HttpServlet {
 					}
 				}
 				
-				rs.close();
-				s.close();
 				connection.close();
 				
 				// set the attributes required
 				request.setAttribute("user", user);
-		        request.setAttribute("mainland", mainland);
-		        request.setAttribute("category", category);
+//		        request.setAttribute("mainland", mainland);
+//		        request.setAttribute("category", category);
 			}
 			else{
 				System.out.println("Database connection failed.");
