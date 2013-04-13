@@ -33,6 +33,8 @@ public class LoginFilter implements Filter {
 
 	/**
 	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
+	 *  Filters all the request which are directed towards the General & Secured Section of the WebContent  
+	 *  i.e. You need to have valid loginId for accessing this page
 	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {

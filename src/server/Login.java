@@ -8,6 +8,9 @@ import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Checks the authenticity of the User for the post,email & redirects accordingly
+ * */
 public class Login extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -64,6 +67,7 @@ public class Login extends HttpServlet {
 		return hexString.toString();
 	} /* End Hash */
 	
+	 /* Closes the connection, if the object is not null. */
 	protected void closeConnection () {
 		if (connection != null) {
             try {
@@ -146,7 +150,6 @@ public class Login extends HttpServlet {
         		System.out.println ("Invalid email or password entries.\n");
         		String error = "Error: Email or Password or Post entries are not valid";
             	request.setAttribute("error", error);
-//            	List<String> posts = Declarations.fetchPosts(connection);
             	request.setAttribute("posts", posts);
         		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
         		return;
@@ -238,8 +241,7 @@ public class Login extends HttpServlet {
 	                	rs1.close ();
 	                	s1.close ();
 	                	session.setAttribute("events", events);
-	                	
-//	                	List<String> posts = Declarations.fetchPosts(connection);
+
 	                	session.setAttribute("posts", posts);
 	                	
 	                	break;
@@ -258,13 +260,12 @@ public class Login extends HttpServlet {
                 System.out.println("Response.");
                 if (!found) {
                 	System.out.println ("Invalid email or password entries.\n");
-            		String error = "Error: No user with this (email, password) pair";
+            		String error = "Error: No user with this (email, password ,post) tuple \n" +
+            				"Please pay attention to the post field [as of now autocomplete is not supported on it :(]";
                 	request.setAttribute("error", error);
-//                	List<String> posts = Declarations.fetchPosts(connection);
                 	request.setAttribute("posts", posts);
             		request.getRequestDispatcher(Declarations.loginHome).forward(request, response);
                 	System.out.println("Home.");
-//                	redirectToLoginHome(request, response);
                 	return;
                 }
                 else {

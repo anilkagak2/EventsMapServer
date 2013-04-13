@@ -32,12 +32,12 @@ public class AllUser extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
+	 *      Fetches all the users from the Login table & shows their relevant
+	 *      details to the Administrator.
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 
-		// Create Connection
 		try {
 			String mysqlUser = Declarations.mysqlUser;
 			String mysqlPass = Declarations.mysqlPass;
@@ -51,13 +51,10 @@ public class AllUser extends HttpServlet {
 			// Execute Queries by checking passHash
 			if (connection != null) {
 				Statement s = connection.createStatement();
-
 				/*
 				 * Changed the Table structure--> loginId = INT & userName =
 				 * user
 				 */
-				// s.executeQuery("SELECT passwdHash FROM Login where loginId = '"+
-				// user +"'");
 				s.executeQuery("SELECT * FROM Login");
 				ResultSet rs = s.getResultSet();
 				List<LoginDetails> list_users = new ArrayList<LoginDetails>();

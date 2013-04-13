@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.validator.routines.EmailValidator;
 import javax.servlet.http.HttpSession;
 
+/* Global declarations for the Server. */
 public class Declarations {
 	public static final int adminId=1; 				// Define admin's post here
 	public static final String mysqlUser = "root";
@@ -54,6 +55,7 @@ public class Declarations {
 		return EmailValidator.getInstance().isValid(email);
 	}
 	
+	/* Gives error not found response. */
 	public static void errorNotFound (HttpServletResponse response) throws IOException {
 		response.setContentType("text/html");
 	    PrintWriter out = response.getWriter();

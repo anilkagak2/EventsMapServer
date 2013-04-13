@@ -28,6 +28,10 @@ public class ChangePassword extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Reset account facility to the Administrator for resetting different accounts 
+	 * of Secys, Profs, etc.
+	 * 
+	 * Give proper thought to the Prepared Statements in executing queries
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		int userId = Integer.parseInt(request.getParameter("id"));

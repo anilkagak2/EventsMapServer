@@ -46,6 +46,9 @@ public class FetchDetails extends HttpServlet {
 		        request.getRequestDispatcher(Declarations.userDetails).forward(request, response);
 	}
     
+	/* Fetches the details of the User.
+	 * Used by My Account->Details
+	 * */
 	protected void processRequest (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try{
 			HttpSession session = request.getSession(false);
@@ -100,6 +103,7 @@ public class FetchDetails extends HttpServlet {
 			sendResponse(request, response);
 		}catch(Exception e)
 		{
+			// TODO send it to some place
 			closeConnection();
 			System.out.println("Fetch Details"+e.toString()+ "\n Exception Stack: \n");
 			e.printStackTrace();

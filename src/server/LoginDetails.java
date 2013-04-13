@@ -1,5 +1,6 @@
 package server;
 
+/* Login abstraction of the Login Table of the DB. */
 public class LoginDetails{
 	int loginId;
 	String userName;

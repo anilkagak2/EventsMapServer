@@ -79,26 +79,12 @@ public class GetEvents extends HttpServlet {
 		if (category != "")
 			query += " and C.category= ? ";
 		if (mapId != "")
-//			query += " and ML.mainLand= ? ";
 			query += " and ML.mapId= ? ";
 		if (postedByName != "")
 			query += " and L.userName= ? ";
 		if (postedByPost != "")
 			query += " and L.post= ? ";
 		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ORDER BY E.startTime";
-		
-//		query += "Select * FROM Event E , MainLand ML ,Login L,Category C, Location LOC WHERE ";
-//		query += "E.endTime>'" + endingAfter + "'";
-//		if (category != "")
-//			query += " and C.category=" + category;
-//		if (mainLand != "")
-//			query += " and ML.mainLand=" + mainLand;
-//		if (postedByName != "")
-//			query += " and L.userName=" + postedByName;
-//		if (postedByPost != "")
-//			query += " and L.post=" + postedByPost;
-//
-//		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ";
 		System.out.println(query);
 
 		try {

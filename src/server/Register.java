@@ -12,6 +12,7 @@ import javax.servlet.http.*;
 /**
  * Servlet implementation class Register
  */
+/* Registers a new user if required parameters are valid. */
 @WebServlet("/Register")
 public class Register extends HttpServlet {
 	private static final long serialVersionUID = 1L;

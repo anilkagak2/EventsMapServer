@@ -2,6 +2,7 @@ package server;
 
 import java.sql.*;
 
+/* EventDetails abstraction of the Event Table of the DB. */
 public class EventDetail {
 	public long eventId;
 	public Timestamp startTime;

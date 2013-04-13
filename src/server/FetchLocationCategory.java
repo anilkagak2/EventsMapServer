@@ -17,6 +17,10 @@ import java.util.List;
  * Servlet implementation class FetchLocationCategory
  */
 
+/*
+ * Fetches the location & category to be shown in the AddEvent page
+ * Pay proper attention to the way mainland & categories are stored in DB 
+ * */
 @WebServlet("/FetchLocationCategory")
 public class FetchLocationCategory extends HttpServlet {
 

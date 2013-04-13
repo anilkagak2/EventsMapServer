@@ -12,6 +12,9 @@ import javax.servlet.annotation.WebFilter;
 /**
  * Servlet Filter implementation class PostsFilter
  */
+/* Filters all the request coming to the Login.jsp page so that
+ * those requests have posts attribute set 
+ * */
 @WebFilter("/PostsFilter")
 public class PostsFilter implements Filter {
 

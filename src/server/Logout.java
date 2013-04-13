@@ -11,6 +11,9 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class Logout
  */
+/*
+ * Invalidates the session & redirects to the Login.jsp page
+ * */
 @WebServlet("/Logout")
 public class Logout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -36,6 +39,10 @@ public class Logout extends HttpServlet {
 			System.out.println("events "+ session);
 		}
 		
+		/*
+		 * TODO: how to set the base
+		 * should it be accessed in /Login.jsp
+		 * */
 		response.sendRedirect("Login.jsp");
     }
     

@@ -6,6 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/*
+ * NOT IN USE NOW
+ * TODO API Refactoring so as to implement the Class Inheritance
+ * & removal of duplication of the code
+ * */
 public class MysqlConnection {
 	/* Connection object for the database query execution */
 	private Connection connection;

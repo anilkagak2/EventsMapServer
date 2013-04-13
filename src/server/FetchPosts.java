@@ -18,6 +18,9 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class FetchPosts
  */
+/*
+ * Fetches the posts to be shown in the Login.jsp & Register.jsp 
+ * */
 @WebServlet("/FetchPosts")
 public class FetchPosts extends HttpServlet {
 	private static final long serialVersionUID = 1L;

@@ -13,6 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class Details
  */
+
+/*
+ * TODO Find out the utility of this servlet
+ * I think no one is using this servlet
+ * */
 @WebServlet("/Details")
 public class Details extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +39,9 @@ public class Details extends HttpServlet {
             }
         }
 	}
-	
+	/*
+	 * Fetches all 
+	 * */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException, SQLException {
 		response.setContentType("text/html;charset=UTF-8");	
@@ -47,14 +54,14 @@ public class Details extends HttpServlet {
 	    Class.forName("com.mysql.jdbc.Driver").newInstance();
 	    connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
 	    System.out.println("Checking your identity.."+ user +"\n");
-
-	   
     }
+	
+	/*
+	 * TODO Send it to some place, otherwise it'll just get blocked
+	 * */
     catch(Exception e){
             System.out.println("Error : " + e.toString());
     }
-	
-	//-----------------------------------------------------
 	
 	if (connection != null) {
         Statement s = connection.createStatement();
@@ -79,6 +86,8 @@ public class Details extends HttpServlet {
 	}
 }
 	
+	/* Both get & post redirects to the common function
+	 * */
 	 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 		 try {

@@ -20,18 +20,23 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/AddEvent")
 public class AddEvent extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	/* Possible actions to be performed by this class. */
 	private static final String insert="INSERT";
 	private static final String update="UPDATE";
 	private static final String delete="DELETE";
+
+	/* Connection object. */
     Connection connection;   
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public AddEvent() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
+    /* Closes the connection, if the object is not null. */
     protected void closeConnection () {
 		if (connection != null) {
             try {
@@ -44,7 +49,10 @@ public class AddEvent extends HttpServlet {
         }
 	}
   
-    /* LocationId corresponding to mainland,subland pair. */
+    /* LocationId corresponding to mainland,subland pair.
+     * If the mainland,subland pair exists then pick the locationId corresponding to that
+     * otherwise insert a new entry in location table.
+     *  */
     protected int getLocationId (int mainland, String subland) {
     	int locationId = 0;
     	
@@ -95,6 +103,9 @@ public class AddEvent extends HttpServlet {
     
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * 
+	 * Adds a new event or updates an existing one, to the user's account &
+	 *  updates the events list in session for the user
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user = "";
@@ -217,15 +228,16 @@ public class AddEvent extends HttpServlet {
 					s.setTimestamp(9, modifiedTime);
 					s.setInt (10, Integer.parseInt(eventId));
 	        	}
-	        	else if (action.equals(delete)) {
-	        		/* Not in USE
-	        		 * */
-	        		eventId = request.getParameter("eventId");
-	        		System.out.println(eventId);
-	        		query= "DELETE FROM Event WHERE eventId=?";
-	        		s = connection.prepareStatement(query);
-	        		s.setInt (1, Integer.parseInt(eventId));
-	        	}
+	        	
+	        	/* Not in USE
+//        		 * */
+//	        	else if (action.equals(delete)) {
+//	        		eventId = request.getParameter("eventId");
+//	        		System.out.println(eventId);
+//	        		query= "DELETE FROM Event WHERE eventId=?";
+//	        		s = connection.prepareStatement(query);
+//	        		s.setInt (1, Integer.parseInt(eventId));
+//	        	}
 	        	else {
 	        		String error = "INVALID QUERY";
 	        		request.setAttribute("error", error);
