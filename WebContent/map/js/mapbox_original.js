@@ -152,6 +152,8 @@
 					+ "<input type='hidden' name='address' value=\"" + dv.address + "\" />"
 					+ "<input type='hidden' name='pic' value='" + dv.pic + "'/><input type='hidden' name='pw' value='" + dv.pw + "'/>"
 					+ "<input type='hidden' name='ph' value='" + dv.ph + "'/>"
+					 +"<input type='hidden' id='"+dv.id+"_x' value='" + dv.x + "'/>"
+					 +"<input type='hidden' id='"+dv.id+"_y' value='" + dv.y + "'/>"
 					+ "<input type='hidden' name='ext' value='" + dv.ext + "'/></div>");
 				}
 				catch(err){

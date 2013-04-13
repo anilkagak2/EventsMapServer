@@ -54,7 +54,8 @@
 <script src="js/jquery/ui.checkbox.js" type="text/javascript"></script>
 <script src="js/jquery/jquery.bind.js" type="text/javascript"></script>
 <script type="text/javascript">
-	function changePassword(id) {
+	function changePassword(id,user,email) {
+		//alert(id + " " +user+ " " + email);
 		var pass = document.getElementById("new_pass").value;
 		var confPass = document.getElementById("confirm_pass").value;
 		if (pass == confPass && pass != '') {
@@ -64,6 +65,8 @@
 					.post(
 							"ChangePassword",
 							{
+								userName : user ,
+								webmail : email,
 								id : id,
 								password : document.getElementById("new_pass").value
 							},
@@ -291,7 +294,7 @@
 
 								<tr>
 									<td align="left"><input
-										onclick="changePassword('${sessionScope.loginId}');"
+										onclick="changePassword('${sessionScope.loginId}','${sessionScope.user}','${sessionScope.email}');"
 										type="button" name="confirm_pass" value=" Change Password " /></td>
 								</tr>
 
