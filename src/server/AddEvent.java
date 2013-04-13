@@ -296,9 +296,9 @@ public class AddEvent extends HttpServlet {
 	        		if (action.equals(insert)) {
         				events.add(event);
 	        		} else if (action.equals(update)) {
-	        			//ListIterator<EventDetail> it = events.listIterator();
+	        			ListIterator<EventDetail> it = events.listIterator();
     					System.out.println ("Size "+events.size ());
-	        			for (int i=0; i<events.size (); i++) {
+	        			/*for (int i=0; i<events.size (); i++) {
 	        				EventDetail e = events.get(i);
 	        				if (e.eventId == event.eventId) {
 	        					System.out.println ("Setting the new event instead of current.");
@@ -306,8 +306,8 @@ public class AddEvent extends HttpServlet {
 	        					System.out.println ("new eventid " + events.get(i).eventId);
 	        					break;
 	        				}
-	        			}
-	        			/*while (it.hasNext()) {
+	        			}*/
+	        			while (it.hasNext()) {
 	        				EventDetail e = it.next ();
 	        				if (e.eventId == event.eventId) {
 	        					System.out.println ("Setting the new event instead of current.");
@@ -318,7 +318,7 @@ public class AddEvent extends HttpServlet {
 	        					
 	        					break;
 	        				}
-	        			}*/
+	        			}
 	        			/*int index = events.indexOf(event);
 	        			if (index == -1) {
 	        				String error = "Error: could not update the event in events list for this session";
