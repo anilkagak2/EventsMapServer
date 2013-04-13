@@ -71,6 +71,63 @@
 
 
 <script type="text/javascript">
+	function submitForm(formId) {
+		var submit = true;
+
+		
+
+		var data = $("input[name=title]")[0].value;
+		if (data == '') {
+			$('#title_error')[0].style.display = 'block';
+			submit = false;
+		}else{
+			$('#title_error')[0].style.display = 'none';
+		}
+		
+		var data = $("input[name=content]")[0].value;
+		if (data == '') {
+			$('#content_error')[0].style.display = 'block';
+			submit = false;
+		}else{
+			$('#content_error')[0].style.display = 'none';
+		}
+		
+		//IF mainland is others then subland should contain the exact location
+		var data = $("select[name=mainland]")[0].value;
+		//alert(data);
+		if (data == '1') {
+			var data = $("input[name=subland]")[0].value;
+			if (data == '') {
+				$('#subland_error')[0].style.display = 'block';
+				submit = false;
+			}
+			else{
+				$('#subland_error')[0].style.display = 'none';
+			}
+		}
+		
+		var data = $("input[name=starttime]")[0].value;
+		if (data == '') {
+			$('#start_time_error')[0].style.display = 'block';
+			submit = false;
+		}else{
+			$('#start_time_error')[0].style.display = 'none';
+		}
+		
+		var data = $("input[name=endtime]")[0].value;
+		if (data == '') {
+			$('#end_time_error')[0].style.display = 'block';
+			submit = false;
+		}else{
+			$('#end_time_error')[0].style.display = 'none';
+		}
+		
+		
+		
+		if (submit)
+			$("form#" + formId).submit();
+	}
+
 	$(function() {
 		$('#startDatetimepicker').datetimepicker({
 			language : 'en',
@@ -340,14 +397,15 @@ input.LinkButton {
 											</c:otherwise>
 										</c:choose>
 
-										<form name="addEvent" method="post" action="AddEvent">
+										<form id='addEvent' name="addEvent" method="post"
+											action="AddEvent">
 											<table border="0" cellpadding="0" cellspacing="0"
 												id="id-form">
 												<tr>
 													<th valign="top">Title:</th>
-													<td><input type="text" class="inp-form" name="title"
-														value="${Utitle}"></td>
-													<td>
+													<td><input id='title' type="text" class="inp-form"
+														name="title" value="${Utitle}"></td>
+													<td id="title_error" style="display: none;">
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
@@ -358,7 +416,7 @@ input.LinkButton {
 													<th valign="top">Content:</th>
 													<td><input type="text" class="inp-form" name="content"
 														value="${Ucontent}"></td>
-													<td>
+													<td id="content_error" style="display: none;">
 														<div class="error-left"></div>
 														<div class="error-inner">This field is required.</div>
 													</td>
@@ -367,28 +425,28 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">MainLand:</th>
-													<td><select name="mainland" selected="${Umainland}">
+													<td><select id='mainland' name="mainland"
+														selected="${Umainland}">
 															<c:forEach items="${mainland}" var="mainland">
 																<option value="${mainland.mainLandId}">
 																	<c:out value="${mainland.mainLand}" />
 																</option>
 															</c:forEach>
 													</select>
-													<td>
-														<div class="error-left"></div>
-														<div class="error-inner">This field is required.</div>
-													</td>
+														<td></td>
 													<td></td>
 												</tr>
 
 												<tr>
 													<th valign="top">SubLand:</th>
-													<td><input type="text" class="inp-form" name="subland"
-														value="${Usubland}"></td>
-													<td>
+													<td><input id='subland' type="text" class="inp-form"
+														name="subland" value="${Usubland}"></td>
+													<td id="subland_error" style="display: none;">
 														<div class="error-left"></div>
-														<div class="error-inner">This field is required.</div>
-													</td>
+														<div class="error-inner">This field is required if
+															MainLand is 'Other'.
+													</div></td>
+													
 													<td></td>
 												</tr>
 
@@ -397,7 +455,7 @@ input.LinkButton {
 													<td class="noheight">
 														<div class="well">
 															<div id="startDatetimepicker" class="input-append">
-																<input data-format="yyyy-MM-dd HH:mm:ss"
+																<input id='start' data-format="yyyy-MM-dd HH:mm:ss"
 																	name="starttime" value="${Ustarttime}" type="text"></input>
 
 																<span class="add-on"> <i
@@ -407,6 +465,10 @@ input.LinkButton {
 															</div>
 														</div>
 													</td>
+													<td id="start_time_error" style="display: none;">
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
+													</td>
 													<td></td>
 												</tr>
 
@@ -415,13 +477,17 @@ input.LinkButton {
 													<td class="noheight">
 														<div class="well">
 															<div id="endDatetimepicker" class="input-append">
-																<input data-format="yyyy-MM-dd HH:mm:ss" name="endtime"
-																	value="${Uendtime}" type="text"></input> <span
+																<input id='end' data-format="yyyy-MM-dd HH:mm:ss"
+																	name="endtime" value="${Uendtime}" type="text"></input> <span
 																	class="add-on"> <i data-time-icon="icon-time"
 																	data-date-icon="icon-calendar"> </i>
 																</span>
 															</div>
 														</div>
+													</td>
+													<td id="end_time_error" style="display: none;">
+														<div class="error-left"></div>
+														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
 												</tr>
@@ -429,8 +495,8 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Status:</th>
-													<td><select class="styledselect_form_1" name="status"
-														selected="${Ustatus}">
+													<td><select id='status' class="styledselect_form_1"
+														name="status" selected="${Ustatus}">
 															<option value="1">ONGOING</option>
 															<option value="2">SCHEDULED</option>
 															<option value="3">CANCELLED</option>
@@ -441,17 +507,16 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Category:</th>
-													<td><select name="category" selected="${Ucategory}">
+													<td><select id='category' name="category"
+														selected="${Ucategory}">
 															<c:forEach items="${category}" var="category">
 																<option value="${category.categoryId}">
 																	<c:out value="${category.category}" />
 																</option>
 															</c:forEach>
 													</select>
-													<td>
-														<div class="error-left"></div>
-														<div class="error-inner">This field is required.</div>
-													</td>
+													
+													<td></td>
 													<td></td>
 												</tr>
 
@@ -461,7 +526,8 @@ input.LinkButton {
 													<th>&nbsp;</th>
 													<td valign="top"><input type="hidden"
 														value="${Uaction}" name="action" /> <input type="hidden"
-														value="${UeventId}" name="eventId" /> <input type="submit"
+														value="${UeventId}" name="eventId" /> <input
+														type="button" onclick="submitForm('addEvent');"
 														value="Submit" style="width: 100px; height: 40px" /> <input
 														type="reset" value="Reset"
 														style="width: 100px; height: 40px" /></td>
@@ -469,14 +535,14 @@ input.LinkButton {
 												</tr>
 											</table>
 										</form> <!-- end id-form  -->
+								
 								<tr>
 									<!-- <td>
 										<img src="images/shared/blank.gif" width="695" height="1" alt="blank" />
 									</td>  -->
-									
-									<td>
-										<img src="images/shared/blank.gif" width="1" height="1" alt="blank" />
-									</td>
+
+									<td><img src="images/shared/blank.gif" width="1"
+										height="1" alt="blank" /></td>
 									<td></td>
 								</tr>
 							</table>
