@@ -279,93 +279,94 @@
 		 * Shows a small pop up box containing a preview pic of the gallery and a small description of the area
 		 */
 		function show_preview(elem_id){
-			var elem = document.getElementById(elem_id);
-			var children = elem.childNodes;
-			var desc = "";
-			var thumbpic = "";
-			var pic = "";
-			var prepic = "";
-			var ext = "";
-			var road = false;
-			var pwidth = 0;
-			var pheight = 0;
-			for (var i=0; i < children.length; i++) {
-				if(children[i].type == 'hidden' && children[i].name == 'address')
-					desc = children[i].value;
-				if(children[i].type == 'hidden' && children[i].name == 'pic')
-					pic = children[i].value;
-				if(children[i].type == 'hidden' && children[i].name == 'pw')
-					pwidth = parseInt(children[i].value);
-				if(children[i].type == 'hidden' && children[i].name == 'ph')
-					pheight = 73 + parseInt(children[i].value);
-				if(children[i].type == 'hidden' && children[i].name == 'ext')
-					ext = children[i].value;
-				if(children[i].type == 'hidden' && children[i].name == 'road')
-					road = true;
-			}
-			//$("#sidebar_heading").val(desc);
-			prepic = "images/campus/" + pic + "/small_" + pic + ext;
-			thumbpic = "images/campus/" + pic + "/thumb_" + pic + ext;
-			var preview = document.getElementById("previewer");
-			var htmlText = "";
-			htmlText = htmlText + "<input name='target' type='hidden' value='" + elem.id + "' /><table><tr><td align='right'>";
-			htmlText = htmlText + "<a style='cursor:pointer;text-decoration:none;' onclick='document.getElementById(\"previewer\").innerHTML=\"\";";
-			htmlText = htmlText + "$(\"#previewer\").css(\"box-shadow\",\"0px 0px 0px 0px #000\");";
-			htmlText = htmlText + "document.getElementById(\"duplicate\").style.display = \"none\";'>x</a>&nbsp;</td></tr>";
-			htmlText = htmlText +"<tr><td align='center'><a style='cursor:pointer' onclick='overlay();'><p title='Click to show the Details'/>hello</p></a></td></tr>";
-			htmlText = htmlText + "<tr><td align='center' style='color:black;'><b>" + desc + "</b></td></tr>";
-			htmlText = htmlText + "</table><div class='chat-bubble-arrow-border'></div>";
-  			htmlText = htmlText + "<div class='chat-bubble-arrow'></div>";
-			$("#previewer").html(htmlText);
-			$("#loading_img").show();
-			/*if(road){
-				getPicInfo(pic+"&road=true",ext);
-				$('#overlay_code').val(pic+"&road=true");
-			}
-			else*/{
-				getPicInfo(pic,ext);
-				$('#overlay_code').val(pic);
-			}
-			pic = "images/campus/" + pic + "/" + pic + ext;
-			var offset = $(elem).offset();
-			pwidth = $("#previewer").width() < pwidth ? pwidth : $("#previewer").width();
-			pheight = $("#previewer").height() < pheight ? pheight : $("#previewer").height();
-			var x = Math.round(offset.left + ($(elem).width() - pwidth)/2);
-			var y = Math.round(offset.top - pheight - 10);
-			preview.style.left = x.toString()+"px";
-			preview.style.top = y.toString()+"px";
-			preview.display = "block";
-			//$(preview).width(pwidth);
-			//$(preview).height(pheight);
-			$(preview).css('box-shadow',"0px 0px 6px 6px #A1A1A1");
-			$(preview).css('background','white');
-			var dup = document.getElementById("duplicate");
-			if(!road){
-				//$(dup).css$(elem).css();
-
-				var old_css = elem.style.cssText;
-				//st.setPropertyValue();
-				elem.style.cssText = "position:absolute;left:"+$(elem).css("left")+";top:"+$(elem).css("top")+";border:"+$(elem).css("border")+";border-radius:"+$(elem).css("border-radius")+";cursor:pointer;height:"+$(elem).css("height")+";width:"+$(elem).css("width")+";";
-				
-				var offset1 = $(elem).offset();
-				elem.style.cssText = old_css;
-				dup.style.cssText = old_css;
-				dup.style.left = offset1.left.toString()+"px";
-				dup.style.top = offset1.top.toString()+"px";
-				/*dup.style.width = $(elem).width().toString()+"px";
-				dup.style.height = $(elem).height().toString()+"px";*/
-				dup.style.border = "thin #F87431";
-				$(dup).css("box-shadow","0px 0px 15px 5px #F87431");
-				dup.style.display = "block";
-			}
-			else{
-				dup.style.border = "none";
-				dup.style.display = "none";
-			}
-			if(document.getElementById("prepic") != null){
-				document.getElementById("prepic").src = prepic;
-				document.getElementById("prepic_target").href = pic;
-			}
+			parent.show_table (elem_id);
+//			var elem = document.getElementById(elem_id);
+//			var children = elem.childNodes;
+//			var desc = "";
+//			var thumbpic = "";
+//			var pic = "";
+//			var prepic = "";
+//			var ext = "";
+//			var road = false;
+//			var pwidth = 0;
+//			var pheight = 0;
+//			for (var i=0; i < children.length; i++) {
+//				if(children[i].type == 'hidden' && children[i].name == 'address')
+//					desc = children[i].value;
+//				if(children[i].type == 'hidden' && children[i].name == 'pic')
+//					pic = children[i].value;
+//				if(children[i].type == 'hidden' && children[i].name == 'pw')
+//					pwidth = parseInt(children[i].value);
+//				if(children[i].type == 'hidden' && children[i].name == 'ph')
+//					pheight = 73 + parseInt(children[i].value);
+//				if(children[i].type == 'hidden' && children[i].name == 'ext')
+//					ext = children[i].value;
+//				if(children[i].type == 'hidden' && children[i].name == 'road')
+//					road = true;
+//			}
+//			//$("#sidebar_heading").val(desc);
+//			prepic = "images/campus/" + pic + "/small_" + pic + ext;
+//			thumbpic = "images/campus/" + pic + "/thumb_" + pic + ext;
+//			var preview = document.getElementById("previewer");
+//			var htmlText = "";
+//			htmlText = htmlText + "<input name='target' type='hidden' value='" + elem.id + "' /><table><tr><td align='right'>";
+//			htmlText = htmlText + "<a style='cursor:pointer;text-decoration:none;' onclick='document.getElementById(\"previewer\").innerHTML=\"\";";
+//			htmlText = htmlText + "$(\"#previewer\").css(\"box-shadow\",\"0px 0px 0px 0px #000\");";
+//			htmlText = htmlText + "document.getElementById(\"duplicate\").style.display = \"none\";'>x</a>&nbsp;</td></tr>";
+//			htmlText = htmlText +"<tr><td align='center'><a style='cursor:pointer' onclick='overlay();'><p title='Click to show the Details'/>hello</p></a></td></tr>";
+//			htmlText = htmlText + "<tr><td align='center' style='color:black;'><b>" + desc + "</b></td></tr>";
+//			htmlText = htmlText + "</table><div class='chat-bubble-arrow-border'></div>";
+//  			htmlText = htmlText + "<div class='chat-bubble-arrow'></div>";
+//			$("#previewer").html(htmlText);
+//			$("#loading_img").show();
+//			/*if(road){
+//				getPicInfo(pic+"&road=true",ext);
+//				$('#overlay_code').val(pic+"&road=true");
+//			}
+//			else*/{
+//				getPicInfo(pic,ext);
+//				$('#overlay_code').val(pic);
+//			}
+//			pic = "images/campus/" + pic + "/" + pic + ext;
+//			var offset = $(elem).offset();
+//			pwidth = $("#previewer").width() < pwidth ? pwidth : $("#previewer").width();
+//			pheight = $("#previewer").height() < pheight ? pheight : $("#previewer").height();
+//			var x = Math.round(offset.left + ($(elem).width() - pwidth)/2);
+//			var y = Math.round(offset.top - pheight - 10);
+//			preview.style.left = x.toString()+"px";
+//			preview.style.top = y.toString()+"px";
+//			preview.display = "block";
+//			//$(preview).width(pwidth);
+//			//$(preview).height(pheight);
+//			$(preview).css('box-shadow',"0px 0px 6px 6px #A1A1A1");
+//			$(preview).css('background','white');
+//			var dup = document.getElementById("duplicate");
+//			if(!road){
+//				//$(dup).css$(elem).css();
+//
+//				var old_css = elem.style.cssText;
+//				//st.setPropertyValue();
+//				elem.style.cssText = "position:absolute;left:"+$(elem).css("left")+";top:"+$(elem).css("top")+";border:"+$(elem).css("border")+";border-radius:"+$(elem).css("border-radius")+";cursor:pointer;height:"+$(elem).css("height")+";width:"+$(elem).css("width")+";";
+//				
+//				var offset1 = $(elem).offset();
+//				elem.style.cssText = old_css;
+//				dup.style.cssText = old_css;
+//				dup.style.left = offset1.left.toString()+"px";
+//				dup.style.top = offset1.top.toString()+"px";
+//				/*dup.style.width = $(elem).width().toString()+"px";
+//				dup.style.height = $(elem).height().toString()+"px";*/
+//				dup.style.border = "thin #F87431";
+//				$(dup).css("box-shadow","0px 0px 15px 5px #F87431");
+//				dup.style.display = "block";
+//			}
+//			else{
+//				dup.style.border = "none";
+//				dup.style.display = "none";
+//			}
+//			if(document.getElementById("prepic") != null){
+//				document.getElementById("prepic").src = prepic;
+//				document.getElementById("prepic_target").href = pic;
+//			}
 		}
 		/**
 		 * will check for events which lead to closing of the pop up box or the gallery

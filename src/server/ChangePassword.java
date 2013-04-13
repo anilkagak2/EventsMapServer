@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,35 +30,50 @@ public class ChangePassword extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		int userId = Integer.parseInt(request.getParameter("id"));
 		String pass = request.getParameter("password");
 		String userName = request.getParameter("userName");
 		String webmail = request.getParameter("webmail");
 		
-		try{
-		// Create Connection
-        String mysqlUser = Declarations.mysqlUser;
-        String mysqlPass = Declarations.mysqlPass;
-        String url = Declarations.url;
-        Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
+		boolean Ispass = false;
+		if (request.getParameter("password") != null) {
+			Ispass = true;
+		}
+		try {
+			// Create Connection
+	        String mysqlUser = Declarations.mysqlUser;
+	        String mysqlPass = Declarations.mysqlPass;
+	        String url = Declarations.url;
+	        Class.forName("com.mysql.jdbc.Driver").newInstance();
+	        Connection connection = DriverManager.getConnection(url, mysqlUser, mysqlPass);
 
         // Execute Queries by checking passHash
         if (connection != null) {
             PreparedStatement s = null;
             String query = "";
 
-			query = "update Login set passwdHash=sha2(?,256) where loginId= ?";
+            query = "update Login set ";
+			if (Ispass)
+				query += " passwdHash=sha2(?,256) ,";
+			query += " userName=? ,email=? where loginId=? ";
 			s = connection.prepareStatement(query);
-			s.setString (1, pass);
-			s.setInt (2, userId);
+			int j=1;
+			if (Ispass) s.setString(j++, pass);
+			s.setString (j++, userName);
+			s.setString (j++, webmail);
+			s.setInt (j++, userId);
 			System.out.println(s.toString());
 
   			s.executeUpdate();
         }
 		}catch(Exception e){
 			System.out.println("Error in change password : "+e.getMessage());
+			e.printStackTrace();
+//    		request.setAttribute("error", e.getMessage());
+			/*
+			 * Send it to someplace so that appliation keeps working
+			 * */
+//    		request.getRequestDispatcher(Declarations.).forward(request, response);
 		}
 	}
 

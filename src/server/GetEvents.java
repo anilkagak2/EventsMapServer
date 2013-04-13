@@ -47,15 +47,28 @@ public class GetEvents extends HttpServlet {
 		Calendar currenttime = Calendar.getInstance();
 		Date sqldate = new Date((currenttime.getTime()).getTime());
 
+		String mapid = request.getParameter("mapId");
+		String isjson = request.getParameter("json");
+
+		if (mapid == null)
+			mapid = "";
+
 		List<EventDetail> events = fetchEvents(
-				new Timestamp(sqldate.getTime()), "", "", "", "");
-		request.setAttribute("user", events);
-		String json = new Gson().toJson(events);
-		out.println(json);
+				new Timestamp(sqldate.getTime()), "", "", mapid, "");
+
+		request.setAttribute("mapEvents", events);
+
+		if (isjson == null) {
+			String json = new Gson().toJson(events);
+			out.println(json);
+		} else {
+			request.getRequestDispatcher("/index.jsp").forward(request,
+					response);
+		}
 	}
 
 	private List<EventDetail> fetchEvents(Timestamp endingAfter,
-			String postedByName, String postedByPost, String mainLand,
+			String postedByName, String postedByPost, String mapId,
 			String category) {
 
 		List<EventDetail> listEvents = new ArrayList<EventDetail>();
@@ -65,13 +78,14 @@ public class GetEvents extends HttpServlet {
 		query = "Select * FROM Event E , MainLand ML ,Login L,Category C, Location LOC WHERE E.endTime > ? ";
 		if (category != "")
 			query += " and C.category= ? ";
-		if (mainLand != "")
-			query += " and ML.mainLand= ? ";
+		if (mapId != "")
+//			query += " and ML.mainLand= ? ";
+			query += " and ML.mapId= ? ";
 		if (postedByName != "")
 			query += " and L.userName= ? ";
 		if (postedByPost != "")
 			query += " and L.post= ? ";
-		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ";
+		query += " and C.categoryId = E.categoryId and LOC.locationId=E.locationId and ML.mainLandId=LOC.mainLandId and L.loginId=E.postedBy ORDER BY E.startTime";
 		
 //		query += "Select * FROM Event E , MainLand ML ,Login L,Category C, Location LOC WHERE ";
 //		query += "E.endTime>'" + endingAfter + "'";
@@ -101,7 +115,7 @@ public class GetEvents extends HttpServlet {
 				/* Set the parameters now. */
 				int j=2;
 				if (category != "") s.setString (j++, category);
-				if (mainLand != "") s.setString (j++, mainLand);
+				if (mapId != "") s.setString (j++, mapId);
 				if (postedByName != "") s.setString(j++, postedByName);
 				if (postedByPost != "") s.setString(j++, postedByPost);
 				

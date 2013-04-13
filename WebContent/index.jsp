@@ -1,7 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<c:set var="req" value="${pageContext.request}" />
+<c:set var="url">${req.requestURL}</c:set>
+<c:set var="uri">${req.requestURI}</c:set>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+<base
+	href="${fn:substring(url, 0, fn:length(url) - fn:length(uri))}${req.contextPath}/" />
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -22,6 +34,27 @@
 <script src="js/jquery/ui.checkbox.js" type="text/javascript"></script>
 <script src="js/jquery/jquery.bind.js" type="text/javascript"></script>
 <script type="text/javascript">
+<!--
+function toggle_visibility_extra(id,type){
+	var e = document.getElementById(id);
+	if (e.style.display == type)
+		e.style.display = 'none';
+	else
+		e.style.display = type;
+}
+	function toggle_visibility(id) {
+		var e = document.getElementById(id);
+		if (e.style.display == 'block')
+			e.style.display = 'none';
+		else
+			e.style.display = 'block';
+	}
+	//-->
+
+	function show_table(id) {
+		window.location = "../GetEvents?json=false&mapid=" + id;
+	}
+
 	$(function() {
 		$('input').checkBox();
 		$('#toggle-all').click(function() {
@@ -175,31 +208,12 @@
 
 			<!-- start logo -->
 			<div id="logo">
-				<a href=""><img src="images/shared/logo.png" width="156"
-					height="40" alt="" /></a>
+				
 			</div>
 			<!-- end logo -->
 
 			<!--  start top-search -->
-			<div id="top-search">
-				<table border="0" cellpadding="0" cellspacing="0">
-					<tr>
-						<td><input type="text" value="Search"
-							onblur="if (this.value=='') { this.value='Search'; }"
-							onfocus="if (this.value=='Search') { this.value=''; }"
-							class="top-search-inp" /></td>
-						<td><select class="styledselect">
-								<option value="">All</option>
-								<option value="">Products</option>
-								<option value="">Categories</option>
-								<option value="">Clients</option>
-								<option value="">News</option>
-						</select></td>
-						<td><input type="image"
-							src="images/shared/top_search_btn.gif" /></td>
-					</tr>
-				</table>
-			</div>
+
 			<!--  end top-search -->
 			<div class="clear"></div>
 
@@ -225,8 +239,8 @@
 						height="14" alt="" />
 				</div>
 				<div class="nav-divider">&nbsp;</div>
-				<a href="" id="logout"><img
-					src="images/shared/nav/nav_logout.gif" width="64" height="14"
+				<a href="Login.jsp" id="logout"><img
+					src="images/shared/nav/nav_login.gif" width="64" height="14"
 					alt="" /></a>
 				<div class="clear">&nbsp;</div>
 
@@ -260,73 +274,11 @@
 
 					<ul class="select">
 						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Dashboard Details 1</a></li>
-									<li><a href="#nogo">Dashboard Details 2</a></li>
-									<li><a href="#nogo">Dashboard Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
 					</ul>
 
-					<div class="nav-divider">&nbsp;</div>
+				
 
-					<ul class="current">
-						<li><a href="#nogo"><b>Products</b> <!--[if IE 7]><!--></a> <!--<![endif]-->
-							<!--[if lte IE 6]><table><tr><td><![endif]
-		<div class="select_sub show">
-			<ul class="sub">
-				<li><a href="#nogo">View all products</a></li>
-				<li class="sub_show"><a href="#nogo">Add product</a></li>
-				<li><a href="#nogo">Delete products</a></li>
-			</ul>
-		</div>
-		<!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
 
-					<div class="nav-divider">&nbsp;</div>
-
-					<ul class="select">
-						<li><a href="#nogo"><b>Categories</b> <!--[if IE 7]><!--></a>
-							<!--<![endif]--> <!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Categories Details 1</a></li>
-									<li><a href="#nogo">Categories Details 2</a></li>
-									<li><a href="#nogo">Categories Details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="nav-divider">&nbsp;</div>
-
-					<ul class="select">
-						<li><a href="#nogo"><b>Clients</b> <!--[if IE 7]><!--></a> <!--<![endif]-->
-							<!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">Clients Details 1</a></li>
-									<li><a href="#nogo">Clients Details 2</a></li>
-									<li><a href="#nogo">Clients Details 3</a></li>
-
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
-
-					<div class="nav-divider">&nbsp;</div>
-
-					<ul class="select">
-						<li><a href="#nogo"><b>News</b> <!--[if IE 7]><!--></a> <!--<![endif]-->
-							<!--[if lte IE 6]><table><tr><td><![endif]-->
-							<div class="select_sub">
-								<ul class="sub">
-									<li><a href="#nogo">News details 1</a></li>
-									<li><a href="#nogo">News details 2</a></li>
-									<li><a href="#nogo">News details 3</a></li>
-								</ul>
-							</div> <!--[if lte IE 6]></td></tr></table></a><![endif]--></li>
-					</ul>
 
 					<div class="clear"></div>
 				</div>
@@ -349,7 +301,7 @@
 
 			<!--  start page-heading -->
 			<div id="page-heading">
-				<h1>Add product</h1>
+				<h1>Campus Events</h1>
 			</div>
 			<!-- end page-heading -->
 
@@ -374,30 +326,57 @@
 
 							<!--  start table-content  -->
 							<div id="table-content">
-								<table width='100%' >
+								<table width='100%'>
 									<tr>
-										<td width='53%'><iframe src='map/index.html' width='100%'
-												height='700px' scrolling='no' name='iframe'></iframe></td>
+										<td width='53%'><iframe id="map" src='map/index.html'
+												width='100%' height='700px' scrolling='no' name='iframe'></iframe></td>
 										<td>
-										<table>
-										<tr>
-										<th>asdfsadf</th>
-										<th>asdfsadf</th>
-										<tr>
-										
-										</table>
-										
-										
-										
-										
+											<form id="mainform" action="">
+												<table border="0" width="100%" cellpadding="0"
+													cellspacing="0" id="product-table">
+													<tr>
+														<!-- <th class="table-header-check"><a id="toggle-all"></a>
+														</th>-->
+														<th class="table-header-repeat line-left minwidth-1"><a>Title</a></th>
+														<th class="table-header-repeat line-left minwidth-1"><a>Start
+																Time</a></th>
+														<th class="table-header-repeat line-left"><a>Location</a></th>
+														<th class="table-header-repeat line-left"><a>Category</a></th>
+														<th class="table-header-repeat line-left"><a>Posted By</a></th>
+													</tr>
+
+													<c:forEach items="${mapEvents}" var="user">
+														<tr
+															onclick="toggle_visibility_extra('${user.eventId}_more','table-row');">
+															<!-- <td><input type="checkbox" /></td> -->
+															<td>${user.title}</td>
+															<td>${user.startTime}</td>
+															<td>${user.mainLand}</td>
+															<td>${user.categoryValue}</td>
+															<td>${user.postedByPost}</td>
+														</tr>
+														<tr id="${user.eventId}_more" class="alternate-row" style="display:none;">
+															<td><input type="button" value="Show on map"
+																onclick="a=document.getElementsByName('iframe')[0].contentWindow;b = document.getElementsByName('iframe')[0].contentDocument;a.go_legend(b.getElementById('${user.mapId}_x').value,b.getElementById('${user.mapId}_y').value);"
+																title="Locate" class="icon-3 info-tooltip"></td>
+															<td>End : ${user.endTime}</td>
+															<td>Venue : ${user.subLand}</td>
+															<td>Status :${user.status}</td>
+															<td>Posted By :${user.postedByName}</td>
+														</tr>
+
+													</c:forEach>
+
+												</table>
+												<!--  end product-table................................... -->
+											</form>
+
 										</td>
 									</tr>
 								</table>
 							</div>
 							<!--  end table-content  -->
-
 							<div class="clear"></div>
-
 						</div> <!--  end content-table-inner ............................................END  -->
 					</td>
 					<td id="tbl-border-right"></td>
@@ -423,8 +402,7 @@
 		<!-- <div id="footer-pad">&nbsp;</div> -->
 		<!--  start footer-left -->
 		<div id="footer-left">
-			Admin Skin &copy; Copyright Internet Dreams Ltd. <a href="">www.netdreams.co.uk</a>.
-			All rights reserved.
+			Developed By : Harsh Gupta , Anil Kag ,Sejal Sharma , Neha Goyal
 		</div>
 		<!--  end footer-left -->
 		<div class="clear">&nbsp;</div>
