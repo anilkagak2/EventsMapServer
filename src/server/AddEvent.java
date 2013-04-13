@@ -182,8 +182,8 @@ public class AddEvent extends HttpServlet {
 	        if(connection!=null){
 	        	locationId = getLocationId(mainland, subland);
 
-	        	// TODO Think about where should the action parameter be in the form
-	        	// --> in session or in request ?
+	        	/* According to action field in the form prepare the query & execute 
+	        	 * via */
 	        	PreparedStatement s = null;
 	        	String query = "";
 	        	if (action.equals(insert)) {
@@ -236,9 +236,13 @@ public class AddEvent extends HttpServlet {
 
 	        	String[] enum_status = {"ONGOING", "SCHEDULED", "CANCELLED", "COMPLETED"};
 	        	System.out.println(query);
-	        	// Query successfully executed
-	        	//if (modificationQuery(query)) {
+	        	
+	        	/* Execute the query for update or insert. */
 	        	if (modificationQuery(s)) {
+	        		/* Successfully executed the modification query.
+	        		 * Now, get the event's details from the database & add those details in the
+	        		 * session's events list.
+	        		 * */
 	        		EventDetail event = new EventDetail();
 	        		event.title= title;
                     event.content=content;
@@ -293,11 +297,16 @@ public class AddEvent extends HttpServlet {
                 		return;
                     }
                     
+                    /* Update the current event's list in the sessio so as to reflect the changes
+                     * be it update or insert. 
+        			 * */
 	        		if (action.equals(insert)) {
         				events.add(event);
 	        		} else if (action.equals(update)) {
 	        			ListIterator<EventDetail> it = events.listIterator();
     					System.out.println ("Size "+events.size ());
+    					
+    					/* This version of the loop takes O(n^2) time */
 	        			/*for (int i=0; i<events.size (); i++) {
 	        				EventDetail e = events.get(i);
 	        				if (e.eventId == event.eventId) {
@@ -307,6 +316,8 @@ public class AddEvent extends HttpServlet {
 	        					break;
 	        				}
 	        			}*/
+    					
+    					/* Equivalent to the previous one but it takes linear time. */
 	        			while (it.hasNext()) {
 	        				EventDetail e = it.next ();
 	        				if (e.eventId == event.eventId) {
@@ -319,6 +330,8 @@ public class AddEvent extends HttpServlet {
 	        					break;
 	        				}
 	        			}
+	        			
+	        			/* Should be equivalent but not tested since the time it's commented. */
 	        			/*int index = events.indexOf(event);
 	        			if (index == -1) {
 	        				String error = "Error: could not update the event in events list for this session";
@@ -329,9 +342,9 @@ public class AddEvent extends HttpServlet {
 	        			else events.set(index, event); */
 	        		}
 	        		
+	        		/* Replace the previous events object with the current one. */
 	        		session.setAttribute("events", events);
 	        		closeConnection();
-		        	//request.getRequestDispatcher("FetchLocationCategory").forward(request, response);
 	        		request.getRequestDispatcher(returnHome).forward(request, response);
 		        	return;
 	        	}
@@ -345,6 +358,7 @@ public class AddEvent extends HttpServlet {
 	        	}
 	        }
 		}
+		/* Handle the SQLException & return the appropriate error message back to user. */
 		catch (SQLException e) {
 		    	System.out.println("Error : " + e.toString());
 		    	e.printStackTrace();
@@ -354,15 +368,16 @@ public class AddEvent extends HttpServlet {
 		        request.getRequestDispatcher(Declarations.addEventHome).forward(request, response);
 		        return;
 		}
+		/* Handle other exceptions & send back to user's home. */
 		catch(Exception e) {
 			closeConnection();
 			System.out.println(e.toString()+ "\n Exception Stack: \n");
 	        e.printStackTrace();
 	        
 	        if (loginId == Declarations.adminId)
-	        	request.getRequestDispatcher("/Secured/Admin.jsp").forward(request, response);
+	        	request.getRequestDispatcher(Declarations.adminHome).forward(request, response);
 	        else
-	        	request.getRequestDispatcher("/General/Events.jsp").forward(request, response);
+	        	request.getRequestDispatcher(Declarations.userHome).forward(request, response);
 			return;
 		}
 	}
