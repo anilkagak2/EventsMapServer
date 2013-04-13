@@ -210,7 +210,7 @@ public class Login extends HttpServlet {
 	                	System.out.println ("You are authenticated now.\n"+ user +
 	                			" Please proceed further\n");
 	                	
-	                	query = "Select E.eventId, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
+	                	query = "Select E.eventId, E.content, E.title, E.startTime,E.modifiedTime, M.mainLand, L.subLand, E.endTime, " +
 	        					"C.category, E.status FROM Event E, Location L, Category C, MainLand M WHERE E.postedBy = ? " +
 	        					" AND L.locationId = E.locationId AND M.mainLandId = L.mainLandId AND C.categoryId = E.categoryId";
 	                	PreparedStatement s1 = connection.prepareStatement(query);
@@ -229,6 +229,7 @@ public class Login extends HttpServlet {
 	                		EventDetail event = new EventDetail();
 	                		event.eventId = rs1.getLong("eventId");
 	                		event.title = rs1.getString("title");
+	                		event.content = rs1.getString("content");
 	                		event.startTime = rs1.getTimestamp("startTime");
 	                		event.modifiedTime = rs1.getTimestamp("modifiedTime");		// Newly Introduced
 	                		event.endTime = rs1.getTimestamp("endTime");

@@ -410,7 +410,8 @@ input.LinkButton {
 												<tr>
 													<th valign="top">Content:</th>
 													<td><textarea rows="4" cols="50" name="content"
-															name="content">
+															value="${Ucontent}">
+															<c:out value="${Ucontent}" />
 														</textarea></td>
 													<td id="content_error" style="display: none;">
 														 
