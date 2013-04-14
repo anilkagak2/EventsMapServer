@@ -35,13 +35,13 @@
 <script src="js/jquery/jquery.bind.js" type="text/javascript"></script>
 <script type="text/javascript">
 <!--
-function toggle_visibility_extra(id,type){
-	var e = document.getElementById(id);
-	if (e.style.display == type)
-		e.style.display = 'none';
-	else
-		e.style.display = type;
-}
+	function toggle_visibility_extra(id, type) {
+		var e = document.getElementById(id);
+		if (e.style.display == type)
+			e.style.display = 'none';
+		else
+			e.style.display = type;
+	}
 	function toggle_visibility(id) {
 		var e = document.getElementById(id);
 		if (e.style.display == 'block')
@@ -200,6 +200,15 @@ function toggle_visibility_extra(id,type){
 </script>
 </head>
 <body>
+
+	<c:if test="${empty mapEvents}">
+		<!--  //When the page is loaded for the first time redirect it to the GetEvents page-->
+	<script>
+		window.location = "GetEvents?json=false";
+	</script>
+
+	</c:if>
+
 	<!-- Start: page-top-outer -->
 	<div id="page-top-outer">
 
@@ -207,9 +216,7 @@ function toggle_visibility_extra(id,type){
 		<div id="page-top">
 
 			<!-- start logo -->
-			<div id="logo">
-				
-			</div>
+			<div id="logo"></div>
 			<!-- end logo -->
 
 			<!--  start top-search -->
@@ -240,8 +247,7 @@ function toggle_visibility_extra(id,type){
 				</div>
 				<div class="nav-divider">&nbsp;</div>
 				<a href="Login.jsp" id="logout"><img
-					src="images/shared/nav/nav_login.gif" width="64" height="14"
-					alt="" /></a>
+					src="images/shared/nav/nav_login.gif" width="64" height="14" alt="" /></a>
 				<div class="clear">&nbsp;</div>
 
 				<!--  start account-content -->
@@ -276,7 +282,7 @@ function toggle_visibility_extra(id,type){
 						<li><a href="#nogo"><b>Dashboard</b> <!--[if IE 7]><!--></a>
 					</ul>
 
-				
+
 
 
 
@@ -342,7 +348,8 @@ function toggle_visibility_extra(id,type){
 																Time</a></th>
 														<th class="table-header-repeat line-left"><a>Location</a></th>
 														<th class="table-header-repeat line-left"><a>Category</a></th>
-														<th class="table-header-repeat line-left"><a>Posted By</a></th>
+														<th class="table-header-repeat line-left"><a>Posted
+																By</a></th>
 													</tr>
 
 													<c:forEach items="${mapEvents}" var="user">
@@ -355,7 +362,8 @@ function toggle_visibility_extra(id,type){
 															<td>${user.categoryValue}</td>
 															<td>${user.postedByPost}</td>
 														</tr>
-														<tr id="${user.eventId}_more" class="alternate-row" style="display:none;">
+														<tr id="${user.eventId}_more" class="alternate-row"
+															style="display: none;">
 															<td><input type="button" value="Show on map"
 																onclick="a=document.getElementsByName('iframe')[0].contentWindow;b = document.getElementsByName('iframe')[0].contentDocument;a.go_legend(b.getElementById('${user.mapId}_x').value,b.getElementById('${user.mapId}_y').value);"
 																title="Locate" class="icon-3 info-tooltip"></td>
@@ -401,9 +409,8 @@ function toggle_visibility_extra(id,type){
 	<div id="footer">
 		<!-- <div id="footer-pad">&nbsp;</div> -->
 		<!--  start footer-left -->
-		<div id="footer-left">
-			Developed By : Harsh Gupta , Anil Kag ,Sejal Sharma , Neha Goyal
-		</div>
+		<div id="footer-left">Developed By : Harsh Gupta , Anil Kag
+			,Sejal Sharma , Neha Goyal</div>
 		<!--  end footer-left -->
 		<div class="clear">&nbsp;</div>
 	</div>
