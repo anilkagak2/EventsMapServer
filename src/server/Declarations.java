@@ -19,7 +19,7 @@ import javax.servlet.http.HttpSession;
 public class Declarations {
 	public static final int adminId=1; 				// Define admin's post here
 	public static final String mysqlUser = "root";
-	public static final String mysqlPass = "root";
+	public static final String mysqlPass = "";
 	public static final String url = "jdbc:mysql://localhost:3306/EventsMapServer";
 	public static final String loginHome = "/Login.jsp";
 	public static final String userHome = "/General/Events.jsp";
