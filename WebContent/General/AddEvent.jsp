@@ -74,24 +74,22 @@
 	function submitForm(formId) {
 		var submit = true;
 
-		
-
 		var data = $("input[name=title]")[0].value;
 		if (data == '') {
 			$('#title_error')[0].style.display = 'block';
 			submit = false;
-		}else{
+		} else {
 			$('#title_error')[0].style.display = 'none';
 		}
-		
-		var data = $("input[name=content]")[0].value;
+
+		var data = $("textarea[name=content]")[0].value;
 		if (data == '') {
 			$('#content_error')[0].style.display = 'block';
 			submit = false;
-		}else{
+		} else {
 			$('#content_error')[0].style.display = 'none';
 		}
-		
+
 		//IF mainland is others then subland should contain the exact location
 		var data = $("select[name=mainland]")[0].value;
 		//alert(data);
@@ -100,30 +98,27 @@
 			if (data == '') {
 				$('#subland_error')[0].style.display = 'block';
 				submit = false;
-			}
-			else{
+			} else {
 				$('#subland_error')[0].style.display = 'none';
 			}
 		}
-		
+
 		var data = $("input[name=starttime]")[0].value;
 		if (data == '') {
 			$('#start_time_error')[0].style.display = 'block';
 			submit = false;
-		}else{
+		} else {
 			$('#start_time_error')[0].style.display = 'none';
 		}
-		
+
 		var data = $("input[name=endtime]")[0].value;
 		if (data == '') {
 			$('#end_time_error')[0].style.display = 'block';
 			submit = false;
-		}else{
+		} else {
 			$('#end_time_error')[0].style.display = 'none';
 		}
-		
-		
-		
+
 		if (submit)
 			$("form#" + formId).submit();
 	}
@@ -406,7 +401,7 @@ input.LinkButton {
 													<td><input id='title' type="text" class="inp-form"
 														name="title" value="${Utitle}"></td>
 													<td id="title_error" style="display: none;">
-														<div class="error-left"></div>
+														 
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
@@ -414,10 +409,11 @@ input.LinkButton {
 
 												<tr>
 													<th valign="top">Content:</th>
-													<td><input type="text" class="inp-form" name="content"
-														value="${Ucontent}"></td>
+													<td><textarea rows="4" cols="50" name="content"
+															name="content">
+														</textarea></td>
 													<td id="content_error" style="display: none;">
-														<div class="error-left"></div>
+														 
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
@@ -433,7 +429,7 @@ input.LinkButton {
 																</option>
 															</c:forEach>
 													</select>
-														<td></td>
+													<td></td>
 													<td></td>
 												</tr>
 
@@ -442,11 +438,11 @@ input.LinkButton {
 													<td><input id='subland' type="text" class="inp-form"
 														name="subland" value="${Usubland}"></td>
 													<td id="subland_error" style="display: none;">
-														<div class="error-left"></div>
+														 
 														<div class="error-inner">This field is required if
-															MainLand is 'Other'.
-													</div></td>
-													
+															MainLand is 'Other'.</div>
+													</td>
+
 													<td></td>
 												</tr>
 
@@ -466,7 +462,7 @@ input.LinkButton {
 														</div>
 													</td>
 													<td id="start_time_error" style="display: none;">
-														<div class="error-left"></div>
+														 
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
@@ -478,15 +474,16 @@ input.LinkButton {
 														<div class="well">
 															<div id="endDatetimepicker" class="input-append">
 																<input id='end' data-format="yyyy-MM-dd HH:mm:ss"
-																	name="endtime" value="${Uendtime}" type="text"></input> <span
-																	class="add-on"> <i data-time-icon="icon-time"
+																	name="endtime" value="${Uendtime}" type="text"></input>
+																<span class="add-on"> <i
+																	data-time-icon="icon-time"
 																	data-date-icon="icon-calendar"> </i>
 																</span>
 															</div>
 														</div>
 													</td>
 													<td id="end_time_error" style="display: none;">
-														<div class="error-left"></div>
+														 
 														<div class="error-inner">This field is required.</div>
 													</td>
 													<td></td>
@@ -515,7 +512,6 @@ input.LinkButton {
 																</option>
 															</c:forEach>
 													</select>
-													
 													<td></td>
 													<td></td>
 												</tr>
@@ -535,7 +531,6 @@ input.LinkButton {
 												</tr>
 											</table>
 										</form> <!-- end id-form  -->
-								
 								<tr>
 									<!-- <td>
 										<img src="images/shared/blank.gif" width="695" height="1" alt="blank" />
