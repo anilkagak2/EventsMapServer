@@ -21,10 +21,10 @@
 	media="screen" title="default" />
 
 <link
-	href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css"
+	href="css/bootstrap-combined.min.css"
 	rel="stylesheet">
 <link rel="stylesheet" type="text/css" media="screen"
-	href="http://tarruda.github.com/bootstrap-datetimepicker/assets/css/bootstrap-datetimepicker.min.css">
+	href="css/bootstrap-datetimepicker.min.css">
 
 <!--[if IE]>
 <link rel="stylesheet" media="all" type="text/css" href="css/pro_dropline_ie.css" />
@@ -53,7 +53,7 @@
 -->
 
 <script type="text/javascript"
-	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+	src="js/jquery/jquery-1.8.3.min.js">
 	
 </script>
 <script type="text/javascript"

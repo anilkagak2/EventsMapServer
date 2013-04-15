@@ -32,7 +32,7 @@
 <script src="js/jquery/jquery-1.4.1.min.js" type="text/javascript"></script>
 
 <script type="text/javascript"
-	src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js">
+	src="js/jquery/jquery-1.8.3.min.js">
 	
 </script>
 <script type="text/javascript"
